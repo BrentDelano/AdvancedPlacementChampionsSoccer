@@ -1,7 +1,15 @@
 import processing.core.PApplet;
 import processing.core.PImage;
+//<<<<<<< HEAD
+//=======
 
 
+//>>>>>>> branch 'master' of https://github.com/bdelano255/AdvancedPlacementChampionsSoccer.git
+/**
+ * Represents the player in the game, which is a MovingObject
+ * @author Brent Delano
+ * @version 5/10/18
+ */
 public class Tekkist extends MovingObject {
 	
 	private PImage tekkist;

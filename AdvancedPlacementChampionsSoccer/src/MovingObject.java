@@ -1,5 +1,11 @@
 import processing.core.PApplet;
 
+/**
+ * Represents all object that moves, which are also PhysicsObjects
+ * @author Brent Delano
+ * @version 5/10/18
+ *
+ */
 public abstract class MovingObject extends PhysicsObject {
 
 	private double vY, gravity;
