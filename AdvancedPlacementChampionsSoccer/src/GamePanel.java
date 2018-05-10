@@ -22,6 +22,14 @@ public class GamePanel extends PApplet {
 		background = new PImage();
 	}
 	
+	public void setup() {
+		background = loadImage("field.jpg");
+		background(255);
+		tekkist.setup(this);
+		ball.setup(this);
+		
+	}
+	
 	public void draw() {		
 		clear();
 		
@@ -29,10 +37,9 @@ public class GamePanel extends PApplet {
 		float ratioY = (float) height / 500; 
 		scale(ratioX, ratioY);
 		
-		background = loadImage("field.jpg");
-		background(255);
+	
 		image(background, 0, 0, 500, 500);
-				
+		
 		ball.draw(this);
 		if (!ball.isOnSurface()) {
 			ball.fall(surface);

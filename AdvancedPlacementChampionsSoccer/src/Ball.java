@@ -15,8 +15,13 @@ public class Ball extends MovingObject {
 		ball = new PImage();
 	}
 	
-	public void draw(PApplet drawer) {
+	public void setup(PApplet drawer)
+	{
 		ball = drawer.loadImage("ball.png");
+	}
+	
+	public void draw(PApplet drawer) {
+		
 		drawer.image(ball, getX(), getY(), getWidth(), getHeight());
 	}
 

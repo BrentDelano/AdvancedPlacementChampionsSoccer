@@ -14,7 +14,7 @@ public class AdvancedPlacementChampionsSoccer {
 		PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
 		JFrame window = (JFrame)canvas.getFrame();
 
-		window.setSize(316, 159);
+		window.setSize(316*2, 159*2);
 		window.setMinimumSize(new Dimension(100,100));
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(true);
