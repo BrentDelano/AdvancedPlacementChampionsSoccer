@@ -23,16 +23,16 @@ public class GamePanel extends PApplet {
 	}
 	
 	public void setup() {		
-		//background.resize(width, height);
-		background = loadImage("field.jpg");
+		background = loadImage("field.jpeg");
+		ball.setup(this);
+		tekkist.setup(this);	
 	}
 	
 	public void settings() {
-		fullScreen();
+		fullScreen(P3D);
 	}
 	
-	public void draw() {		
-		
+	public void draw() {			
 		float ratioX = (float) width / 500; 		
 		float ratioY = (float) height / 500; 
 		scale(ratioX, ratioY);
@@ -40,17 +40,17 @@ public class GamePanel extends PApplet {
 		image(background, 0, 0, 500, 500);
 		
 		ball.draw(this);
-		
 		tekkist.draw(this);
+		surface.draw(this);
 	}
 	
 	public void keyPressed() {
 		if (keyPressed) {
 			if (key == 'a') {
-				tekkist.walk(-5);
+				tekkist.walk(-1);
 			}
 			if (key == 'd') {
-				tekkist.walk(5);
+				tekkist.walk(1);
 			}
 			if (key == 'w') {
 				tekkist.jump();

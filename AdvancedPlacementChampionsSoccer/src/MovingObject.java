@@ -11,18 +11,10 @@ public abstract class MovingObject extends PhysicsObject {
 	}
 	
 	public void fall(Surface s) {
-//		vY += 10.0;
-//		System.out.println(vY);
-//		setY((int) vY);
-//		if (s.isPointInSurface(getX() + getWidth() / 2, getY() + getHeight())) {
-//			setY(getY() - (getY() + getHeight() - s.getY()));
-//			onSurface = true;
-//			vY = 0;
-//		}
 		if (!onSurface) {
 			if(super.getY() <  s.getY() - super.getHeight()) {
 				setY((int)(super.getY() + gravity));
-				gravity += 5.0;
+				gravity += 0.5;
 			} else {
 				gravity = 0;
 			}
@@ -42,4 +34,6 @@ public abstract class MovingObject extends PhysicsObject {
 	}	
 	
 	public abstract void draw(PApplet drawer);
+	public abstract void collision();
+
 }

@@ -1,3 +1,4 @@
+import processing.core.PApplet;
 
 public class Surface extends PhysicsObject {
 	
@@ -14,8 +15,14 @@ public class Surface extends PhysicsObject {
 			return true;
 		return false;
 	}
+	
+	public void draw(PApplet drawer) {
+		drawer.rectMode(drawer.CENTER);
+		drawer.fill(51);
+		drawer.stroke(255);
 
-	public void collision() {
-		// implement later
+		drawer.translate(drawer.width/2, drawer.height/2, 0);
+		drawer.rotateX(drawer.PI/4);
+		drawer.rect(0, 0, 100, 100);
 	}
 }

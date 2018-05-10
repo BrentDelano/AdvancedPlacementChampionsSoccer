@@ -6,7 +6,7 @@ public class Ball extends MovingObject {
 	private PImage ball;
 	
 	public Ball() {
-		super(10, 10, 30, 30);
+		super(10, 10, 15, 15);
 		ball = new PImage();
 	}
 	
@@ -15,10 +15,14 @@ public class Ball extends MovingObject {
 		ball = new PImage();
 	}
 	
-	public void draw(PApplet drawer) {
+	public void setup(PApplet drawer) {
 		ball = drawer.loadImage("ball.png");
+	}
+	
+	public void draw(PApplet drawer) {
 		drawer.image(ball, getX(), getY(), getWidth(), getHeight());
-		fall(new Surface());
+		if (!isOnSurface())
+			fall(new Surface());
 	}
 
 	public void collision() {

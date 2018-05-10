@@ -27,13 +27,11 @@ public abstract class PhysicsObject {
 		return height;
 	}
 	
-	public void setX(int x) {
-		this.x = x;
+	public void setX(int d) {
+		this.x = d;
 	}
 	
 	public void setY(int y) {
 		this.y = y;
-	}
-		
-	public abstract void collision();
+	}		
 }

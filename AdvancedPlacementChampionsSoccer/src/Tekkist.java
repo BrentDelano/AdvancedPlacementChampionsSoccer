@@ -6,7 +6,7 @@ public class Tekkist extends MovingObject {
 	private PImage tekkist;
 	
 	public Tekkist() {
-		super(100, 10, 100, 125);
+		super(100, 10, 60, 75);
 		tekkist = new PImage();
 	}
 	
@@ -16,20 +16,24 @@ public class Tekkist extends MovingObject {
 	}
 	
 	public void walk(int direction) {
-		setX(getX() + direction * 6); 
+		setX(getX() + direction); 
 	}
 	
 	public void jump() {
 		if (isOnSurface()) {
-			setVY(-10);
+			setVY(-5);
 			setState(false);
 		}
 	}
 	
-	public void draw(PApplet drawer) {
+	public void setup(PApplet drawer) {
 		tekkist = drawer.loadImage("boi.png");
+	}
+	
+	public void draw(PApplet drawer) {
 		drawer.image(tekkist, getX(), getY(), getWidth(), getHeight());
-		fall(new Surface());
+		if (!isOnSurface())
+			fall(new Surface());
 	}
 
 	public void collision() {
