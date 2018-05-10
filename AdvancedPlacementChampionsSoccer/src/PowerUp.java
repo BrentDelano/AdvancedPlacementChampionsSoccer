@@ -1,7 +1,7 @@
 /**
  * Represents the power up that a Tekkist has
  * @author Mira Khosla
- * @version
+ * @version 5/10/18
  *
  */
 public class PowerUp {

@@ -6,9 +6,9 @@ import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
 
 /**
- * 
+ * Contains the main method
  * @author Brent Delano
- * @version
+ * @version 5/10/18
  *
  */
 public class AdvancedPlacementChampionsSoccer {

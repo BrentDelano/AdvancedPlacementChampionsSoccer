@@ -3,7 +3,7 @@ import processing.core.*;
 /**
  * Represents the soccer goal, which is a PhysicsObject
  * @author Mira Khosla
- * @version
+ * @version 5/10/18
  *
  */
 public class Goal extends PhysicsObject{
