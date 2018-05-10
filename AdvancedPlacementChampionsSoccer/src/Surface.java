@@ -3,7 +3,7 @@ import processing.core.PApplet;
 public class Surface extends PhysicsObject {
 	
 	public Surface() {
-		super(0, 400, 500, 100);
+		super(0, 30, 400, 320);
 	}
 	
 	public Surface(int x, int y, int w, int h) {
@@ -21,8 +21,8 @@ public class Surface extends PhysicsObject {
 		drawer.fill(51);
 		drawer.stroke(255);
 
-		drawer.translate(drawer.width/2, drawer.height/2, 0);
+		drawer.translate(250, 250, 0);
 		drawer.rotateX(drawer.PI/4);
-		drawer.rect(0, 0, 100, 100);
+		drawer.rect(0, 30, 400, 320);
 	}
 }
