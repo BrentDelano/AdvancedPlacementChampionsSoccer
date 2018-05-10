@@ -14,7 +14,7 @@ public abstract class MovingObject extends PhysicsObject {
 		if (!onSurface) {
 			if (super.getY() < s.getY() - super.getHeight()) {
 				setY((int) (super.getY() + gravity));
-				gravity += 0.5;
+				gravity += 0.2;
 			} else {
 				gravity = 0;
 			}

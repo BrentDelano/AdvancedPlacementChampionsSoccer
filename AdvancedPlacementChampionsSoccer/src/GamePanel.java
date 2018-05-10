@@ -39,19 +39,20 @@ public class GamePanel extends PApplet {
 		float ratioY = (float) height / 500; 
 		scale(ratioX, ratioY);
 		
-//		image(background, 0, 0, 500, 500);
+		image(background, 0, 0, 500, 500);
 		
 		ball.draw(this);
 		tekkist.draw(this);
 		
-		background(100);
+		pushMatrix();
 		rectMode(CENTER);
 		fill(51);
 		stroke(255);
 
 		translate(250, 250, 0);
 		rotateX(PI/4);
-		rect(0, 0, 500, 500);
+		rect(0, 0, 100, 100);
+		popMatrix();
 	}
 	
 	public void keyPressed() {
