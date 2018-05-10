@@ -9,6 +9,7 @@ public class AdvancedPlacementChampionsSoccer {
 
 	public static void main(String[] args) {
 		GamePanel p = new GamePanel();
+//		MenuPanel p = new MenuPanel();
 		PApplet.runSketch(new String[]{""}, p);
 		PSurfaceAWT surf = (PSurfaceAWT) p.getSurface();
 		PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
