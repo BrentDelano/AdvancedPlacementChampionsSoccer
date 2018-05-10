@@ -29,6 +29,7 @@ public class Tekkist extends MovingObject {
 	public void draw(PApplet drawer) {
 		tekkist = drawer.loadImage("boi.png");
 		drawer.image(tekkist, getX(), getY(), getWidth(), getHeight());
+		fall(new Surface());
 	}
 
 	public void collision() {

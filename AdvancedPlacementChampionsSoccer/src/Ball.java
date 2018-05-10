@@ -18,6 +18,7 @@ public class Ball extends MovingObject {
 	public void draw(PApplet drawer) {
 		ball = drawer.loadImage("ball.png");
 		drawer.image(ball, getX(), getY(), getWidth(), getHeight());
+		fall(new Surface());
 	}
 
 	public void collision() {

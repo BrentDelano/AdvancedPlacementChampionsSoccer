@@ -22,26 +22,26 @@ public class GamePanel extends PApplet {
 		background = new PImage();
 	}
 	
+	public void setup() {		
+		//background.resize(width, height);
+		background = loadImage("field.jpg");
+	}
+	
+	public void settings() {
+		fullScreen();
+	}
+	
 	public void draw() {		
-		clear();
 		
 		float ratioX = (float) width / 500; 		
 		float ratioY = (float) height / 500; 
 		scale(ratioX, ratioY);
 		
-		background = loadImage("field.jpg");
-		background(255);
 		image(background, 0, 0, 500, 500);
-				
+		
 		ball.draw(this);
-		if (!ball.isOnSurface()) {
-			ball.fall(surface);
-		}
 		
 		tekkist.draw(this);
-		if (!tekkist.isOnSurface()) {
-			tekkist.fall(surface);
-		}
 	}
 	
 	public void keyPressed() {

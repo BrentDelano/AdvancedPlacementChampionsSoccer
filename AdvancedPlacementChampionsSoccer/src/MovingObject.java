@@ -2,7 +2,7 @@ import processing.core.PApplet;
 
 public abstract class MovingObject extends PhysicsObject {
 	
-	private double vY;
+	private double vY, gravity;
 	private boolean onSurface;
 	
 	public MovingObject(int x, int y, int w, int h) {
@@ -11,12 +11,21 @@ public abstract class MovingObject extends PhysicsObject {
 	}
 	
 	public void fall(Surface s) {
-		vY += 100.0;
-		setY((int) vY);
-		if (s.isPointInSurface(getX() + getWidth() / 2, getY() + getHeight())) {
-			setY(getY() - (getY() + getHeight() - s.getY()));
-			onSurface = true;
-			vY = 0;
+//		vY += 10.0;
+//		System.out.println(vY);
+//		setY((int) vY);
+//		if (s.isPointInSurface(getX() + getWidth() / 2, getY() + getHeight())) {
+//			setY(getY() - (getY() + getHeight() - s.getY()));
+//			onSurface = true;
+//			vY = 0;
+//		}
+		if (!onSurface) {
+			if(super.getY() <  s.getY() - super.getHeight()) {
+				setY((int)(super.getY() + gravity));
+				gravity += 5.0;
+			} else {
+				gravity = 0;
+			}
 		}
 	}
 	
