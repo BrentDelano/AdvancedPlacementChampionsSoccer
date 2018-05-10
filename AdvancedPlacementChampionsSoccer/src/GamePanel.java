@@ -23,7 +23,7 @@ public class GamePanel extends PApplet {
 	}
 	
 	public void setup() {
-		background = loadImage("field.jpg");
+		background = loadImage("field.png");
 		
 		tekkist.setup(this);
 		ball.setup(this);
