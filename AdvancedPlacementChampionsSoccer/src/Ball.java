@@ -24,7 +24,7 @@ public class Ball extends MovingObject {
 	public void draw(PApplet drawer) {
 		drawer.image(ball, getX(), getY(), getWidth(), getHeight());
 		if (!isOnSurface())
-			fall(new Surface());
+			fall(new Surface(), false);
 	}
 
 	public void collision() {

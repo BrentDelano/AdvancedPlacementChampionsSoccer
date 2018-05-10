@@ -10,22 +10,54 @@ public abstract class MovingObject extends PhysicsObject {
 		vY = 0.0;
 	}
 
-	public void fall(Surface s) {
-		if (!onSurface) {
+	public void fall(Surface s, boolean isJumping) {
+//		if (!onSurface) {
+//			if (super.getY() < s.getY() - super.getHeight()) {
+//				setY((int) (super.getY() + gravity));
+//				gravity += 0.1;
+//			} else {
+//				gravity = 0;
+//			}
+//			vY += 0.0;
+//			setY((int) vY);
+//			if (s.isPointInSurface(getX() + getWidth() / 2, getY() + getHeight())) {
+//				setY(getY() - (getY() + getHeight() - s.getY()));
+//				onSurface = true;
+//				vY = 0;
+//			}
+//		}
+		if(!isJumping)
+		{
+			if(!onSurface)
+			{
+				if (s.isPointInSurface(getX() + getWidth() / 2, getY() + getHeight())) {
+					setY(getY() - (getY() + getHeight() - s.getY()));
+					onSurface = true;
+					vY = 0;
+				}
+				if (super.getY() < s.getY() - super.getHeight()) {
+					setY((int) (super.getY() + gravity));
+					gravity += 0.1;
+				} else {
+					gravity = 0;
+				}
+			}
+		}
+		else {
+			vY+=5;
 			if (super.getY() < s.getY() - super.getHeight()) {
-				setY((int) (super.getY() + gravity));
-				gravity += 0.1;
+				setY((int) (super.getY() +vY -gravity));
+				gravity +=1;
 			} else {
 				gravity = 0;
 			}
-			vY += 30.0;
-			setY((int) vY);
-			if (s.isPointInSurface(getX() + getWidth() / 2, getY() + getHeight())) {
-				setY(getY() - (getY() + getHeight() - s.getY()));
-				onSurface = true;
-				vY = 0;
-			}
+			
 		}
+	}
+	
+	public double getVy()
+	{
+		return vY;
 	}
 
 	public void setVY(int v) {
