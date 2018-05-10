@@ -16,7 +16,7 @@ public class Tekkist extends MovingObject {
 	}
 	
 	public void walk(int direction) {
-		setX(getX() + direction); 
+		setX(getX() + direction*2); 
 	}
 	
 	public void jump() {
@@ -26,7 +26,8 @@ public class Tekkist extends MovingObject {
 		}
 	}
 	
-	public void setup(PApplet drawer) {
+	public void setup(PApplet drawer)
+	{
 		tekkist = drawer.loadImage("boi.png");
 	}
 	
