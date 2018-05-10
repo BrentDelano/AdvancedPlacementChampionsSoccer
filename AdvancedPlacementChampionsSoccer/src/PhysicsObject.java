@@ -1,4 +1,9 @@
-
+/**
+ * Represents all object that has properties of physics
+ * @author Brent Delano
+ * @version
+ *
+ */
 public abstract class PhysicsObject {
 
 	private int x, y;

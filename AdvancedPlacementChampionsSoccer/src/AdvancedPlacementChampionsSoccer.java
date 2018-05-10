@@ -5,6 +5,12 @@ import javax.swing.JFrame;
 import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
 
+/**
+ * 
+ * @author Brent Delano
+ * @version
+ *
+ */
 public class AdvancedPlacementChampionsSoccer {
 
 	public static void main(String[] args) {

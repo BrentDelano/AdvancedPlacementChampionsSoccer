@@ -1,6 +1,12 @@
 import processing.core.PApplet;
 import processing.core.PImage;
 
+/**
+ * Represents a soccer ball, which is a MovingObject
+ * @author Brent Delano
+ * @version
+ *
+ */
 public class Ball extends MovingObject {
 	
 	private PImage ball;

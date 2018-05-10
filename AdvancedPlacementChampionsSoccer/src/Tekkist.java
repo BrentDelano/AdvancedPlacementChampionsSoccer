@@ -1,6 +1,11 @@
 import processing.core.PApplet;
 import processing.core.PImage;
 
+/**
+ * Represents the player in the game, which is a MovingObject
+ * @author Brent Delano
+ * @version
+ */
 public class Tekkist extends MovingObject {
 	
 	private PImage tekkist;

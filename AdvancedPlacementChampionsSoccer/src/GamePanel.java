@@ -1,6 +1,12 @@
 import processing.core.PApplet;
 import processing.core.PImage;
 
+/**
+ * Represents the in-game screen
+ * @author Brent Delano
+ * @version
+ *
+ */
 public class GamePanel extends PApplet {
 	
 	private Ball ball;
