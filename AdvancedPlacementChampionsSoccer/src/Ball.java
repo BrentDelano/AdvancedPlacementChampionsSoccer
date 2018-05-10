@@ -6,7 +6,7 @@ public class Ball extends MovingObject {
 	private PImage ball;
 	
 	public Ball() {
-		super(10, 10, 30, 30);
+		super(10, 10, 40, 50);
 		ball = new PImage();
 	}
 	

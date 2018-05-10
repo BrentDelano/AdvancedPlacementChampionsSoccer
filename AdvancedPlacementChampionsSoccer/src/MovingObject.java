@@ -11,7 +11,7 @@ public abstract class MovingObject extends PhysicsObject {
 	}
 	
 	public void fall(Surface s) {
-		vY += 100.0;
+		vY += 30.0;
 		setY((int) vY);
 		if (s.isPointInSurface(getX() + getWidth() / 2, getY() + getHeight())) {
 			setY(getY() - (getY() + getHeight() - s.getY()));

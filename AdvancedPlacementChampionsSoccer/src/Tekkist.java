@@ -16,7 +16,7 @@ public class Tekkist extends MovingObject {
 	}
 	
 	public void walk(int direction) {
-		setX(getX() + direction*6); 
+		setX(getX() + direction*2); 
 	}
 	
 	public void jump() {

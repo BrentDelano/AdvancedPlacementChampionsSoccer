@@ -24,7 +24,7 @@ public class GamePanel extends PApplet {
 	
 	public void setup() {
 		background = loadImage("field.jpg");
-		background(255);
+		
 		tekkist.setup(this);
 		ball.setup(this);
 		
@@ -32,7 +32,7 @@ public class GamePanel extends PApplet {
 	
 	public void draw() {		
 		clear();
-		
+		background(255);
 		float ratioX = (float) width / 500; 		
 		float ratioY = (float) height / 500; 
 		scale(ratioX, ratioY);
