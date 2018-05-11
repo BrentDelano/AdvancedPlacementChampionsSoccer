@@ -1,14 +1,17 @@
-
 import java.util.ArrayList;
-
 import processing.core.PImage;
 
+/**
+ * Represents the screen where the player selects his/her character
+ * @author Tony Yu
+ * @version 5/10/18
+ */
 public class PlayerSelect {
 
 	private ArrayList<PImage> pictures;
 	private int imgWidth;
 	private int imgHeight;
-	
+
 	public PlayerSelect(ArrayList<PImage> pictures, int imgWidth, int imgHeight)
 	{
 		this.pictures = pictures;

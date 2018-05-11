@@ -1,6 +1,12 @@
 import processing.core.PApplet;
 import processing.core.PImage;
 
+/**
+ * Represents a soccer ball, which is a MovingObject
+ * @author Brent Delano
+ * @version 5/10/18
+ *
+ */
 public class Ball extends MovingObject {
 	
 	private PImage ball;
@@ -24,7 +30,7 @@ public class Ball extends MovingObject {
 	public void draw(PApplet drawer) {
 		drawer.image(ball, getX(), getY(), getWidth(), getHeight());
 		if (!isOnSurface())
-			fall(new Surface());
+			fall(new Surface(), false);
 	}
 
 	public void collision() {

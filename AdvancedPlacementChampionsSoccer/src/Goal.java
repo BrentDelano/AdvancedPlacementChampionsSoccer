@@ -1,4 +1,11 @@
 import processing.core.*;
+
+/**
+ * Represents the soccer goal, which is a PhysicsObject
+ * @author Mira Khosla
+ * @version 5/10/18
+ *
+ */
 public class Goal extends PhysicsObject{
 	
 	private int x, y, height, width;

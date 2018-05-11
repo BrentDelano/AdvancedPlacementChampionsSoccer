@@ -5,10 +5,17 @@ import javax.swing.JFrame;
 import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
 
+/**
+ * Contains the main method
+ * @author Brent Delano
+ * @version 5/10/18
+ *
+ */
 public class AdvancedPlacementChampionsSoccer {
 
 	public static void main(String[] args) {
 		GamePanel p = new GamePanel();
+//		MenuPanel p = new MenuPanel();
 		PApplet.runSketch(new String[]{""}, p);
 		PSurfaceAWT surf = (PSurfaceAWT) p.getSurface();
 		PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
