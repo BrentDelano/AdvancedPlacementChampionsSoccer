@@ -16,7 +16,7 @@ public class Tekkist extends MovingObject {
 	private boolean isJumping;
 	
 	public Tekkist() {
-		super(100, 10, 60, 75);
+		super(100, 10, 100, 135);
 		tekkist = new PImage();
 		isJumping = false;
 	}
@@ -27,8 +27,12 @@ public class Tekkist extends MovingObject {
 		isJumping = false;
 	}
 	
-	public void walk(int direction) {
-		setX(getX() + direction*2); 
+	public void walkHorizontally(int direction) {
+		setX(getX() + direction * 2); 
+	}
+	
+	public void walkVertically(int direction) {
+		setY(getY() + direction * 2);
 	}
 	
 	public void jump() {
@@ -55,7 +59,7 @@ public class Tekkist extends MovingObject {
 		if (!isOnSurface())
 		{
 			
-			fall(new Surface(), isJumping);
+			fall(new Surface(drawer.width/2, drawer.height/2, drawer.width, drawer.height/2), isJumping);
 			if(isJumping)
 			{
 				if(super.getVy()==0)
@@ -64,6 +68,10 @@ public class Tekkist extends MovingObject {
 				}
 			}
 		}
+	}
+	
+	public void kick(Tekkist t, Ball b) {
+		
 	}
 
 	public void collision() {

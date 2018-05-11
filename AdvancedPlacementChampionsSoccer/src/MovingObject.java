@@ -36,7 +36,7 @@ public abstract class MovingObject extends PhysicsObject {
 		{
 			if(!onSurface)
 			{
-				if (s.isPointInSurface(getX() + getWidth() / 2, getY() + getHeight())) {
+				if (s.isPointInHorizontalSurface(getX() + getWidth() / 2, getY() + getHeight())) {
 					setY(getY() - (getY() + getHeight() - s.getY()));
 					onSurface = true;
 					vY = 0;
