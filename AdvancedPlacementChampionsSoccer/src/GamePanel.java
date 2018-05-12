@@ -38,7 +38,7 @@ public class GamePanel extends PApplet {
 		fullScreen(P3D);
 	}
 	
-	public void draw() {			
+	public void draw() {	
 		clear();
 		
 		float ratioX = (float) width / 500; 		

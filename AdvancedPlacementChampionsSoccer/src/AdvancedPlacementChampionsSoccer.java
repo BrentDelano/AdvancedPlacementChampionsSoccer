@@ -14,12 +14,13 @@ import processing.core.PApplet;
 public class AdvancedPlacementChampionsSoccer {
 
 	public static void main(String[] args) {
-		GamePanel p = new GamePanel();
-//		MenuPanel p = new MenuPanel();
+//		GamePanel p = new GamePanel();
+		MenuPanel p = new MenuPanel();
 		PApplet.runSketch(new String[]{""}, p);
 		PSurfaceAWT surf = (PSurfaceAWT) p.getSurface();
 		PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
 		JFrame window = (JFrame)canvas.getFrame();
+		p.setWindow(window);
 
 //		window.setSize(316, 159);
 		window.setMinimumSize(new Dimension(100,100));
