@@ -36,22 +36,23 @@ public class GamePanel extends PApplet {
 	}
 	
 	public void settings() {
-		fullScreen(P3D);
+		fullScreen(P2D);
 	}
 	
 	public void draw() {			
 		clear();
-		rotateX(PI/4);	
-		translate(width / 2, height / 2, 0);
+	//	rotateX(PI/4);	
+	//	translate(width / 2, height / 2, 0);
 		
 //		imageMode(CENTER);
 //		image(background, 0, 0, width, height);
 		
-		tekkist.draw(this);
+		
 		
 		pushMatrix();
 		ball.draw(this);
-		boundaries[0].draw(this);
+		//boundaries[0].draw(this);
+		tekkist.draw(this);
 		popMatrix();
 	}
 	
@@ -64,10 +65,10 @@ public class GamePanel extends PApplet {
 				tekkist.walkHorizontally(1);
 			}
 			if (key == 'w') {
-				tekkist.walkVertically(1);
+				tekkist.walkVertically(-1);
 			}
 			if (key == 's' ) {
-				tekkist.walkVertically(-1);
+				tekkist.walkVertically(+1);
 			}
 			if (key == ' ') {
 				tekkist.jump();
