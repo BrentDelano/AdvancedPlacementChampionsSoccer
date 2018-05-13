@@ -16,9 +16,9 @@ public class GamePanel extends PApplet {
 	private PImage background;
 
 	public GamePanel() {
-		ball = new Ball();
-		p1 = new Tekkist(225, (float) (height / 2.0), 100, 135);
-		p2 = new Tekkist(1075, (float) (height / 2.0), 100, 135);
+		ball = new Ball(700, 0, 30);
+		p1 = new Tekkist(225, 520, 100, 135);
+		p2 = new Tekkist(1075, 520, 100, 135);
 		boundaries = new Surface[6];
 		background = new PImage();
 	}
@@ -47,29 +47,45 @@ public class GamePanel extends PApplet {
 	public void draw() {			
 		clear();
 
-		image(background, 0, 0, width, height);
+		// draws everything onto the screen
 
+		image(background, 0, 0, width, height);
 		p1.draw(this);
-		p1.actHorizontally();
+		p2.draw(this);		
+		ball.draw(this);
+
+		// creates physics between physics objects
+
+		p1.act();
 		if (!p1.isOnSurface()) 
 			p1.fall(boundaries[0]);
 
-		p2.draw(this);
-		p2.actHorizontally();
+		p2.act();
 		if (!p2.isOnSurface()) 
 			p2.fall(boundaries[0]);
 
-		ball.draw(this);
-		ball.actHorizontally();
+		ball.act();
 		if (!ball.isOnSurface()) 
 			ball.fall(boundaries[0]);
 
+		//  collision detecting
+
 		if (Math.abs(p1.getX() - p2.getX()) < 100 && Math.abs(p1.getY() - p2.getY()) < 135)
 			playerCollisionDetection();
+		else {
+			p1.setRightMovability(true);
+			p2.setLeftMovability(true);
+		}
+		
+		if (Math.abs(p1.getX() - ball.getX()) < 150)
+			ballCollisionDetection();
 	}
 
-	public void keyPressed() {
+	public void keyPressed() {		
 		if (keyPressed) {
+
+			// player 1
+
 			if (key == 'a')
 				if (p1.canMoveLeft())
 					p1.walkHorizontally(-1);
@@ -78,6 +94,8 @@ public class GamePanel extends PApplet {
 					p1.walkHorizontally(1);
 			if (key == 'w') 
 				p1.jump();
+
+			// player 2
 
 			if (keyCode == LEFT)
 				if (p2.canMoveLeft())
@@ -91,21 +109,24 @@ public class GamePanel extends PApplet {
 	}
 
 	public void keyReleased() {
-		if (key == 'a') 
-			if (p1.canMoveLeft())
-				p1.walkHorizontally(0);
-		if (key == 'd')
-			if (p1.canMoveRight())
-				p1.walkHorizontally(0);
+		// player 1	
 
-		if (keyCode == LEFT) 
-			if (p2.canMoveLeft())
-				p2.walkHorizontally(0);
+		if (key == 'a') 
+			p1.walkHorizontally(0);
+		if (key == 'd')
+			p1.walkHorizontally(0);
+
+		// player 2	
+
+		if (keyCode == LEFT)
+			p2.walkHorizontally(0);
 		if (keyCode == RIGHT)
-			if (p2.canMoveRight())
-				p2.walkHorizontally(0);
+			p2.walkHorizontally(0);
 	}
 
+	/**
+	 * @pre only detects collision if p1 is to the left of p2; also it does not detect player collision on the y axis
+	 */
 	public void playerCollisionDetection() {
 		if (p1.getX() + p1.getWidth() >= p2.getX()) {
 			p1.setVX(0);
@@ -113,19 +134,10 @@ public class GamePanel extends PApplet {
 			p2.setVX(0);
 			p2.setLeftMovability(false);
 		}
-		if (p2.getX() + p2.getWidth() >= p1.getX()) {
-			p2.setVX(0);
-			p2.setRightMovability(false);
-			p1.setVX(0);
-			p1.setLeftMovability(false);
-		}
-		if (p1.getY() + p1.getHeight() >= p2.getY()) {
-			p1.setVY(0);
-			p1.setDownMovability(false);
-		}
-		if (p2.getY() + p2.getHeight() >= p1.getY()) {
-			p2.setVY(0);
-			p2.setDownMovability(false);
-		}
+	}
+	
+	public void ballCollisionDetection() {
+		if (p1.getX() + p1.getWidth() == ball.getX() && p1.getY() <= ball.getY() + ball.getHeight() && p1.getY() + p1.getHeight() >= ball.getY())
+			ball.setVX(p1.getVX());
 	}
 }

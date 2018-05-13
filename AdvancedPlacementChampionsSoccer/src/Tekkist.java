@@ -10,7 +10,12 @@ public class Tekkist extends MovingObject {
 
 	private PImage tekkist;
 
-	public Tekkist(float x, float y, float w, float h) {
+	public Tekkist() {
+		super(100, 10, 100, 135);
+		tekkist = new PImage();
+	}
+
+	public Tekkist(int x, int y, int w, int h) {
 		super(x, y, w, h);
 		tekkist = new PImage();
 	}
@@ -43,7 +48,7 @@ public class Tekkist extends MovingObject {
 
 	public void jump() {
 		if (isOnSurface()) {
-			setVY(-10);
+			setVY(-7.5);
 			setState(false);
 		}
 	}
