@@ -17,8 +17,8 @@ public class GamePanel extends PApplet {
 
 	public GamePanel() {
 		ball = new Ball();
-		p1 = new Tekkist();
-		p2 = new Tekkist();
+		p1 = new Tekkist(225, (float) (height / 2.0), 100, 135);
+		p2 = new Tekkist(1075, (float) (height / 2.0), 100, 135);
 		boundaries = new Surface[6];
 		background = new PImage();
 	}
@@ -30,12 +30,6 @@ public class GamePanel extends PApplet {
 	public void createBoundaries() {
 		//		boundaries[0] = new Surface(0, 0, (int) (3.0 * width / 4.0), (int) (3.0 * height / 5.0));
 		boundaries[0] = new Surface(0, (int) (height / 2.0) + 70,  width, (int) (height / 2.0));
-
-		//		********************************************************
-		//		********************************************************
-		//		********** TRY TO ADD THE WALLS AND CEILING!! **********
-		//		********************************************************
-		//		********************************************************
 	}
 
 	public void setup() {		
@@ -59,7 +53,7 @@ public class GamePanel extends PApplet {
 		p1.actHorizontally();
 		if (!p1.isOnSurface()) 
 			p1.fall(boundaries[0]);
-		
+
 		p2.draw(this);
 		p2.actHorizontally();
 		if (!p2.isOnSurface()) 
@@ -69,33 +63,69 @@ public class GamePanel extends PApplet {
 		ball.actHorizontally();
 		if (!ball.isOnSurface()) 
 			ball.fall(boundaries[0]);
+
+		if (Math.abs(p1.getX() - p2.getX()) < 100 && Math.abs(p1.getY() - p2.getY()) < 135)
+			playerCollisionDetection();
 	}
 
 	public void keyPressed() {
 		if (keyPressed) {
 			if (key == 'a')
-				p1.walkHorizontally(-1);
+				if (p1.canMoveLeft())
+					p1.walkHorizontally(-1);
 			if (key == 'd')
-				p1.walkHorizontally(1);
+				if (p1.canMoveRight())
+					p1.walkHorizontally(1);
 			if (key == 'w') 
 				p1.jump();
-			if (key == 'k')
-				p2.walkHorizontally(-1);
-			if (key == ';')
-				p2.walkHorizontally(1);
-			if (key == 'o') 
+
+			if (keyCode == LEFT)
+				if (p2.canMoveLeft())
+					p2.walkHorizontally(-1);
+			if (keyCode == RIGHT)
+				if (p2.canMoveRight())
+					p2.walkHorizontally(1);
+			if (keyCode == UP) 
 				p2.jump();
 		}	
 	}
 
 	public void keyReleased() {
 		if (key == 'a') 
-			p1.walkHorizontally(0);
+			if (p1.canMoveLeft())
+				p1.walkHorizontally(0);
 		if (key == 'd')
-			p1.walkHorizontally(0);
-		if (key == 'k') 
-			p2.walkHorizontally(0);
-		if (key == ';')
-			p2.walkHorizontally(0);
+			if (p1.canMoveRight())
+				p1.walkHorizontally(0);
+
+		if (keyCode == LEFT) 
+			if (p2.canMoveLeft())
+				p2.walkHorizontally(0);
+		if (keyCode == RIGHT)
+			if (p2.canMoveRight())
+				p2.walkHorizontally(0);
+	}
+
+	public void playerCollisionDetection() {
+		if (p1.getX() + p1.getWidth() >= p2.getX()) {
+			p1.setVX(0);
+			p1.setRightMovability(false);
+			p2.setVX(0);
+			p2.setLeftMovability(false);
+		}
+		if (p2.getX() + p2.getWidth() >= p1.getX()) {
+			p2.setVX(0);
+			p2.setRightMovability(false);
+			p1.setVX(0);
+			p1.setLeftMovability(false);
+		}
+		if (p1.getY() + p1.getHeight() >= p2.getY()) {
+			p1.setVY(0);
+			p1.setDownMovability(false);
+		}
+		if (p2.getY() + p2.getHeight() >= p1.getY()) {
+			p2.setVY(0);
+			p2.setDownMovability(false);
+		}
 	}
 }

@@ -10,26 +10,33 @@ public abstract class MovingObject extends PhysicsObject {
 
 	private double vX, vY;
 	private boolean onSurface;
+	private boolean canMoveRight, canMoveLeft, canMoveDown;
 
-	public MovingObject(int x, int y, int w, int h) {
+	public MovingObject(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		vX = 0.0;
 		vY = 0.0;
+		canMoveRight = true;
+		canMoveLeft = true;
+		canMoveDown = true;
 	}
 
 	public void fall(Surface s) {
-		if (getY() <= s.getY() - getHeight()) {
+		if (getY() <= s.getY() - getHeight() && canMoveDown) {
 			setY((float) (getY() + vY));
 			vY += 0.5;
 		} else {
 			vY = 0;
-			onSurface = true;
-			setY(s.getY() - getHeight());
+			if (canMoveDown) {
+				onSurface = true;
+				setY(s.getY() - getHeight());
+			}
 		}
 	}
 	
 	public void actHorizontally() {
-		setX((float) (getX() + vX));
+		if (vX > 0 && canMoveRight || vX < 0 && canMoveLeft)
+			setX((float) (getX() + vX));
 	}
 
 	public double getVX() {
@@ -52,8 +59,30 @@ public abstract class MovingObject extends PhysicsObject {
 		onSurface = s;
 	}
 
+	public boolean canMoveRight() {
+		return canMoveRight;
+	}
+	
+	public boolean canMoveLeft() {
+		return canMoveLeft;
+	}
+	
+	public boolean canMoveDown() {
+		return canMoveDown;
+	}
+	
+	public void setRightMovability(boolean m) {
+		canMoveRight = m;
+	}
+	
+	public void setLeftMovability(boolean m) {
+		canMoveLeft = m;
+	}
+	
+	public void setDownMovability(boolean m) {
+		canMoveDown = m;
+	}
+	
 	public abstract void draw(PApplet drawer);
-
-	public abstract void collision();
 
 }

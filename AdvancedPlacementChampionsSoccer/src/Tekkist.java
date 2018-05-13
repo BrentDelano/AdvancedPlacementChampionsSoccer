@@ -10,12 +10,7 @@ public class Tekkist extends MovingObject {
 
 	private PImage tekkist;
 
-	public Tekkist() {
-		super(100, 10, 100, 135);
-		tekkist = new PImage();
-	}
-
-	public Tekkist(int x, int y, int w, int h) {
+	public Tekkist(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		tekkist = new PImage();
 	}
@@ -61,11 +56,7 @@ public class Tekkist extends MovingObject {
 		drawer.image(tekkist, getX(), getY(), getWidth(), getHeight());
 	}
 
-	public void kick(Tekkist t, Ball b) {
-		// implement later
-	}
-
-	public void collision() {
+	public void kick(Ball b) {
 		// implement later
 	}
 }

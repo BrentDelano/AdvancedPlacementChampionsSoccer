@@ -37,8 +37,4 @@ public class Ball extends MovingObject {
 	public void kicked(int side) {
 		
 	}
-
-	public void collision() {
-		
-	}
 }

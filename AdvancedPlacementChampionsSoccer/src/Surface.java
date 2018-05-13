@@ -8,7 +8,7 @@ import processing.core.PApplet;
  */
 public class Surface extends PhysicsObject {
 	
-	public Surface(int x, int y, int w, int h) {
+	public Surface(float x, float y, float w, float h) {
 		super(x, y, w, h);
 	}
 	
