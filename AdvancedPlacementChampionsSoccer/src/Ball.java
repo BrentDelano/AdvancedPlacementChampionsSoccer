@@ -25,8 +25,6 @@ public class Ball extends MovingObject {
 	public void draw(PApplet drawer) {
 		drawer.lights();
 		drawer.sphere(getWidth());
-		if (!isOnSurface())
-			fall(new Surface(drawer.width/2, drawer.height/2, drawer.width, drawer.height/2), false);
 	}
 	
 	public void kicked(int side) {

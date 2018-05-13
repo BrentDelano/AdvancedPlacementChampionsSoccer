@@ -1,10 +1,6 @@
 import processing.core.PApplet;
 import processing.core.PImage;
-//<<<<<<< HEAD
-//=======
 
-
-//>>>>>>> branch 'master' of https://github.com/bdelano255/AdvancedPlacementChampionsSoccer.git
 /**
  * Represents the player in the game, which is a MovingObject
  * @author Brent Delano
@@ -32,7 +28,7 @@ public class Tekkist extends MovingObject {
 	}
 	
 	public void walkVertically(int direction) {
-		setY(getY() + direction * 2);
+		setY(getY() + -direction * 2);
 	}
 	
 	public void jump() {
@@ -44,13 +40,11 @@ public class Tekkist extends MovingObject {
 		}
 	}
 	
-	public void setup(PApplet drawer)
-	{
+	public void setup(PApplet drawer) {
 		tekkist = drawer.loadImage("boi.png");
 	}
 	
-	public void setIsJumping(boolean isJumping)
-	{
+	public void setIsJumping(boolean isJumping) {
 		this.isJumping = isJumping;
 	}
 	

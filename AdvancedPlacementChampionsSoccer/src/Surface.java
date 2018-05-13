@@ -19,6 +19,7 @@ public class Surface extends PhysicsObject {
 	}
 	
 	public void draw(PApplet drawer) {
+		drawer.rotateX(drawer.PI/4);	
 		drawer.rectMode(drawer.CENTER);
 		drawer.fill(51);
 		drawer.stroke(255);
