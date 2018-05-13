@@ -8,65 +8,39 @@ import processing.core.PApplet;
  */
 public abstract class MovingObject extends PhysicsObject {
 
-	private double vY, gravity;
+	private double vX, vY;
 	private boolean onSurface;
 
 	public MovingObject(int x, int y, int w, int h) {
 		super(x, y, w, h);
+		vX = 0.0;
 		vY = 0.0;
 	}
 
-	public void fall(Surface s, boolean isJumping) {
-//		if (!onSurface) {
-//			if (super.getY() < s.getY() - super.getHeight()) {
-//				setY((int) (super.getY() + gravity));
-//				gravity += 0.1;
-//			} else {
-//				gravity = 0;
-//			}
-//			vY += 0.0;
-//			setY((int) vY);
-//			if (s.isPointInSurface(getX() + getWidth() / 2, getY() + getHeight())) {
-//				setY(getY() - (getY() + getHeight() - s.getY()));
-//				onSurface = true;
-//				vY = 0;
-//			}
-//		}
-		if(!isJumping)
-		{
-			if(!onSurface)
-			{
-				if (s.isPointInHorizontalSurface(getX() + getWidth() / 2, getY() + getHeight())) {
-					setY(getY() - (getY() + getHeight() - s.getY()));
-					onSurface = true;
-					vY = 0;
-				}
-				if (super.getY() < s.getY() - super.getHeight()) {
-					setY((int) (super.getY() + gravity));
-					gravity += 0.1;
-				} else {
-					gravity = 0;
-				}
-			}
-		}
-		else {
-			vY+=5;
-			if (super.getY() < s.getY() - super.getHeight()) {
-				setY((int) (super.getY() +vY -gravity));
-				gravity +=1;
-			} else {
-				gravity = 0;
-			}
-			
+	public void fall(Surface s) {
+		if (getY() <= s.getY() - getHeight()) {
+			setY((float) (getY() + vY));
+			vY += 0.5;
+		} else {
+			vY = 0;
+			onSurface = true;
+			setY(s.getY() - getHeight());
 		}
 	}
 	
-	public double getVy()
-	{
-		return vY;
+	public void actHorizontally() {
+		setX((float) (getX() + vX));
 	}
 
-	public void setVY(int v) {
+	public double getVX() {
+		return vX;
+	}
+	
+	public void setVX(double v) {
+		vX = v;
+	}
+	
+	public void setVY(double v) {
 		vY = v;
 	}
 

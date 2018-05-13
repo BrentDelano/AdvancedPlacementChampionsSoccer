@@ -6,37 +6,37 @@
  */
 public abstract class PhysicsObject {
 
-	private int x, y;
-	private int width, height;
+	private float x, y;
+	private float width, height;
 	
-	public PhysicsObject(int x, int y, int w, int h) {
+	public PhysicsObject(float x, float y, float w, float h) {
 		this.x = x;
 		this.y = y;
 		width = w;
 		height = h;
 	}
 	
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 	
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 	
-	public int getWidth() {
+	public float getWidth() {
 		return width;
 	}
 	
-	public int getHeight() {
+	public float getHeight() {
 		return height;
 	}
 	
-	public void setX(int d) {
+	public void setX(float d) {
 		this.x = d;
 	}
 	
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
 	}		
 }

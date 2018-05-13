@@ -8,7 +8,6 @@ import processing.core.*;
  */
 public class Goal extends PhysicsObject{
 	
-	private int x, y, height, width;
 	private boolean isLeft;
 	private PImage img;
 	
@@ -16,16 +15,6 @@ public class Goal extends PhysicsObject{
 	{
 		super(x, y, height, width);
 		this.isLeft = isLeft;
-	}
-	
-	public void setHeight(int newHeight)
-	{
-		height = newHeight;
-	}
-	
-	public void setWidth(int newWidth)
-	{
-		width = newWidth;
 	}
 	
 	public void setup(PApplet marker)
@@ -40,7 +29,7 @@ public class Goal extends PhysicsObject{
 	
 	public void draw(PApplet marker)
 	{
-		marker.image(img, x, y);
+		marker.image(img, getX(), getY());
 	}
 	
 }

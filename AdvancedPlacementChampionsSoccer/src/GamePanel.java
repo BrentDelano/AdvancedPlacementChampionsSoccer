@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -12,23 +10,30 @@ import processing.core.PImage;
 public class GamePanel extends PApplet {
 
 	private Ball ball;
-	private Tekkist tekkist;
+	private Tekkist p1;
+	private Tekkist p2;
 	private Surface[] boundaries;
 	private PImage background;
 
 	public GamePanel() {
 		ball = new Ball();
-		tekkist = new Tekkist();
+		p1 = new Tekkist();
+		p2 = new Tekkist();
 		boundaries = new Surface[6];
 		background = new PImage();
 	}
 
+	public static void main(String[] args) {
+		PApplet.main("GamePanel");
+	}
+
 	public void createBoundaries() {
-		boundaries[0] = new Surface(0, 0, (int) (3.0 * width / 4.0), (int) (3.0 * height / 5.0));
-		
+		//		boundaries[0] = new Surface(0, 0, (int) (3.0 * width / 4.0), (int) (3.0 * height / 5.0));
+		boundaries[0] = new Surface(0, (int) (height / 2.0) + 70,  width, (int) (height / 2.0));
+
 		//		********************************************************
 		//		********************************************************
-		//		** TRY TO ADD THE WALLS AND CEILING DURING TUTORIAL!! **
+		//		********** TRY TO ADD THE WALLS AND CEILING!! **********
 		//		********************************************************
 		//		********************************************************
 	}
@@ -37,53 +42,60 @@ public class GamePanel extends PApplet {
 		background = loadImage("field.jpeg");
 		createBoundaries();
 		ball.setup(this);
-		tekkist.setup(this);	
+		p1.setup(this, "batman.gif");	
+		p2.setup(this, "street fighter.gif");
 	}
 
 	public void settings() {
-		fullScreen(P3D);
+		fullScreen(P2D);
 	}
 
 	public void draw() {			
 		clear();
-		translate(width / 2, height / 2, 0);
 
-		imageMode(CENTER);
 		image(background, 0, 0, width, height);
 
-		tekkist.draw(this);
-		if(!tekkist.isOnSurface()) 
-			tekkist.fall(boundaries[0], false);
+		p1.draw(this);
+		p1.actHorizontally();
+		if (!p1.isOnSurface()) 
+			p1.fall(boundaries[0]);
+		
+		p2.draw(this);
+		p2.actHorizontally();
+		if (!p2.isOnSurface()) 
+			p2.fall(boundaries[0]);
 
-		
-		
-		pushMatrix();
-		rotateX(PI/4);
-		boundaries[0].draw(this);
-		rotateX(-PI/4);
 		ball.draw(this);
-		if (!ball.isOnSurface())
-			ball.fall(boundaries[0], false);
-		popMatrix();
+		ball.actHorizontally();
+		if (!ball.isOnSurface()) 
+			ball.fall(boundaries[0]);
 	}
 
 	public void keyPressed() {
 		if (keyPressed) {
-			if (key == 'a') {
-				tekkist.walkHorizontally(-1);
-			}
-			if (key == 'd') {
-				tekkist.walkHorizontally(1);
-			}
-			if (key == 'w') {
-				tekkist.walkVertically(1);
-			}
-			if (key == 's' ) {
-				tekkist.walkVertically(-1);
-			}
-			if (key == ' ') {
-				tekkist.jump();
-			}
+			if (key == 'a')
+				p1.walkHorizontally(-1);
+			if (key == 'd')
+				p1.walkHorizontally(1);
+			if (key == 'w') 
+				p1.jump();
+			if (key == 'k')
+				p2.walkHorizontally(-1);
+			if (key == ';')
+				p2.walkHorizontally(1);
+			if (key == 'o') 
+				p2.jump();
 		}	
+	}
+
+	public void keyReleased() {
+		if (key == 'a') 
+			p1.walkHorizontally(0);
+		if (key == 'd')
+			p1.walkHorizontally(0);
+		if (key == 'k') 
+			p2.walkHorizontally(0);
+		if (key == ';')
+			p2.walkHorizontally(0);
 	}
 }
