@@ -28,11 +28,12 @@ public class Ball extends MovingObject {
 		//		drawer.sphere(getWidth());
 
 		//		drawer.image(ball, getX(), getY(), getWidth(), getHeight());
-
+		drawer.pushMatrix();
 		drawer.translate((float) (getX() + getWidth()/2.0), (float) (getY() + getHeight()/2.0));
 		drawer.rotate((float) (calcSpin()));
 		drawer.image(ball, (float) (-getWidth()/2.0), (float) (-getHeight()/2.0), getWidth(), getHeight());
 		drawer.translate((float) -(getX() + getWidth()/2.0), (float) -(getY() + getHeight()/2.0));
+		drawer.popMatrix();
 	}
 
 	public void applyFriction() {
