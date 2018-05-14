@@ -51,7 +51,7 @@ public class GamePanel extends PApplet {
 
 		image(background, 0, 0, width, height);
 		p1.draw(this);
-		p2.draw(this);		
+		p2.draw(this);	
 		ball.draw(this);
 
 		// creates physics between physics objects
@@ -142,9 +142,9 @@ public class GamePanel extends PApplet {
 	
 	public void ballCollisionDetection(Tekkist p) {
 		if (p.getY() <= ball.getY() - ball.getHeight() && p.getY() + p.getHeight() >= ball.getY()) {
-			System.out.println(p.getX() + p.getWidth() - ball.getX());
+			System.out.println(p1.getX());
 			if (p.getX() + p.getWidth()/2.0 - ball.getX() <= 0 && p.getX() + p.getWidth()/2.0 - ball.getX() >= -(p.getWidth() / 2.0) ||
-					p.getX() - p.getWidth()/2.0 - ball.getX() - ball.getWidth() <= 0 && p.getX() - p.getWidth()/2.0 - ball.getX() - ball.getWidth() >= -(p.getWidth() / 2.0)) {
+					p.getX() - ball.getX() - ball.getWidth() <= 0 && p.getX() - ball.getX() - ball.getWidth() >= -(p.getWidth() / 2.0)) {
 				ball.setVX(1.5 * p.getVX());
 			}
 		}

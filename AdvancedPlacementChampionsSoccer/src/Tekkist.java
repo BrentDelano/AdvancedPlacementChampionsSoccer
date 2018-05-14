@@ -42,9 +42,9 @@ public class Tekkist extends MovingObject {
 		}
 	}
 
-	public void walkVertically(int direction) {
-		setVY(5 * direction);
-	}
+//	public void walkVertically(int direction) {
+//		setVY(5 * direction);
+//	}
 
 	public void jump() {
 		if (isOnSurface()) {
