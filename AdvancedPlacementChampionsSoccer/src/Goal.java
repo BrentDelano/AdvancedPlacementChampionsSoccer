@@ -11,7 +11,7 @@ public class Goal extends PhysicsObject{
 	private boolean isLeft;
 	private PImage img;
 	
-	public Goal(int x, int y, boolean isLeft, int height, int width)
+	public Goal(float x, float y, boolean isLeft, float height, float width)
 	{
 		super(x, y, height, width);
 		this.isLeft = isLeft;
@@ -21,15 +21,20 @@ public class Goal extends PhysicsObject{
 	{
 		if(isLeft)
 			img = marker.loadImage("soccerGoalLeft.png");
+		
 		else
 		{
-			img = marker.loadImage("soccerGoal.png");
+			img = marker.loadImage("soccerGoalRight.png");
 		}
+		
+		
 	}
 	
 	public void draw(PApplet marker)
 	{
-		marker.image(img, getX(), getY());
+		
+		marker.image(img, getX(), getY(), getWidth(),getHeight());
+		
 	}
 	
 }

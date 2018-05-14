@@ -39,4 +39,14 @@ public abstract class PhysicsObject {
 	public void setY(float y) {
 		this.y = y;
 	}		
+	
+	public void setHeight(float height)
+	{
+		this.height = height;
+	}
+	
+	public void setWidth(float width)
+	{
+		this.width = width;
+	}
 }

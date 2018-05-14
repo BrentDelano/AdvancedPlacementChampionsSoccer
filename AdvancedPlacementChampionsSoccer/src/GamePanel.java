@@ -14,13 +14,21 @@ public class GamePanel extends PApplet {
 	private Tekkist p2;
 	private Surface[] boundaries;
 	private PImage background;
+	private Goal leftGoal;
+	private Goal rightGoal;
+	private int p1Score;
+	private int p2Score;
 
 	public GamePanel() {
 		ball = new Ball(700, 0, 30);
 		p1 = new Tekkist(225, 520, 100, 135);
-		p2 = new Tekkist(1075, 520, 100, 135);
+		p2 = new Tekkist(1000, 520, 100, 135);
 		boundaries = new Surface[6];
 		background = new PImage();
+		leftGoal = new Goal(50, 150, true,100, 400); 
+		rightGoal = new Goal(1120, 150, false,100, 400);
+		p1Score = 0;
+		p2Score =0;
 	}
 
 	public static void main(String[] args) {
@@ -38,6 +46,8 @@ public class GamePanel extends PApplet {
 		ball.setup(this);
 		p1.setup(this, "batman.gif");	
 		p2.setup(this, "street fighter.gif");
+		leftGoal.setup(this);
+		rightGoal.setup(this);
 	}
 
 	public void settings() {
@@ -53,6 +63,10 @@ public class GamePanel extends PApplet {
 		p1.draw(this);
 		p2.draw(this);		
 		ball.draw(this);
+		rightGoal.draw(this);
+		leftGoal.draw(this);
+		textSize(40);
+		text("SCORE: " + p1Score + " - " + p2Score, 500,750);
 
 		// creates physics between physics objects
 
@@ -72,6 +86,8 @@ public class GamePanel extends PApplet {
 
 		//  collision detecting
 
+		
+		
 		if (Math.abs(p1.getX() - p2.getX()) < 100 && Math.abs(p1.getY() - p2.getY()) < 135)
 			playerCollisionDetection();
 		else {
@@ -83,7 +99,11 @@ public class GamePanel extends PApplet {
 			ballCollisionDetection(p1);
 		if (Math.abs(p2.getX() - ball.getX()) < 150)
 			ballCollisionDetection(p2);
+		
+		goalScored();
 	}
+	
+	
 
 	public void keyPressed() {		
 		if (keyPressed) {
@@ -142,11 +162,27 @@ public class GamePanel extends PApplet {
 	
 	public void ballCollisionDetection(Tekkist p) {
 		if (p.getY() <= ball.getY() - ball.getHeight() && p.getY() + p.getHeight() >= ball.getY()) {
-			System.out.println(p.getX() + p.getWidth() - ball.getX());
+		//	System.out.println(p.getX() + p.getWidth() - ball.getX());
 			if (p.getX() + p.getWidth()/2.0 - ball.getX() <= 0 && p.getX() + p.getWidth()/2.0 - ball.getX() >= -(p.getWidth() / 2.0) ||
 					p.getX() - p.getWidth()/2.0 - ball.getX() - ball.getWidth() <= 0 && p.getX() - p.getWidth()/2.0 - ball.getX() - ball.getWidth() >= -(p.getWidth() / 2.0)) {
 				ball.setVX(1.5 * p.getVX());
 			}
+		}
+	}
+	
+	public void goalScored()
+	{
+		if(ball.getX()<=150 && ball.getY() >= 150 && ball.getY()<=150+400)
+		{
+			p2Score++;
+			ball = new Ball(700, 0, 30);
+			ball.setup(this);
+		}
+		if(ball.getX()>=1120 && ball.getY() >= 150 && ball.getY()<=150+400)
+		{
+			p1Score++;
+			ball = new Ball(700, 0, 30);
+			ball.setup(this);
 		}
 	}
 }
