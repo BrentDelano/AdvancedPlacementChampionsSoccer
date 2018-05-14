@@ -18,6 +18,7 @@ public class GamePanel extends PApplet {
 	private Goal rightGoal;
 	private int p1Score;
 	private int p2Score;
+	private PImage pauseButton;
 
 	public GamePanel() {
 		ball = new Ball(700, 0, 30);
@@ -27,6 +28,7 @@ public class GamePanel extends PApplet {
 		background = new PImage();
 		leftGoal = new Goal(50, 150, true,100, 400); 
 		rightGoal = new Goal(1120, 150, false,100, 400);
+		pauseButton = new PImage();
 		p1Score = 0;
 		p2Score =0;
 	}
@@ -48,6 +50,7 @@ public class GamePanel extends PApplet {
 		p2.setup(this, "street fighter.gif");
 		leftGoal.setup(this);
 		rightGoal.setup(this);
+		pauseButton = loadImage("pauseButton.png");
 	}
 
 	public void settings() {
@@ -60,6 +63,7 @@ public class GamePanel extends PApplet {
 		// draws everything onto the screen
 
 		image(background, 0, 0, width, height);
+		image(pauseButton, width-60, 10, 50, 50);
 		p1.draw(this);
 		p2.draw(this);	
 		ball.draw(this);
@@ -101,7 +105,7 @@ public class GamePanel extends PApplet {
 		if (Math.abs(p2.getX() - ball.getX()) < 150)
 			ballCollisionDetection(p2);
 		
-		goalScored();
+		goalInteraction();
 	}
 	
 	
@@ -131,6 +135,15 @@ public class GamePanel extends PApplet {
 			if (keyCode == UP) 
 				p2.jump();
 		}	
+	}
+	
+	public void mousePressed()
+	{
+		if(mouseX>=width-60 && mouseY<=60 && mouseY>10 && mouseX<width-10)
+		{
+			//TONY ADD PAUSE SCREEN GRAPHIC
+			
+		}
 	}
 
 	public void keyReleased() {
@@ -175,7 +188,7 @@ public class GamePanel extends PApplet {
 		}
 	}
 	
-	public void goalScored()
+	public void goalInteraction()
 	{
 		if(ball.getX()<=150 && ball.getY() >= 150 && ball.getY()<=150+400)
 		{
@@ -189,5 +202,7 @@ public class GamePanel extends PApplet {
 			ball = new Ball(700, 0, 30);
 			ball.setup(this);
 		}
+		//need to add bounce off crossbar
+		
 	}
 }
