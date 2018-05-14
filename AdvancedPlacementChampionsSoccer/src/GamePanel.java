@@ -26,7 +26,11 @@ public class GamePanel extends PApplet {
 		p2 = new Tekkist(1000, 520, 100, 135);
 		boundaries = new Surface[6];
 		background = new PImage();
-		leftGoal = new Goal(50, 150, true,100, 400); 
+		leftGoal = new Goal((float)(width/25.6), (float)((height*3.0)/16.0), true,100, 400); 
+		//System.out.println(width);
+		//System.out.println(height);
+		//System.out.println(leftGoal.getX());
+		//System.out.println(leftGoal.getY());
 		rightGoal = new Goal(1120, 150, false,100, 400);
 		pauseButton = new PImage();
 		p1Score = 0;
@@ -40,6 +44,7 @@ public class GamePanel extends PApplet {
 	public void createBoundaries() {
 		//		boundaries[0] = new Surface(0, 0, (int) (3.0 * width / 4.0), (int) (3.0 * height / 5.0));
 		boundaries[0] = new Surface(0, (int) (height / 2.0) + 70,  width, (int) (height / 2.0));
+		
 	}
 
 	public void setup() {		
@@ -51,6 +56,7 @@ public class GamePanel extends PApplet {
 		leftGoal.setup(this);
 		rightGoal.setup(this);
 		pauseButton = loadImage("pauseButton.png");
+		//leftGoal = new Goal((float)(width/25.6), (float)((height*3.0)/16.0), true,100, 400);
 	}
 
 	public void settings() {
@@ -61,7 +67,10 @@ public class GamePanel extends PApplet {
 		clear();
 
 		// draws everything onto the screen
-
+		leftGoal.setX((float)(width/25.6));
+		leftGoal.setY((float)((height*3.0)/16.0));
+		rightGoal.setX((float)((width*7.0)/8.0));
+		rightGoal.setY((float)((height*3.0)/16.0));
 		image(background, 0, 0, width, height);
 		image(pauseButton, width-60, 10, 50, 50);
 		p1.draw(this);
@@ -71,7 +80,7 @@ public class GamePanel extends PApplet {
 		leftGoal.draw(this);
 
 		textSize(40);
-		text("SCORE: " + p1Score + " - " + p2Score, 500,750);
+		text("SCORE: " + p1Score + " - " + p2Score, (float)(width/2.56),(float)((height*15.0)/16.0));
 
 		// creates physics between physics objects
 
@@ -106,6 +115,8 @@ public class GamePanel extends PApplet {
 			ballCollisionDetection(p2);
 		
 		goalInteraction();
+	//	System.out.println(width + "width");
+	//	System.out.println(height + "height");
 	}
 	
 	
