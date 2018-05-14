@@ -201,13 +201,13 @@ public class GamePanel extends PApplet {
 	
 	public void goalInteraction()
 	{
-		if(ball.getX()<=150 && ball.getY() >= 150 && ball.getY()<=150+400)
+		if(ball.getX()<=100+leftGoal.getX() && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY()+400)
 		{
 			p2Score++;
 			ball = new Ball(700, 0, 30);
 			ball.setup(this);
 		}
-		if(ball.getX()>=1120 && ball.getY() >= 150 && ball.getY()<=150+400)
+		if(ball.getX()>=rightGoal.getX() && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+400)
 		{
 			p1Score++;
 			ball = new Ball(700, 0, 30);
