@@ -26,16 +26,28 @@ public class Ball extends MovingObject {
 	public void draw(PApplet drawer) {
 		//		drawer.lights();
 		//		drawer.sphere(getWidth());
-		drawer.image(ball, getX(), getY(), getWidth(), getHeight());
+
+		//		drawer.image(ball, getX(), getY(), getWidth(), getHeight());
+
+		drawer.translate((float) (getX() + getWidth()/2.0), (float) (getY() + getHeight()/2.0));
+		drawer.rotate((float) (calcSpin()));
+		drawer.image(ball, (float) (-getWidth()/2.0), (float) (-getHeight()/2.0), getWidth(), getHeight());
+		drawer.translate((float) -(getX() + getWidth()/2.0), (float) -(getY() + getHeight()/2.0));
 	}
 
 	public void applyFriction() {
 		if (isOnSurface()) {
+			double friction;
+			if (Math.abs(getVX()) < 0.05) 
+				friction = Math.abs(getVX());
+			else
+				friction = 0.05;
+
 			if (getVX() > 0) {
-				setVX(getVX() - 0.05);
+				setVX(getVX() - friction);
 			}
 			if (getVX() < 0) {
-				setVX(getVX() + 0.05);
+				setVX(getVX() + friction);
 			} 
 		}
 	}
@@ -58,6 +70,13 @@ public class Ball extends MovingObject {
 	public void bounce() {
 		setVY(-Math.abs(getVY()) + Math.abs(getVY() * 0.2));
 		setState(false);
+	}
+	
+	public double calcSpin() {
+		if (getVX() > 0)
+			return -Math.pow(2, getVX()) / 4.0;
+		else 
+			return Math.pow(2, Math.abs(getVX())) / 4.0;
 	}
 
 	public void kicked(int side) {
