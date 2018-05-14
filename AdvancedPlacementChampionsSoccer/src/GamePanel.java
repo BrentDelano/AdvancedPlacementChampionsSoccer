@@ -67,6 +67,8 @@ public class GamePanel extends PApplet {
 		ball.act();
 		if (!ball.isOnSurface()) 
 			ball.fall(boundaries[0]);
+		if (ball.getVX() != 0)
+			ball.applyFriction();
 
 		//  collision detecting
 
@@ -78,7 +80,9 @@ public class GamePanel extends PApplet {
 		}
 		
 		if (Math.abs(p1.getX() - ball.getX()) < 150)
-			ballCollisionDetection();
+			ballCollisionDetection(p1);
+		if (Math.abs(p2.getX() - ball.getX()) < 150)
+			ballCollisionDetection(p2);
 	}
 
 	public void keyPressed() {		
@@ -136,8 +140,13 @@ public class GamePanel extends PApplet {
 		}
 	}
 	
-	public void ballCollisionDetection() {
-		if (p1.getX() + p1.getWidth() == ball.getX() && p1.getY() <= ball.getY() + ball.getHeight() && p1.getY() + p1.getHeight() >= ball.getY())
-			ball.setVX(p1.getVX());
+	public void ballCollisionDetection(Tekkist p) {
+		if (p.getY() <= ball.getY() - ball.getHeight() && p.getY() + p.getHeight() >= ball.getY()) {
+			System.out.println(p.getX() + p.getWidth() - ball.getX());
+			if (p.getX() + p.getWidth()/2.0 - ball.getX() <= 0 && p.getX() + p.getWidth()/2.0 - ball.getX() >= -(p.getWidth() / 2.0) ||
+					p.getX() - p.getWidth()/2.0 - ball.getX() - ball.getWidth() <= 0 && p.getX() - p.getWidth()/2.0 - ball.getX() - ball.getWidth() >= -(p.getWidth() / 2.0)) {
+				ball.setVX(1.5 * p.getVX());
+			}
+		}
 	}
 }

@@ -29,19 +29,16 @@ public class Ball extends MovingObject {
 		drawer.image(ball, getX(), getY(), getWidth(), getHeight());
 	}
 
-//	public void actHorizontally() {
-//		final double friction = 0.05;
-//		setX((float) (getX() + getVX()));
-//		if (getVX() > 0) {
-//			while(getVX() > 0) 
-//				setVX(getVX() - friction);
-//		}
-//		if (getVX() < 0) {
-//			while(getVX() < 0) 
-//				setVX(getVX() + friction);
-//		}
-//		setVX(0);
-//	}
+	public void applyFriction() {
+		if (isOnSurface()) {
+			if (getVX() > 0) {
+				setVX(getVX() - 0.05);
+			}
+			if (getVX() < 0) {
+				setVX(getVX() + 0.05);
+			} 
+		}
+	}
 
 	public void fall(Surface s) {
 		if (getY() <= s.getY() - getHeight()) {
@@ -59,9 +56,7 @@ public class Ball extends MovingObject {
 	}
 
 	public void bounce() {
-		System.out.println(getVY());
 		setVY(-Math.abs(getVY()) + Math.abs(getVY() * 0.2));
-		System.out.println(getVY());
 		setState(false);
 	}
 
