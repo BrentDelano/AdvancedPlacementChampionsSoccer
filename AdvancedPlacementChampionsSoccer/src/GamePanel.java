@@ -128,12 +128,28 @@ public class GamePanel extends PApplet {
 		
 		if(Math.abs(p1.getY()+p1.getHeight()-ball.getY()) <5 && ball.getX()  + ball.getWidth() >p1.getX() && ball.getX()  <p1.getX()+p1.getWidth())
 		{
-			ball.setX(p1.getX()+ p1.getWidth());
+			if(ball.getX() >= p1.getX() +p1.getHeight()/2)
+			{
+				ball.setX(p1.getX()+ p1.getWidth());
+			}
+			else
+			{
+				ball.setX(p1.getX());
+			}
+			
 			ball.setVX(1.5* p1.getVX());
 		}
 		if(Math.abs(p2.getY()+p2.getHeight()-ball.getY()) <5 && ball.getX()  + ball.getWidth() >p2.getX() && ball.getX()  <p2.getX()+p2.getWidth())
 		{
-			ball.setX(p2.getX());
+			if(ball.getX() >= p2.getX() +p2.getHeight()/2)
+			{
+				ball.setX(p2.getX()+ p2.getWidth());
+			}
+			else
+			{
+				ball.setX(p2.getX());
+			}
+			
 			ball.setVX(1.5* p2.getVX());
 		}
 		
