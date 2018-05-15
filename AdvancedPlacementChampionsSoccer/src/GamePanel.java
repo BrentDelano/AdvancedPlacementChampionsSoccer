@@ -26,11 +26,11 @@ public class GamePanel extends PApplet {
 		p2 = new Tekkist(1000, 520, 100, 135);
 		boundaries = new Surface[6];
 		background = new PImage();
-		leftGoal = new Goal(50, 150, true,100, 400); 
+		leftGoal = new Goal((float)(width/25.6), (float)((height*3.0)/16.0), true,100, 400); 
 		rightGoal = new Goal(1120, 150, false,100, 400);
 		pauseButton = new PImage();
 		p1Score = 0;
-		p2Score =0;
+		p2Score = 0;
 	}
 
 	public static void main(String[] args) {
@@ -40,6 +40,7 @@ public class GamePanel extends PApplet {
 	public void createBoundaries() {
 		//		boundaries[0] = new Surface(0, 0, (int) (3.0 * width / 4.0), (int) (3.0 * height / 5.0));
 		boundaries[0] = new Surface(0, (int) (height / 2.0) + 70,  width, (int) (height / 2.0));
+		
 	}
 
 	public void setup() {		
@@ -51,6 +52,7 @@ public class GamePanel extends PApplet {
 		leftGoal.setup(this);
 		rightGoal.setup(this);
 		pauseButton = loadImage("pauseButton.png");
+		//leftGoal = new Goal((float)(width/25.6), (float)((height*3.0)/16.0), true,100, 400);
 	}
 
 	public void settings() {
@@ -61,7 +63,10 @@ public class GamePanel extends PApplet {
 		clear();
 
 		// draws everything onto the screen
-
+		leftGoal.setX((float)(width/25.6));
+		leftGoal.setY((float)((height*3.0)/16.0));
+		rightGoal.setX((float)((width*7.0)/8.0));
+		rightGoal.setY((float)((height*3.0)/16.0));
 		image(background, 0, 0, width, height);
 		image(pauseButton, width - 60, 10, 50, 50);
 		p1.draw(this);
@@ -71,7 +76,7 @@ public class GamePanel extends PApplet {
 		leftGoal.draw(this);
 
 		textSize(40);
-		text("SCORE: " + p1Score + " - " + p2Score, 500, 750);
+		text("SCORE: " + p1Score + " - " + p2Score, (float)(width/2.56),(float)((height*15.0)/16.0));
 
 		// creates physics between physics objects
 
@@ -99,18 +104,20 @@ public class GamePanel extends PApplet {
 		}
 		
 		if (Math.abs(p1.getX() - ball.getX()) < 150)
-			ballCollisionDetection(p1);
+			ballInteraction(p1);
 		if (Math.abs(p2.getX() - ball.getX()) < 150)
-			ballCollisionDetection(p2);
+			ballInteraction(p2);
 		
 		goalInteraction();
+	//	System.out.println(width + "width");
+	//	System.out.println(height + "height");
 	}
 
 	public void keyPressed() {		
 		if (keyPressed) {
-
+			
 			// player 1
-
+			
 			if (key == 'a')
 				if (p1.canMoveLeft())
 					p1.walkHorizontally(-1);
@@ -130,6 +137,12 @@ public class GamePanel extends PApplet {
 					p2.walkHorizontally(1);
 			if (keyCode == UP) 
 				p2.jump();
+			
+			if (key == ' ' ) {
+				System.out.print("rightX: " + p1.getX() + p1.getWidth());
+				System.out.print(", Player Width: " + p1.getWidth());
+				System.out.println(", BallX: " + ball.getX());
+			}
 		}	
 	}
 	
@@ -170,10 +183,10 @@ public class GamePanel extends PApplet {
 		}
 	}
 	
-	public void ballCollisionDetection(Tekkist p) {
+	public void ballInteraction(Tekkist p) {
 		if (p.getY() <= ball.getY() - ball.getHeight() && p.getY() + p.getHeight() >= ball.getY()) {
-			if (p.getX() + p.getWidth()/2.0 - ball.getX() <= 0 && p.getX() + p.getWidth()/2.0 - ball.getX() >= -(p.getWidth() / 2.0) ||
-					p.getX() - ball.getX() - ball.getWidth() <= 0 && p.getX() - ball.getX() - ball.getWidth() >= -(p.getWidth() / 2.0)) {
+			if (p.getX() + p.getWidth() >= ball.getX() && p.getX() + p.getWidth()/2.0 < ball.getX() ||
+					p.getX() <= ball.getX() + ball.getWidth() && p.getX() >= ball.getX() + ball.getWidth()/2.0) {
 				ball.setVX(1.5 * p.getVX());
 			}
 		}
@@ -181,13 +194,13 @@ public class GamePanel extends PApplet {
 	
 	public void goalInteraction()
 	{
-		if(ball.getX()<=150 && ball.getY() >= 150 && ball.getY()<=150+400)
+		if(ball.getX()<=100+leftGoal.getX() && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY()+400)
 		{
 			p2Score++;
 			ball = new Ball(700, 0, 30);
 			ball.setup(this);
 		}
-		if(ball.getX()>=1120 && ball.getY() >= 150 && ball.getY()<=150+400)
+		if(ball.getX()>=rightGoal.getX() && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+400)
 		{
 			p1Score++;
 			ball = new Ball(700, 0, 30);

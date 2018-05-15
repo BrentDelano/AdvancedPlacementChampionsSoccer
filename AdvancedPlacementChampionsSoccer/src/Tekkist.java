@@ -42,6 +42,28 @@ public class Tekkist extends MovingObject {
 		}
 	}
 
+	public void dash(int direction)  {
+		if (direction > 0) {
+			while (getVX() < 25.0)
+				setVX(getVX() + 0.1);
+			
+		} else if (direction < 0) {
+			while (getVX() > -25.0)
+				setVX(getVX() - 0.1);
+			
+		} else {
+			if (getVX() > 0) {
+				while(getVX() > 0) 
+					setVX(getVX() - 0.1);
+			}
+			if (getVX() < 0) {
+				while(getVX() < 0) 
+					setVX(getVX() + 0.1);
+			}
+			setVX(0);
+		}
+	}
+	
 //	public void walkVertically(int direction) {
 //		setVY(5 * direction);
 //	}
