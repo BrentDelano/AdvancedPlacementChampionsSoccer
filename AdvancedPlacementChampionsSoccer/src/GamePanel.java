@@ -1,5 +1,6 @@
 import processing.core.PApplet;
 import processing.core.PImage;
+//import processing.sound.*;
 
 /**
  * Represents the in-game screen
@@ -19,6 +20,7 @@ public class GamePanel extends PApplet {
 	private int p1Score;
 	private int p2Score;
 	private PImage pauseButton;
+	//private SoundFile cheer;
 //	private boolean inJump;
 
 	public GamePanel() {
@@ -31,8 +33,9 @@ public class GamePanel extends PApplet {
 		rightGoal = new Goal(1120, 150, false,100, 400);
 		pauseButton = new PImage();
 		p1Score = 0;
+	//	cheer = new SoundFile(this, "cheer.mp3");
 	//	inJump=false;
-		p2Score = 0;
+		
 	}
 
 	public static void main(String[] args) {
@@ -54,6 +57,8 @@ public class GamePanel extends PApplet {
 		leftGoal.setup(this);
 		rightGoal.setup(this);
 		pauseButton = loadImage("pauseButton.png");
+		p2Score = 0;
+		
 		//leftGoal = new Goal((float)(width/25.6), (float)((height*3.0)/16.0), true,100, 400);
 	}
 
@@ -247,12 +252,14 @@ public class GamePanel extends PApplet {
 		if(ball.getX()<=100+leftGoal.getX() && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY()+400)
 		{
 			p2Score++;
+	//		cheer.play();
 			ball = new Ball(700, 0, 30);
 			ball.setup(this);
 		}
 		if(ball.getX()>=rightGoal.getX() && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+400)
 		{
 			p1Score++;
+	//		cheer.play();
 			ball = new Ball(700, 0, 30);
 			ball.setup(this);
 		}
