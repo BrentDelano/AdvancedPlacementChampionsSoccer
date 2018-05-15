@@ -83,7 +83,19 @@ public class Tekkist extends MovingObject {
 		drawer.image(tekkist, getX(), getY(), getWidth(), getHeight());
 	}
 
-	public void kick(Ball b) {
+	public void kick(Ball b, Surface s, boolean isLeft) {
 		// implement later
+		
+		if(isLeft)
+			{
+			b.setVX(10);
+			}
+		else
+		{
+			b.setVX(-10);
+		}
+		b.setVY(-4);
+		b.fall(s);
+		
 	}
 }

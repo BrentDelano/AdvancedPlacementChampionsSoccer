@@ -20,6 +20,8 @@ public class GamePanel extends PApplet {
 	private int p1Score;
 	private int p2Score;
 	private PImage pauseButton;
+	private PImage kick1;
+	private PImage kick2;
 	//private SoundFile cheer;
 //	private boolean inJump;
 
@@ -33,6 +35,8 @@ public class GamePanel extends PApplet {
 		rightGoal = new Goal(1120, 150, false,100, 400);
 		pauseButton = new PImage();
 		p1Score = 0;
+		kick1 = new PImage();
+		kick2 = new PImage();
 	//	cheer = new SoundFile(this, "cheer.mp3");
 	//	inJump=false;
 		
@@ -58,6 +62,8 @@ public class GamePanel extends PApplet {
 		rightGoal.setup(this);
 		pauseButton = loadImage("pauseButton.png");
 		p2Score = 0;
+		kick1 = loadImage("kick.jpeg");
+		kick2 = loadImage("kick.jpeg");
 		
 		//leftGoal = new Goal((float)(width/25.6), (float)((height*3.0)/16.0), true,100, 400);
 	}
@@ -76,6 +82,8 @@ public class GamePanel extends PApplet {
 		rightGoal.setY((float)((height*3.0)/16.0));
 		image(background, 0, 0, width, height);
 		image(pauseButton, width - 60, 10, 50, 50);
+		image(kick1, (float)110,(float)height-110, 100, 100);
+		image(kick2, (float)width-110-100,height-110, 100, 100);
 		p1.draw(this);
 		p2.draw(this);	
 		ball.draw(this);
@@ -207,6 +215,20 @@ public class GamePanel extends PApplet {
 			//TONY ADD PAUSE SCREEN GRAPHIC
 			
 		}
+		if(mouseX>= 110 && mouseX<=110+100 && mouseY >=height-110&& mouseY<=height-110+100)
+		{
+			if(ballInteraction(p1))
+			{
+				p1.kick(ball, boundaries[0], true);
+			}
+		}
+		else if(mouseX >=width-100-110 && mouseX <= width-110 &&  mouseY >=height-110&& mouseY<=height-110+100)
+		{
+			if(ballInteraction(p2))
+			{
+				p2.kick(ball, boundaries[0], false);
+			}
+		}
 	}
 
 	public void keyReleased() {
@@ -237,14 +259,16 @@ public class GamePanel extends PApplet {
 		}
 	}
 	
-	public void ballInteraction(Tekkist p) {
+	public boolean ballInteraction(Tekkist p) {
 		
 		if (p.getY() <= ball.getY() - ball.getHeight() && p.getY() + p.getHeight() >= ball.getY()) {
 			if (p.getX() + p.getWidth() >= ball.getX() && p.getX() + p.getWidth()/2.0 < ball.getX() ||
 					p.getX() <= ball.getX() + ball.getWidth() && p.getX() >= ball.getX() + ball.getWidth()/2.0) {
 				ball.setVX(1.5 * p.getVX());
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	public void goalInteraction()
