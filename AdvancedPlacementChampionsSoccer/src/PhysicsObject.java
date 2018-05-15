@@ -1,7 +1,7 @@
 /**
  * Represents all object that has properties of physics
  * @author Brent Delano
- * @version 5/10/18
+ * @version 5/15/18
  *
  */
 public abstract class PhysicsObject {

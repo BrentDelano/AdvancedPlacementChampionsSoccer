@@ -4,8 +4,8 @@ import processing.core.PImage;
 
 /**
  * Represents the in-game screen
- * @author Brent Delano
- * @version 5/10/18
+ * @author Brent Delano & Mira Khosla
+ * @version 5/15/18
  *
  */
 public class GamePanel extends PApplet {
@@ -69,12 +69,12 @@ public class GamePanel extends PApplet {
 	}
 
 	public void settings() {
-		fullScreen(P2D);
+		size(1280, 800, P2D);
 	}
 
 	public void draw() {			
 		clear();
-
+		
 		// draws everything onto the screen
 		leftGoal.setX((float)(width/25.6));
 		leftGoal.setY((float)((height*3.0)/16.0));

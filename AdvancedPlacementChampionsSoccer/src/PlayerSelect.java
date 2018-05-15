@@ -4,7 +4,7 @@ import processing.core.PImage;
 /**
  * Represents the screen where the player selects his/her character
  * @author Tony Yu
- * @version 5/10/18
+ * @version 5/15/18
  */
 public class PlayerSelect {
 
