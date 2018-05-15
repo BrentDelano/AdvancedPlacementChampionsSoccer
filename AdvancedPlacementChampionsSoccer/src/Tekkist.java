@@ -94,8 +94,9 @@ public class Tekkist extends MovingObject {
 		{
 			b.setVX(-10);
 		}
-		b.setVY(-4);
-		b.fall(s);
+		b.setVY(-10);
+		b.setState(false);
+	//	b.fall(s);
 		
 	}
 }

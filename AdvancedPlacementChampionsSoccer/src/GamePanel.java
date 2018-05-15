@@ -187,6 +187,10 @@ public class GamePanel extends PApplet {
 				p1.jump();
 		//		inJump = true;
 			}
+			if(key == 's')
+			{
+				
+			}
 			// player 2
 
 			if (keyCode == LEFT)
