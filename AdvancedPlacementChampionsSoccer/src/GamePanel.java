@@ -19,6 +19,7 @@ public class GamePanel extends PApplet {
 	private int p1Score;
 	private int p2Score;
 	private PImage pauseButton;
+//	private boolean inJump;
 
 	public GamePanel() {
 		ball = new Ball(700, 0, 30);
@@ -30,6 +31,7 @@ public class GamePanel extends PApplet {
 		rightGoal = new Goal(1120, 150, false,100, 400);
 		pauseButton = new PImage();
 		p1Score = 0;
+	//	inJump=false;
 		p2Score = 0;
 	}
 
@@ -107,6 +109,34 @@ public class GamePanel extends PApplet {
 			ballInteraction(p1);
 		if (Math.abs(p2.getX() - ball.getX()) < 150)
 			ballInteraction(p2);
+//		if(inJump) {
+//			if(p1.getVY() == 0 && p2.getVY()==0)
+//			{
+//				inJump = false;
+//			}
+//		if(ball.getX() + ball.getWidth() >p1.getX() && ball.getX()<p1.getX()+p1.getWidth() && p1.getY()<ball.getY())
+//		{
+//			ball.setVX(1.5 * ball.getVX());
+//			//System.out.println("sd");
+//		}
+//		if(ball.getX()  + ball.getWidth() >p2.getX() && ball.getX()  <p2.getX()+p2.getWidth() && p1.getY()<ball.getY())
+//		{
+//			ball.setVX(1.5 * ball.getVX());
+//			//System.out.println("sd");
+//		}
+//		}
+		
+		if(Math.abs(p1.getY()+p1.getHeight()-ball.getY()) <5 && ball.getX()  + ball.getWidth() >p1.getX() && ball.getX()  <p1.getX()+p1.getWidth())
+		{
+			ball.setX(p1.getX()+ p1.getWidth());
+			ball.setVX(1.5* p1.getVX());
+		}
+		if(Math.abs(p2.getY()+p2.getHeight()-ball.getY()) <5 && ball.getX()  + ball.getWidth() >p2.getX() && ball.getX()  <p2.getX()+p2.getWidth())
+		{
+			ball.setX(p2.getX());
+			ball.setVX(1.5* p2.getVX());
+		}
+		
 		
 		goalInteraction();
 	//	System.out.println(width + "width");
@@ -124,9 +154,10 @@ public class GamePanel extends PApplet {
 			if (key == 'd')
 				if (p1.canMoveRight())
 					p1.walkHorizontally(1);
-			if (key == 'w') 
+			if (key == 'w') {
 				p1.jump();
-
+		//		inJump = true;
+			}
 			// player 2
 
 			if (keyCode == LEFT)
@@ -135,8 +166,10 @@ public class GamePanel extends PApplet {
 			if (keyCode == RIGHT)
 				if (p2.canMoveRight())
 					p2.walkHorizontally(1);
-			if (keyCode == UP) 
+			if (keyCode == UP) {
 				p2.jump();
+		//		inJump = true;
+			}
 			
 			if (key == ' ' ) {
 				System.out.print("rightX: " + p1.getX() + p1.getWidth());
@@ -184,6 +217,7 @@ public class GamePanel extends PApplet {
 	}
 	
 	public void ballInteraction(Tekkist p) {
+		
 		if (p.getY() <= ball.getY() - ball.getHeight() && p.getY() + p.getHeight() >= ball.getY()) {
 			if (p.getX() + p.getWidth() >= ball.getX() && p.getX() + p.getWidth()/2.0 < ball.getX() ||
 					p.getX() <= ball.getX() + ball.getWidth() && p.getX() >= ball.getX() + ball.getWidth()/2.0) {
