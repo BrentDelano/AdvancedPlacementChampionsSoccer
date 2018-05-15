@@ -1,5 +1,6 @@
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.sound.*;
 
 /**
  * Represents the in-game screen
