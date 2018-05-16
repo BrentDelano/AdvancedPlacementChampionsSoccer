@@ -14,19 +14,17 @@ import processing.core.PApplet;
 public class AdvancedPlacementChampionsSoccer {
 
 	public static void main(String[] args) {
-		MenuPanel p = new MenuPanel();
-		PApplet.runSketch(new String[]{""}, p);
-		PSurfaceAWT surf = (PSurfaceAWT) p.getSurface();
+		MenuPanel m = new MenuPanel();
+		PApplet.runSketch(new String[]{""}, m);
+		PSurfaceAWT surf = (PSurfaceAWT) m.getSurface();
 		PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
 		JFrame window = (JFrame)canvas.getFrame();
-		p.setWindow(window);
+		m.setWindow(window);
 
 		window.setMinimumSize(new Dimension(100,100));
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(true);
-		window.setVisible(true);
-		
-		p.draw();
+		window.setVisible(true);		
 	}
 
 }
