@@ -69,7 +69,7 @@ public class GamePanel extends PApplet {
 		size(1280, 800, P2D);
 	}
 
-	public void draw() {			
+	public void draw() {	
 		clear();
 		
 		// draws everything onto the screen
