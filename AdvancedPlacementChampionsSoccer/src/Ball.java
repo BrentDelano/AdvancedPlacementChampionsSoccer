@@ -9,8 +9,8 @@ import processing.core.PImage;
  */
 public class Ball extends MovingObject {
 
-	PImage ball;
-	Surface top;
+	private PImage ball;
+	private Surface top;
 
 	public Ball(float x, float y, float d) { 
 		super(x, y, d, d);

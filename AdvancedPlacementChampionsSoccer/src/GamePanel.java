@@ -20,6 +20,8 @@ public class GamePanel extends PApplet {
 	private int p1Score;
 	private int p2Score;
 	private PImage pauseButton;
+	private PowerUp p1Power;
+	private PowerUp p2Power;
 
 	//private SoundFile cheer;
 //	private boolean inJump;
@@ -34,6 +36,8 @@ public class GamePanel extends PApplet {
 		rightGoal = new Goal(1120, 150, false,100, 400);
 		pauseButton = new PImage();
 		p1Score = 0;
+		p1Power = new PowerUp(1, 110, (float)((height*15.0)/16.0));
+		p2Power = new PowerUp(1, width-110, (float)((height*15.0)/16.0));
 	
 	//	cheer = new SoundFile(this, "cheer.mp3");
 	//	inJump=false;
@@ -60,6 +64,8 @@ public class GamePanel extends PApplet {
 		rightGoal.setup(this);
 		pauseButton = loadImage("pauseButton.png");
 		p2Score = 0;
+		p1Power.setup(this);
+		p2Power.setup(this);
 
 		
 		//leftGoal = new Goal((float)(width/25.6), (float)((height*3.0)/16.0), true,100, 400);
@@ -77,6 +83,9 @@ public class GamePanel extends PApplet {
 		leftGoal.setY((float)((height*3.0)/16.0));
 		rightGoal.setX((float)((width*7.0)/8.0));
 		rightGoal.setY((float)((height*3.0)/16.0));
+		p1Power.setY((float)((height*15.0)/16.0)-60);
+		p2Power.setY((float)((height*15.0)/16.0)-60);
+		p2Power.setX(width-110-100);
 		image(background, 0, 0, width, height);
 		image(pauseButton, width - 60, 10, 50, 50);
 		
@@ -85,6 +94,8 @@ public class GamePanel extends PApplet {
 		ball.draw(this);
 		rightGoal.draw(this);
 		leftGoal.draw(this);
+		p1Power.draw(this);
+		p2Power.draw(this);
 
 		textSize(40);
 		text("SCORE: " + p1Score + " - " + p2Score, (float)(width/2.56),(float)((height*15.0)/16.0));
