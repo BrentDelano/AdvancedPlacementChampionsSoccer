@@ -84,16 +84,16 @@ public class Tekkist extends MovingObject {
 
 	public void draw(PApplet drawer) {
 		
-		drawer.pushMatrix();
-		if(turned)
-		{
-			
-			drawer.rotate((float)(Math.PI/2));
-			
-		}
-		turned = false;
+//		drawer.pushMatrix();
+//		if(turned)
+//		{
+//			
+//			drawer.rotate((float)(Math.PI/2));
+//			
+//		}
+		
 		drawer.image(tekkist, getX(), getY(), getWidth(), getHeight());
-		drawer.popMatrix();
+	//	drawer.popMatrix();
 		
 	}
 
