@@ -26,7 +26,7 @@ public class MenuPanel extends PApplet {
 	}
 
 	public void settings() {
-		fullScreen(P3D);
+		size(1280, 800, P2D);
 	}
 	
 	public void draw() {			
@@ -40,9 +40,9 @@ public class MenuPanel extends PApplet {
 	public void mouseClicked() {
 		if (mouseButton == LEFT) {
 			
-			GamePanel p = new GamePanel();
-			PApplet.runSketch(new String[]{""}, p);
-			PSurfaceAWT surf = (PSurfaceAWT) p.getSurface();
+			PlayerSelect s = new PlayerSelect();
+			PApplet.runSketch(new String[]{""}, s);
+			PSurfaceAWT surf = (PSurfaceAWT) s.getSurface();
 			PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
 			JFrame window = (JFrame)canvas.getFrame();
 
@@ -51,11 +51,10 @@ public class MenuPanel extends PApplet {
 			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			window.setResizable(true);
 			window.setVisible(true);
-			
-			p.draw();
-			
+
+			this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			s.draw();
 			this.window.setVisible(false);
-			
 		}
 		
 	}
