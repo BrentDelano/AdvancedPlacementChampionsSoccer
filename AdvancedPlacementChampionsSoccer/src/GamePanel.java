@@ -299,6 +299,7 @@ public class GamePanel extends PApplet {
 		{
 			p2.setX(rightGoal.getX());
 		}
+	
 		
 		//need to add bounce off crossbar
 		
