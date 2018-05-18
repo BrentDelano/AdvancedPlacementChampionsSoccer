@@ -9,18 +9,15 @@ import processing.core.PImage;
 public class Tekkist extends MovingObject {
 
 	private PImage tekkist;
-	private boolean turned;
 
 	public Tekkist() {
 		super(100, 10, 100, 135);
 		tekkist = new PImage();
-		turned = false;
 	}
 
 	public Tekkist(int x, int y, int w, int h) {
 		super(x, y, w, h);
 		tekkist = new PImage();
-		turned = false;
 	}
 
 	public void walkHorizontally(int direction) {
@@ -84,16 +81,16 @@ public class Tekkist extends MovingObject {
 
 	public void draw(PApplet drawer) {
 		
-		drawer.pushMatrix();
-		if(turned)
-		{
-			
-			drawer.rotate((float)(Math.PI/2));
-			
-		}
-		turned = false;
+//		drawer.pushMatrix();
+//		if(turned)
+//		{
+//			
+//			drawer.rotate((float)(Math.PI/2));
+//			
+//		}
+		
 		drawer.image(tekkist, getX(), getY(), getWidth(), getHeight());
-		drawer.popMatrix();
+	//	drawer.popMatrix();
 		
 	}
 
@@ -110,7 +107,6 @@ public class Tekkist extends MovingObject {
 		}
 		b.setVY(-10);
 		b.setState(false);
-		turned = true;
 	//	b.fall(s);
 		
 	}
