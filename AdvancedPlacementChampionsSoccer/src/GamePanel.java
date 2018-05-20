@@ -24,11 +24,13 @@ public class GamePanel extends DrawingSurface {
 	private boolean paused;
 	private int pauseDelay;
 	private MysteryBox mysteryBox;
+	private PowerUp boxPowerP1;
+	private PowerUp boxPowerP2;
 
 	public GamePanel() {
 		ball = new Ball(625, 0, 30);
-		p1 = new Tekkist(225, 520, 100, 135, new PowerUp(20, 20), new Health(20, 60));
-		p2 = new Tekkist(1000, 520, 100, 135, new PowerUp(960, 20), new Health(960, 60));
+		p1 = new Tekkist(225, 520, 100, 135, new PowerUpBar(20, 20), new Health(20, 60));
+		p2 = new Tekkist(1000, 520, 100, 135, new PowerUpBar(960, 20), new Health(960, 60));
 		ground = new Surface(0, 470, 1280, 400);
 		background = new PImage();
 		leftGoal = new Goal((float)(width/25.6), (float)((height*3.0)/16.0), true, 100, 400); 
@@ -39,6 +41,8 @@ public class GamePanel extends DrawingSurface {
 		paused = false;
 		pauseDelay = 0;
 		mysteryBox = new MysteryBox(608, -75);
+		boxPowerP1 = null;
+		boxPowerP2 = null;
 	}
 
 	public void setup() {	
@@ -156,17 +160,41 @@ public class GamePanel extends DrawingSurface {
 
 				goalInteraction();
 				
-				if (Math.abs(p1.getX() - mysteryBox.getX()) <= 110)
-					mysteryBoxCollisionDetection(p1);
-				if (Math.abs(p2.getX() - mysteryBox.getX()) <= 110)
-					mysteryBoxCollisionDetection(p2);
+				if (Math.abs(p1.getX() - mysteryBox.getX()) <= 100 && Math.abs(p1.getY()-mysteryBox.getY())<100) {
+					if(mysteryBoxCollisionDetection(p1));
+					{
+						p1.collectBox();
+						boxPowerP1 = p1.getBoxPower();
+						boxPowerP1.setup(this);
+					}
+					
+				}
+					
+				if (Math.abs(p2.getX() - mysteryBox.getX()) <= 100&& Math.abs(p1.getY()-mysteryBox.getY())<100) {
+					if(mysteryBoxCollisionDetection(p2));
+					{
+						p2.collectBox();
+						boxPowerP2 = p2.getBoxPower();
+						boxPowerP2.setup(this);
+					}
+				}
 
 				// power up, mystery boxes, & health bars
 
-				p1.getPowerUp().draw(this);
-				p2.getPowerUp().draw(this);
+				p1.getPowerUpBar().draw(this);
+				p2.getPowerUpBar().draw(this);
 				p1.getHealth().draw(this);
-				p2.getHealth().draw(this);					
+				p2.getHealth().draw(this);	
+				
+				if(boxPowerP1 != null)
+				{
+					boxPowerP1.draw(this, 20, 90);
+				}
+				if(boxPowerP2 != null)
+				{
+					boxPowerP2.draw(this, 1100, 90);
+				}
+				
 			}
 
 		} else {
@@ -191,7 +219,17 @@ public class GamePanel extends DrawingSurface {
 				if(ballInteraction(p1))
 					p1.kick(ball, ground, true);
 			if (key == ' ')
-				p1.makeSuper();
+			{
+				if(boxPowerP1 != null)
+				{
+					boxPowerP2 = null;
+				}
+				else {
+					p1.makeSuper();
+				}
+				
+			}
+				
 
 			// player 2
 
@@ -206,8 +244,15 @@ public class GamePanel extends DrawingSurface {
 			if (keyCode == DOWN) 
 				if(ballInteraction(p2))
 					p2.kick(ball, ground, false);
-			if (key == ENTER) 
-				p2.makeSuper();
+			if (key == ENTER) {
+				if(boxPowerP2 != null)
+				{
+					boxPowerP2 = null;
+				}
+				else {
+					p2.makeSuper();
+				}
+			}
 		}	
 	}
 
@@ -244,14 +289,17 @@ public class GamePanel extends DrawingSurface {
 		}
 	}
 
-	public void mysteryBoxCollisionDetection(Tekkist p) {
+	public boolean mysteryBoxCollisionDetection(Tekkist p) {
 		if (p.getY() <= mysteryBox.getY() + mysteryBox.getHeight() && p.getY() + p.getHeight() >= mysteryBox.getY()) {
 			if (p.getX() + p.getWidth() >= mysteryBox.getX() && p.getX() + p.getWidth()/2.0 < mysteryBox.getX() ||
 					p.getX() <= mysteryBox.getX() + mysteryBox.getWidth() && p.getX() >= mysteryBox.getX() + mysteryBox.getWidth()/2.0) {
+				
 				mysteryBox.setX(-100);
 				mysteryBox.setY(-100);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	public boolean ballInteraction(Tekkist p) {
