@@ -21,19 +21,19 @@ public class PlayerSelect extends DrawingSurface{
 
 	public PlayerSelect()
 	{
-		for (int i = 1; i<=30; i++) {
-			pictures.add(loadImage(i + ".png"));
-		}
+//		for (int i = 1; i<=30; i++) {
+//			pictures.add(loadImage(i + ".png"));
+//		}
 		background = new PImage();
 	}
-	
-	public PImage getTekkistPicture(double mouseX, double mouseY)
-	{
-		int a = (int)(mouseX/imgWidth);
-		int b = (int)((mouseY-460)/imgHeight);
-		return pictures.get(b*10 + a + 1);
-	}
-	
+//	
+//	public PImage getTekkistPicture(double mouseX, double mouseY)
+//	{
+//		int a = (int)(mouseX/imgWidth);
+//		int b = (int)((mouseY-460)/imgHeight);
+//		return pictures.get(b*10 + a + 1);
+//	}
+//	
 	public void setup() {
 		background = loadImage("SELECTION.png");
 	}
