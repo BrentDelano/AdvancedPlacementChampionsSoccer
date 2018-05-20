@@ -284,20 +284,14 @@ public class GamePanel extends DrawingSurface {
 			ball.setup(this);
 		}
 
-		if (p1.getX() + p1.getWidth() < leftGoal.getX()+100)
-		{
+		if (p1.getX() + p1.getWidth() < leftGoal.getX()+100) {
 			p1.setX(leftGoal.getX()+100-p1.getWidth());
-		}
-		else if (p1.getX() >rightGoal.getX())
-		{
+		} else if (p1.getX() >rightGoal.getX()) {
 			p1.setX(rightGoal.getX());
 		}
-		if (p2.getX() + p2.getWidth() < leftGoal.getX()+100)
-		{
+		if (p2.getX() + p2.getWidth() < leftGoal.getX()+100) {
 			p2.setX(leftGoal.getX()+100-p2.getWidth());
-		}
-		else if (p2.getX() >rightGoal.getX())
-		{
+		} else if (p2.getX() >rightGoal.getX()) {
 			p2.setX(rightGoal.getX());
 		}
 
