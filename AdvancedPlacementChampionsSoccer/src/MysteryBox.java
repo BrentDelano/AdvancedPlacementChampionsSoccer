@@ -42,4 +42,5 @@ public class MysteryBox extends MovingObject {
 		setVY(-Math.abs(getVY()) + Math.abs(getVY() * 0.4));
 		setState(false);
 	}
+	
 }

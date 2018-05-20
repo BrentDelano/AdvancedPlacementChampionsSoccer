@@ -10,17 +10,24 @@ public class Tekkist extends MovingObject {
 
 	private PImage tekkist;
 	private PImage aura;
-	private PowerUp power;
+	private PowerUpBar power;
 	private Health health;
 	private boolean superSaiyan;
+	private PowerUp boxPower;
+	private boolean hasBoxPower;
 
-	public Tekkist(int x, int y, int w, int h, PowerUp p, Health health) {
+	
+
+	public Tekkist(int x, int y, int w, int h, PowerUpBar p, Health health) {
 		super(x, y, w, h);
 		tekkist = new PImage();
 		aura = new PImage();
 		superSaiyan = false;
 		power = p;
 		this.health = health;
+		boxPower = null;
+		hasBoxPower = false;
+		
 	}
 
 	public void walkHorizontally(int direction) {
@@ -102,7 +109,7 @@ public class Tekkist extends MovingObject {
 		power.setPowerAmount(power.getPowerAmount() + 1);
 	}
 
-	public PowerUp getPowerUp() {
+	public PowerUpBar getPowerUpBar() {
 		return power;
 	}
 	
@@ -126,5 +133,21 @@ public class Tekkist extends MovingObject {
 		setRightMobility(false);
 		setLeftMobility(false);
 		setUpwardsMobility(false);
+	}
+	
+	public boolean getHasBoxPower()
+	{
+		return hasBoxPower;
+	}
+	
+	public void collectBox()
+	{
+		boxPower = new PowerUp();
+		hasBoxPower = true;
+	}
+	
+	public PowerUp getBoxPower()
+	{
+		return boxPower;
 	}
 }
