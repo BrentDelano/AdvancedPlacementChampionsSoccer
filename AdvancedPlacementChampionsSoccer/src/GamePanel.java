@@ -45,10 +45,6 @@ public class GamePanel extends PApplet {
 		p2Power = new PowerUp(1, width-110, (float)((height*15.0)/16.0));
 	}
 
-	public static void main(String[] args) {
-		PApplet.main("GamePanel");
-	}
-
 	public void createBoundaries() {
 		//		boundaries[0] = new Surface(0, 0, (int) (3.0 * width / 4.0), (int) (3.0 * height / 5.0));
 		boundaries[0] = new Surface(0, (int) (height / 2.0) + 70,  width, (int) (height / 2.0));

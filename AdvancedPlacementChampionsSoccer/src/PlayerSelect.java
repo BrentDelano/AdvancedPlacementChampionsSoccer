@@ -18,7 +18,6 @@ public class PlayerSelect extends PApplet{
 	private int imgWidth;
 	private int imgHeight;
 	private PImage background;
-	private JFrame window;
 	
 	public PlayerSelect() {
 
@@ -60,27 +59,8 @@ public class PlayerSelect extends PApplet{
 	public void mouseClicked() {
 		if (mouseButton == LEFT) {
 			
-			GamePanel p = new GamePanel();
-			PApplet.runSketch(new String[]{""}, p);
-			PSurfaceAWT surf = (PSurfaceAWT) p.getSurface();
-			PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
-			JFrame window = (JFrame)canvas.getFrame();
-
-			window.setSize(316, 159);
-			window.setMinimumSize(new Dimension(100,100));
-			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			window.setResizable(true);
-			window.setVisible(true);
-
-			this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			p.draw();
-			this.window.setVisible(false);
+			PApplet.main("GamePanel");
 		}
-		
-	}
-	public void setWindow(JFrame window) {
-		
-		this.window = window;
 		
 	}
 }

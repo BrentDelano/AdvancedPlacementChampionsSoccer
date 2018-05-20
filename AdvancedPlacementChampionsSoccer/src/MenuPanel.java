@@ -40,27 +40,8 @@ public class MenuPanel extends PApplet {
 	public void mouseClicked() {
 		if (mouseButton == LEFT) {
 			
-			InsPanel i = new InsPanel();
-			PApplet.runSketch(new String[]{""}, i);
-			PSurfaceAWT surf = (PSurfaceAWT) i.getSurface();
-			PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
-			JFrame window = (JFrame)canvas.getFrame();
-
-			window.setSize(316, 159);
-			window.setMinimumSize(new Dimension(100,100));
-			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			window.setResizable(true);
-			window.setVisible(true);
-
-			this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			i.draw();
-			this.window.setVisible(false);
+			PApplet.main("InsPanel");
 		}
-		
-	}
-	public void setWindow(JFrame window) {
-		
-		this.window = window;
 		
 	}
 }
