@@ -8,7 +8,7 @@ import processing.core.PImage;
  * @version 5/15/18
  *
  */
-public class GamePanel extends PApplet {
+public class GamePanel extends DrawingSurface {
 
 	private Ball ball;
 	private Tekkist p1;

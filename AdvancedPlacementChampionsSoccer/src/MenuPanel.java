@@ -13,10 +13,9 @@ import processing.core.PApplet;
  * @version 5/10/18
  *
  */
-public class MenuPanel extends PApplet {
+public class MenuPanel extends DrawingSurface {
 
 	private PImage background;
-	private JFrame window;
 
 	public MenuPanel() {
 		background = new PImage();
@@ -39,7 +38,6 @@ public class MenuPanel extends PApplet {
 	
 	public void mouseClicked() {
 		if (mouseButton == LEFT) {
-			
 			PApplet.main("InsPanel");
 		}
 		

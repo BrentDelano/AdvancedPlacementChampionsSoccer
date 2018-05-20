@@ -13,7 +13,7 @@ import processing.core.PApplet;
  * @version 5/10/18
  *
  */
-public class InsPanel extends PApplet {
+public class InsPanel extends DrawingSurface {
 
 	private PImage background;
 
@@ -27,7 +27,7 @@ public class InsPanel extends PApplet {
 	public void settings() {
 		size(1280, 800, P2D);
 	}
-	
+
 	public void draw() {			
 		clear();
 		float ratioX = (float) width / 500; 		
@@ -35,11 +35,11 @@ public class InsPanel extends PApplet {
 		scale(ratioX, ratioY);
 		image(background, 0, 0, 500, 500);
 	}
-	
+
 	public void mouseClicked() {
 		if (mouseButton == LEFT) {
 			PApplet.main("PlayerSelect");
-		
+
 		}
 	}
 }
