@@ -12,32 +12,26 @@ import processing.core.PImage;
  * @author Tony Yu
  * @version 5/15/18
  */
-public class PlayerSelect extends PApplet{
+public class PlayerSelect extends DrawingSurface{
 
 	private ArrayList<PImage> pictures;
-	private int imgWidth;
-	private int imgHeight;
+	private double imgWidth = 235.7;
+	private double imgHeight = 313.3333;
 	private PImage background;
-	
-	public PlayerSelect() {
 
-		background = new PImage();
-	}
-
-	public PlayerSelect(ArrayList<PImage> pictures, int imgWidth, int imgHeight)
+	public PlayerSelect()
 	{
-		this.pictures = pictures;
-		this.imgHeight = imgHeight;
-		this.imgWidth= imgWidth;
-
+		for (int i = 1; i<=30; i++) {
+			pictures.add(loadImage(i + ".png"));
+		}
 		background = new PImage();
 	}
-	//dont necessarily multiply by 5 in return statement, multiply by # of pics per row
+	
 	public PImage getTekkistPicture(double mouseX, double mouseY)
 	{
-		int a = (int) (mouseY/imgHeight);
-		int b = (int) (mouseX/imgWidth);
-		return pictures.get(b*5 + a);
+		int a = (int)(mouseX/imgWidth);
+		int b = (int)((mouseY-460)/imgHeight);
+		return pictures.get(b*10 + a + 1);
 	}
 	
 	public void setup() {
