@@ -1,46 +1,58 @@
-
 import processing.core.*;
 
 /**
  * Represents the power up that a Tekkist has
- * @author Mira Khosla
+ * @author Brent Delano
  * @version 5/15/18
- *
  */
 public class PowerUp {
-	public static final String[] powerUps= new String[]{"shrink goal","grow", "slow motion"};
-	public int whichPower;
-	public float x, y;
-	public PImage powerImage;
+
+	private double power;
+	private boolean enabled;
+	private float x, y;
 	
-	public PowerUp(int whichPower, float x, float y)
-	{
-		this.whichPower = whichPower;
-		powerImage = new PImage();
-		this.x =x;
-		this.y = y;
-	}
-	
-	public void setup(PApplet drawer) {
-		powerImage = drawer.loadImage("powerUpLogo.jpg");
-	}
-	
-	public void setPower(int newPower)
-	{
-		whichPower = newPower;
-	}
-	
-	public void setX(float x)
-	{
+	public PowerUp(float x, float y) {
 		this.x = x;
-	}
-	public void setY(float y)
-	{
-		this.y =y;
+		this.y = y;
+		power = 0;
+		enabled = false;
 	}
 	
-	public void draw(PApplet drawer)
-	{
-		drawer.image(powerImage, x, y, 100, 50);
+	public boolean isCapable() {
+		return enabled;
+	}
+	
+	public void setCapability(boolean s) {
+		enabled = s;
+	}
+	
+	public double getPowerAmount() {
+		return power;
+	}
+	
+	public void setPowerAmount(double p) {
+		power = p;
+	}
+	
+	public void draw(PApplet drawer) {
+		// power bars
+		
+		drawer.pushMatrix();
+		drawer.noFill();
+		drawer.rect(x, y, 300, 20);
+		
+		power += 0.25;
+		drawer.fill(51, 255, 255);
+		if (power < 300)
+			drawer.rect(x, y, (float) power, 20);
+		else {
+			drawer.rect(x, y, 300, 20);
+			enabled = true;
+		}
+		
+		drawer.textSize(15);
+		drawer.fill(0);
+		drawer.text("POWER", x, y - 2);
+		drawer.popMatrix();
 	}
 }

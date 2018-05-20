@@ -9,26 +9,29 @@ import processing.core.PImage;
 public class Tekkist extends MovingObject {
 
 	private PImage tekkist;
+	private PImage aura;
+	private PowerUp power;
+	private Health health;
+	private boolean superSaiyan;
 
-	public Tekkist() {
-		super(100, 10, 100, 135);
-		tekkist = new PImage();
-	}
-
-	public Tekkist(int x, int y, int w, int h) {
+	public Tekkist(int x, int y, int w, int h, PowerUp p, Health health) {
 		super(x, y, w, h);
 		tekkist = new PImage();
+		aura = new PImage();
+		superSaiyan = false;
+		power = p;
+		this.health = health;
 	}
 
 	public void walkHorizontally(int direction) {
 		if (direction > 0) {
 			while (getVX() < 4.0)
 				setVX(getVX() + 0.1);
-			
+
 		} else if (direction < 0) {
 			while (getVX() > -4.0)
 				setVX(getVX() - 0.1);
-			
+
 		} else {
 			if (getVX() > 0) {
 				while(getVX() > 0) 
@@ -46,11 +49,11 @@ public class Tekkist extends MovingObject {
 		if (direction > 0) {
 			while (getVX() < 25.0)
 				setVX(getVX() + 0.1);
-			
+
 		} else if (direction < 0) {
 			while (getVX() > -25.0)
 				setVX(getVX() - 0.1);
-			
+
 		} else {
 			if (getVX() > 0) {
 				while(getVX() > 0) 
@@ -63,13 +66,9 @@ public class Tekkist extends MovingObject {
 			setVX(0);
 		}
 	}
-	
-//	public void walkVertically(int direction) {
-//		setVY(5 * direction);
-//	}
 
 	public void jump() {
-		if (isOnSurface()) {
+		if (isOnSurface() && canMoveUp()) {
 			setVY(-7.5);
 			setState(false);
 		}
@@ -77,37 +76,55 @@ public class Tekkist extends MovingObject {
 
 	public void setup(PApplet drawer, String imageFile) {
 		tekkist = drawer.loadImage(imageFile);
+		aura = drawer.loadImage("aura.png");
 	}
 
 	public void draw(PApplet drawer) {
 		
-//		drawer.pushMatrix();
-//		if(turned)
-//		{
-//			
-//			drawer.rotate((float)(Math.PI/2));
-//			
-//		}
+		// tekkist image
 		
-		drawer.image(tekkist, getX(), getY(), getWidth(), getHeight());
-	//	drawer.popMatrix();
+		drawer.image(tekkist, getX(), getY(), getWidth(), getHeight());	
 		
+		// power up
+		
+		if (superSaiyan) {
+			drawer.image(aura, getX() - 35, getY() - 35, getWidth() + 70, getHeight() + 70);
+		}
 	}
 
-	public void kick(Ball b, Surface s, boolean isLeft) {
-		// implement later
-		
-		if(isLeft)
-			{
+	public void kick(Ball b, Surface s, boolean isLeft) {		
+		if (isLeft)
 			b.setVX(10);
-			}
 		else
-		{
 			b.setVX(-10);
-		}
 		b.setVY(-10);
-		b.setState(false);
-	//	b.fall(s);
-		
+		b.setState(false);	
+		power.setPowerAmount(power.getPowerAmount() + 1);
+	}
+
+	public PowerUp getPowerUp() {
+		return power;
+	}
+	
+	public Health getHealth() {
+		return health;
+	}
+
+	public void makeSuper() {
+		if (power.isCapable()) {
+			superSaiyan = true;
+			power.setCapability(false);
+			power.setPowerAmount(0);
+		}
+	}
+	
+	public boolean getSuperStatus() {
+		return superSaiyan;
+	}
+	
+	public void freeze() {
+		setRightMobility(false);
+		setLeftMobility(false);
+		setUpwardsMobility(false);
 	}
 }

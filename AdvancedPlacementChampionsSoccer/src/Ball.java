@@ -17,17 +17,10 @@ public class Ball extends MovingObject {
 	}
 
 	public void setup(PApplet drawer) {
-		//		drawer.translate(getX(), getY(), 0);
-		//		drawer.fill(255);
-		//		drawer.noStroke();
 		ball = drawer.loadImage("ball.png");
 	}
 
 	public void draw(PApplet drawer) {
-		//		drawer.lights();
-		//		drawer.sphere(getWidth());
-
-		//		drawer.image(ball, getX(), getY(), getWidth(), getHeight());
 		drawer.pushMatrix();
 		drawer.translate((float) (getX() + getWidth()/2.0), (float) (getY() + getHeight()/2.0));
 		drawer.rotate((float) (calcSpin()));
@@ -78,9 +71,5 @@ public class Ball extends MovingObject {
 			return -Math.pow(2, getVX()) / 4.0;
 		else 
 			return Math.pow(2, Math.abs(getVX())) / 4.0;
-	}
-
-	public void kicked(int side) {
-
 	}
 }

@@ -1,10 +1,4 @@
 import processing.core.PImage;
-
-import java.awt.Dimension;
-
-import javax.swing.JFrame;
-
-import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
 
 /**
@@ -30,10 +24,7 @@ public class MenuPanel extends DrawingSurface {
 	
 	public void draw() {			
 		clear();
-		float ratioX = (float) width / 500; 		
-		float ratioY = (float) height / 500; 
-		scale(ratioX, ratioY);
-		image(background, 0, 0, 500, 500);
+		image(background, 0, 0, width, height);
 	}
 	
 	public void mouseClicked() {

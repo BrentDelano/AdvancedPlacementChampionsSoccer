@@ -1,9 +1,4 @@
-import java.awt.Dimension;
 import java.util.ArrayList;
-
-import javax.swing.JFrame;
-
-import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -26,14 +21,7 @@ public class PlayerSelect extends DrawingSurface{
 //		}
 		background = new PImage();
 	}
-//	
-//	public PImage getTekkistPicture(double mouseX, double mouseY)
-//	{
-//		int a = (int)(mouseX/imgWidth);
-//		int b = (int)((mouseY-460)/imgHeight);
-//		return pictures.get(b*10 + a + 1);
-//	}
-//	
+
 	public void setup() {
 		background = loadImage("SELECTION.png");
 	}
@@ -44,10 +32,7 @@ public class PlayerSelect extends DrawingSurface{
 	
 	public void draw() {			
 		clear();
-		float ratioX = (float) width / 500; 		
-		float ratioY = (float) height / 500; 
-		scale(ratioX, ratioY);
-		image(background, 0, 0, 500, 500);
+		image(background, 0, 0, width, height);
 	}
 	
 	public void mouseClicked() {

@@ -1,4 +1,3 @@
-import processing.core.PApplet;
 import processing.core.PImage;
 //import processing.sound.*;
 
@@ -13,7 +12,7 @@ public class GamePanel extends DrawingSurface {
 	private Ball ball;
 	private Tekkist p1;
 	private Tekkist p2;
-	private Surface[] boundaries;
+	private Surface ground;
 	private PImage background;
 	private Goal leftGoal;
 	private Goal rightGoal;
@@ -24,37 +23,27 @@ public class GamePanel extends DrawingSurface {
 	private int delay;
 	private boolean paused;
 	private int pauseDelay;
-	private PowerUp p1Power;
-	private PowerUp p2Power;
+	private MysteryBox mysteryBox;
 
 	public GamePanel() {
-		ball = new Ball(700, 0, 30);
-		p1 = new Tekkist(225, 520, 100, 135);
-		p2 = new Tekkist(1000, 520, 100, 135);
-		boundaries = new Surface[6];
+		ball = new Ball(625, 0, 30);
+		p1 = new Tekkist(225, 520, 100, 135, new PowerUp(20, 20), new Health(20, 60));
+		p2 = new Tekkist(1000, 520, 100, 135, new PowerUp(960, 20), new Health(960, 60));
+		ground = new Surface(0, 470, 1280, 400);
 		background = new PImage();
-		leftGoal = new Goal((float)(width/25.6), (float)((height*3.0)/16.0), true,100, 400); 
-		rightGoal = new Goal(1120, 150, false,100, 400);
-		pauseButton = new PImage();
+		leftGoal = new Goal((float)(width/25.6), (float)((height*3.0)/16.0), true, 100, 400); 
+		rightGoal = new Goal(1120, 150, false, 100, 400);
 		p1Score = 0;
 		time = 0;
 		delay = 0;
 		paused = false;
 		pauseDelay = 0;
-		p1Power = new PowerUp(1, 110, (float)((height*15.0)/16.0));
-		p2Power = new PowerUp(1, width-110, (float)((height*15.0)/16.0));
-	}
-
-	public void createBoundaries() {
-		//		boundaries[0] = new Surface(0, 0, (int) (3.0 * width / 4.0), (int) (3.0 * height / 5.0));
-		boundaries[0] = new Surface(0, (int) (height / 2.0) + 70,  width, (int) (height / 2.0));
-
+		mysteryBox = new MysteryBox(608, -75);
 	}
 
 	public void setup() {	
 		frame.setResizable(false);
 		background = loadImage("field.jpeg");
-		createBoundaries();
 		ball.setup(this);
 		p1.setup(this, "batman.gif");	
 		p2.setup(this, "street fighter.gif");
@@ -62,8 +51,7 @@ public class GamePanel extends DrawingSurface {
 		rightGoal.setup(this);
 		pauseButton = loadImage("pauseButton.png");
 		p2Score = 0;
-		p1Power.setup(this);
-		p2Power.setup(this);
+		mysteryBox.setup(this);
 	}
 
 	public void settings() {
@@ -75,105 +63,112 @@ public class GamePanel extends DrawingSurface {
 			delay = millis();
 		if (!paused) {
 			time = millis();
-			int displayTime = 60  - (time/1000)  + (delay/1000) + (pauseDelay/1000);
+			int displayTime = 60  - (time/1000) + (delay/1000) + (pauseDelay/1000);
 
-				if (displayTime >= 0) {
+			if (displayTime >= 0) {
+				clear();		
 
-					clear();		
+				// some objects being drawn here
 
-					// draws everything onto the screen
-					
-					leftGoal.setX((float)(width/25.6));
-					leftGoal.setY((float)((height*3.0)/16.0));
-					rightGoal.setX((float)((width*7.0)/8.0));
-					rightGoal.setY((float)((height*3.0)/16.0));
-					p1Power.setY((float)((height*15.0)/16.0)-60);
-					p2Power.setY((float)((height*15.0)/16.0)-60);
-					p2Power.setX(width-110-100);
-					image(background, 0, 0, width, height);
-					image(pauseButton, width - 60, 10, 50, 50);
+				leftGoal.setX((float)(width/25.6));
+				leftGoal.setY((float)((height*3.0)/16.0));
+				rightGoal.setX((float)((width*7.0)/8.0));
+				rightGoal.setY((float)((height*3.0)/16.0));
+				image(background, 0, 0, width, height);
+				image(pauseButton, width - 60, height - 60, 50, 50);
 
-					p1.draw(this);
-					p2.draw(this);	
-					ball.draw(this);
-					rightGoal.draw(this);
-					leftGoal.draw(this);
-					p1Power.draw(this);
-					p2Power.draw(this);
+				p1.draw(this);
+				p2.draw(this);	
+				ball.draw(this);
+				rightGoal.draw(this);
+				leftGoal.draw(this);
+				mysteryBox.draw(this);
 
-					// timing and scoring
+				// timing and scoring
 
-					textSize(40);
-					fill(0);
-					if (displayTime >= 10)
-						text(displayTime, 12 * width / 25, height / 10);
-					else if (displayTime >= 0)
-						text(displayTime, 12 * width / 25, height / 10);
-					else
-						text("0", width / 2, height / 10);
-					fill(255);
-					text("SCORE: " + p1Score + " - " + p2Score, (float)(width/2.56),(float)((height*15.0)/16.0));
+				textSize(40);
+				fill(0);
+				if (displayTime >= 10)
+					text(displayTime, 12 * width / 25, height / 10);
+				else if (displayTime >= 0)
+					text(displayTime, 12 * width / 25, height / 10);
+				else
+					text("0", width / 2, height / 10);
+				fill(255);
+				text("SCORE: " + p1Score + " - " + p2Score, (float)(width/2.56),(float)((height*15.0)/16.0));
 
-					// creates physics between physics objects
+				// creates physics between physics objects
 
-					p1.act();
-					if (!p1.isOnSurface()) 
-						p1.fall(boundaries[0]);
+				p1.act();
+				if (!p1.isOnSurface()) 
+					p1.fall(ground);
 
-					p2.act();
-					if (!p2.isOnSurface()) 
-						p2.fall(boundaries[0]);
+				p2.act();
+				if (!p2.isOnSurface()) 
+					p2.fall(ground);
 
-					ball.act();
-					if (!ball.isOnSurface()) 
-						ball.fall(boundaries[0]);
-					if (ball.getVX() != 0)
-						ball.applyFriction();
-
-					//  collision detecting
-
-					if (Math.abs(p1.getX() - p2.getX()) < 100 && Math.abs(p1.getY() - p2.getY()) < 135)
-						playerCollisionDetection();
-					else {
-						p1.setRightMovability(true);
-						p2.setLeftMovability(true);
-					}
-
-					if (Math.abs(p1.getX() - ball.getX()) < 150)
-						ballInteraction(p1);
-					if (Math.abs(p2.getX() - ball.getX()) < 150)
-						ballInteraction(p2);
-
-					if(Math.abs(p1.getY()+p1.getHeight()-ball.getY()) <5 && ball.getX()  + ball.getWidth() >p1.getX() && ball.getX()  <p1.getX()+p1.getWidth())
-					{
-						if(ball.getX() >= p1.getX() +p1.getHeight()/2)
-						{
-							ball.setX(p1.getX()+ p1.getWidth());
-						}
-						else
-						{
-							ball.setX(p1.getX());
-						}
-
-						ball.setVX(1.5* p1.getVX());
-					}
-					if(Math.abs(p2.getY()+p2.getHeight()-ball.getY()) <5 && ball.getX()  + ball.getWidth() >p2.getX() && ball.getX()  <p2.getX()+p2.getWidth())
-					{
-						if(ball.getX() >= p2.getX() +p2.getHeight()/2)
-						{
-							ball.setX(p2.getX()+ p2.getWidth());
-						}
-						else
-						{
-							ball.setX(p2.getX());
-						}
-
-						ball.setVX(1.5* p2.getVX());
-					}
-
-
-					goalInteraction();
+				if (displayTime <= 55) {
+					mysteryBox.act();
+					if (!mysteryBox.isOnSurface()) 
+						mysteryBox.fall(ground);
 				}
+
+				ball.act();
+				if (!ball.isOnSurface()) 
+					ball.fall(ground);
+				if (ball.getVX() != 0)
+					ball.applyFriction();
+
+				//  collision detecting
+
+				if (Math.abs(p1.getX() - p2.getX()) < 100 && Math.abs(p1.getY() - p2.getY()) < 135)
+					playerCollisionDetection();
+				else {
+					p1.setRightMobility(true);
+					p2.setLeftMobility(true);
+				}
+
+				if (Math.abs(p1.getX() - ball.getX()) < 150)
+					ballInteraction(p1);
+				if (Math.abs(p2.getX() - ball.getX()) < 150)
+					ballInteraction(p2);
+
+				if (Math.abs(p1.getY()+p1.getHeight()-ball.getY()) <5 && ball.getX()  + ball.getWidth() >p1.getX() && ball.getX()  <p1.getX()+p1.getWidth()) {
+					if(ball.getX() >= p1.getX() +p1.getHeight()/2) {
+						ball.setX(p1.getX()+ p1.getWidth());
+					}
+					else {
+						ball.setX(p1.getX());
+					}
+
+					ball.setVX(1.5* p1.getVX());
+				}
+				if (Math.abs(p2.getY()+p2.getHeight()-ball.getY()) <5 && ball.getX()  + ball.getWidth() >p2.getX() && ball.getX()  <p2.getX()+p2.getWidth()) {
+					if(ball.getX() >= p2.getX() +p2.getHeight()/2) {
+						ball.setX(p2.getX()+ p2.getWidth());
+					}
+					else {
+						ball.setX(p2.getX());
+					}
+
+					ball.setVX(1.5* p2.getVX());
+				}
+
+				goalInteraction();
+				
+				if (Math.abs(p1.getX() - mysteryBox.getX()) <= 110)
+					mysteryBoxCollisionDetection(p1);
+				if (Math.abs(p2.getX() - mysteryBox.getX()) <= 110)
+					mysteryBoxCollisionDetection(p2);
+
+				// power up, mystery boxes, & health bars
+
+				p1.getPowerUp().draw(this);
+				p2.getPowerUp().draw(this);
+				p1.getHealth().draw(this);
+				p2.getHealth().draw(this);					
+			}
+
 		} else {
 			pauseDelay = millis() - time;
 		}
@@ -190,17 +185,14 @@ public class GamePanel extends DrawingSurface {
 			if (key == 'd')
 				if (p1.canMoveRight())
 					p1.walkHorizontally(1);
-			if (key == 'w') {
+			if (key == 'w')
 				p1.jump();
-				//		inJump = true;
-			}
-			if(key == 's')
-			{
+			if (key == 's')
 				if(ballInteraction(p1))
-				{
-					p1.kick(ball, boundaries[0], true);
-				}
-			}
+					p1.kick(ball, ground, true);
+			if (key == ' ')
+				p1.makeSuper();
+
 			// player 2
 
 			if (keyCode == LEFT)
@@ -209,36 +201,19 @@ public class GamePanel extends DrawingSurface {
 			if (keyCode == RIGHT)
 				if (p2.canMoveRight())
 					p2.walkHorizontally(1);
-			if (keyCode == UP) {
+			if (keyCode == UP)
 				p2.jump();
-				//		inJump = true;
-			}
-			if(keyCode == DOWN) {
+			if (keyCode == DOWN) 
 				if(ballInteraction(p2))
-				{
-					p2.kick(ball, boundaries[0], false);
-				}
-			}
-
-			if (key == ' ' ) {
-				System.out.print("rightX: " + p1.getX() + p1.getWidth());
-				System.out.print(", Player Width: " + p1.getWidth());
-				System.out.println(", BallX: " + ball.getX());
-			}
-
-			if (key == 'p')
-				paused = !paused;
+					p2.kick(ball, ground, false);
+			if (key == ENTER) 
+				p2.makeSuper();
 		}	
 	}
 
-	public void mousePressed()
-	{
-		if(mouseX>=width-60 && mouseY<=60 && mouseY>10 && mouseX<width-10)
-		{
-			//TONY ADD PAUSE SCREEN GRAPHIC
-
-		}
-
+	public void mousePressed() {
+		if (mouseX >= width - 60 && mouseY >= height - 60 && mouseY < height - 10 && mouseX < width - 10)
+			paused = !paused;
 	}
 
 	public void keyReleased() {
@@ -263,38 +238,49 @@ public class GamePanel extends DrawingSurface {
 	public void playerCollisionDetection() {
 		if (p1.getX() + p1.getWidth() >= p2.getX()) {
 			p1.setVX(0);
-			p1.setRightMovability(false);
+			p1.setRightMobility(false);
 			p2.setVX(0);
-			p2.setLeftMovability(false);
+			p2.setLeftMobility(false);
+		}
+	}
+
+	public void mysteryBoxCollisionDetection(Tekkist p) {
+		if (p.getY() <= mysteryBox.getY() + mysteryBox.getHeight() && p.getY() + p.getHeight() >= mysteryBox.getY()) {
+			if (p.getX() + p.getWidth() >= mysteryBox.getX() && p.getX() + p.getWidth()/2.0 < mysteryBox.getX() ||
+					p.getX() <= mysteryBox.getX() + mysteryBox.getWidth() && p.getX() >= mysteryBox.getX() + mysteryBox.getWidth()/2.0) {
+				mysteryBox.setX(-100);
+				mysteryBox.setY(-100);
+			}
 		}
 	}
 
 	public boolean ballInteraction(Tekkist p) {
-
 		if (p.getY() <= ball.getY() - ball.getHeight() && p.getY() + p.getHeight() >= ball.getY()) {
 			if (p.getX() + p.getWidth() >= ball.getX() && p.getX() + p.getWidth()/2.0 < ball.getX() ||
 					p.getX() <= ball.getX() + ball.getWidth() && p.getX() >= ball.getX() + ball.getWidth()/2.0) {
-				ball.setVX(1.5 * p.getVX());
+
+				if (!p.getSuperStatus())
+					ball.setVX(1.5 * p.getVX());
+				else {
+					ball.setVY(0);
+					ball.setVX(0);
+				}
+
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public void goalInteraction()
-	{
-		if (ball.getX()<=100+leftGoal.getX() && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY()+400)
-		{
+	public void goalInteraction() {
+		if (ball.getX()<=100+leftGoal.getX() && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY()+400) {
 			p2Score++;
-			//		cheer.play();
-			ball = new Ball(700, 0, 30);
+			ball = new Ball(width/2 - 15, 0, 30);
 			ball.setup(this);
 		}
-		if (ball.getX()>=rightGoal.getX() && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+400)
-		{
+		if (ball.getX()>=rightGoal.getX() && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+400) {
 			p1Score++;
-			//		cheer.play();
-			ball = new Ball(700, 0, 30);
+			ball = new Ball(width/2 - 15, 0, 30);
 			ball.setup(this);
 		}
 
