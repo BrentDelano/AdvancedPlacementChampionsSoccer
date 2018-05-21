@@ -107,8 +107,11 @@ public class Tekkist extends MovingObject {
 		
 		if (hasHeartbeat)
 			drawer.image(tekkist, getX(), getY(), getWidth(), getHeight());	
-		else
-			drawer.image(gravestone, getX(), getY(), getWidth(), getHeight());	
+		else {
+			drawer.image(gravestone, getX(), getY(), getWidth(), getHeight());
+			if (health.getHealthAmount() < 100)
+				health.setHealthAmount(health.getHealthAmount() + 0.2);
+		}
 			
 		// power up
 		

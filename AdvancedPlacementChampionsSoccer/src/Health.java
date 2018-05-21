@@ -8,7 +8,7 @@ import processing.core.*;
 public class Health {
 
 	private float x, y;
-	private int health;
+	private double health;
 	
 	public Health(float x, float y) {
 		this.x = x;
@@ -16,11 +16,11 @@ public class Health {
 		health = 100;
 	}
 	
-	public int getHealthAmount() {
+	public double getHealthAmount() {
 		return health;
 	}
 	
-	public void setHealthAmount(int h) {
+	public void setHealthAmount(double h) {
 		health = h;
 	}
 	
@@ -39,7 +39,7 @@ public class Health {
 			drawer.fill(255, 0, 0);
 		
 		if (health > 0) 
-			drawer.rect(x, y, health * 3, 20);
+			drawer.rect(x, y, (float) (health * 3), 20);
 		
 		drawer.textSize(15);
 		drawer.fill(0);

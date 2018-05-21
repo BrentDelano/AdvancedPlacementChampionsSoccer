@@ -197,7 +197,7 @@ public class GamePanel extends DrawingSurface {
 						p1.freeze();
 						p1.setTimeOfDeath(displayTime);
 					} else {
-						if (p1.getTimeOfDeath() - displayTime >= 7) {
+						if (p1.getHealth().getHealthAmount() >= 100) {
 							p1.defibrillation();
 							p1.unfreeze();
 							p1.setTimeOfDeath(0);
@@ -210,7 +210,7 @@ public class GamePanel extends DrawingSurface {
 						p2.freeze();
 						p2.setTimeOfDeath(displayTime);
 					} else {
-						if (p2.getTimeOfDeath() - displayTime >= 7) {
+						if (p2.getHealth().getHealthAmount() >= 100) {
 							p2.defibrillation();
 							p2.unfreeze();
 							p2.setTimeOfDeath(0);
