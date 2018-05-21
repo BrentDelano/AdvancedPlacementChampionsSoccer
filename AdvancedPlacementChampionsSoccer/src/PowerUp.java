@@ -23,10 +23,15 @@ public class PowerUp {
 	public void draw(PApplet drawer, float x, float y) {
 		drawer.fill(0);
 		drawer.stroke(0);
-		drawer.rect(x+10, y+10, 80, 80);
-		drawer.image(powerPic, x, y, 100, 100);
+		drawer.rect(x, y, 80, 80);
+		drawer.image(powerPic, x, y, 80, 80);
 
 		
+	}
+	
+	public String getPower()
+	{
+		return powerUp;
 	}
 	
 	

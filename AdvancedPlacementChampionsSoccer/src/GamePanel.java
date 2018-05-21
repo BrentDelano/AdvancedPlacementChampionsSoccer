@@ -143,22 +143,6 @@ public class GamePanel extends DrawingSurface {
 				if (Math.abs(p2.getX() - ball.getX()) < 150)
 					ballInteraction(p2);
 
-//				if (Math.abs(p1.getY() + p1.getHeight() - ball.getY()) < 5 && ball.getX() + ball.getWidth() > p1.getX() && ball.getX() < p1.getX() + p1.getWidth()) {
-//					if (ball.getX() >= p1.getX() + p1.getHeight()/2)
-//						ball.setX(p1.getX() + p1.getWidth());
-//					else
-//						ball.setX(p1.getX());
-//
-//					ball.setVX(1.5* p1.getVX());
-//				}
-//				if (Math.abs(p2.getY() + p2.getHeight() - ball.getY()) < 5 && ball.getX() + ball.getWidth() > p2.getX() && ball.getX()  <p2.getX() + p2.getWidth()) {
-//					if (ball.getX() >= p2.getX() +p2.getHeight()/2)
-//						ball.setX(p2.getX()+ p2.getWidth());
-//					else 
-//						ball.setX(p2.getX());
-//
-//					ball.setVX(1.5* p2.getVX());
-//				}
 
 				goalInteraction();
 
@@ -328,40 +312,16 @@ public class GamePanel extends DrawingSurface {
 
 	public boolean ballInteraction(Tekkist p) {
 		if (p.getY() <= ball.getY() && p.getY() + p.getHeight() >= ball.getY()+ball.getHeight()) {
-		//	if (p.getX() + p.getWidth() >= ball.getX() && p.getX() + p.getWidth()/2.0 < ball.getX() ||
-		//			p.getX() <= ball.getX() + ball.getWidth() && p.getX() >= ball.getX() + ball.getWidth()/2.0) {
-				if(ball.getX()+ball.getWidth()<=p.getX()+p.getWidth() && ball.getX()>=p.getX()) {
+						if(ball.getX()+ball.getWidth()<=p.getX()+p.getWidth() && ball.getX()>=p.getX()) {
 				if (!p.getSuperStatus()) {
 					
-//					if(ball.getX() >= p.getX() + p.getHeight()/2)
-//					{
-//						if(p.getVX()>0)
-//						{
-//							ball.setVX(1.5 * p.getVX());
-//						}
-//						else
-//						{
-//							ball.setVX(-1.5 * p.getVX());
-//						}
-//						
-//					}
-//					else
-//					{
-//						if(p.getVX()<0)
-//						{
-//							ball.setVX(1.5 * p.getVX());
-//						}
-//						else {
-//							ball.setVX(-1.5 * p.getVX());
-//						}
-//					}
+
 					
 					ball.setVX(1.5*p.getVX());
-					if(p.getY()-ball.getY()-ball.getHeight() <10 && ball.getY()<=p.getY()) {
+					if(p.getY()-ball.getY()-ball.getHeight() <10 && ball.getY()<=p.getY() +ball.getHeight()) {
 						
-						ball.setVY(-1 * ball.getVY());
-						//ball.setState(false);
-						//System.out.println("header");
+						ball.setVY(-.85 * ball.getVY());
+
 					}
 					if(p.getX()+p.getWidth()-ball.getX() <10 && ball.getX() <=p.getX()+p.getWidth()) {
 						if(ball.getVX() <0)
