@@ -77,6 +77,12 @@ public class GamePanel extends DrawingSurface {
 				clear();		
 
 				// some objects being drawn here
+				if(displayTime == 30 && mysteryBox.getX()<0)
+				{
+					mysteryBox.setX(608);
+					mysteryBox.setY(-75);
+					mysteryBox.setState(false);
+				}
 				if(goalChange && time-isPowered >=10*1000) {
 					resetGoalSizes();
 					goalChange = !goalChange;
