@@ -8,7 +8,7 @@ import processing.core.PImage;
  *
  */
 public class GamePanel extends DrawingSurface {
-
+	
 	private Ball ball;
 	private Tekkist p1;
 	private Tekkist p2;
@@ -26,7 +26,6 @@ public class GamePanel extends DrawingSurface {
 	private MysteryBox mysteryBox;
 	private PowerUp boxPowerP1;
 	private PowerUp boxPowerP2;
-	private int goalMessageTime;
 
 	public GamePanel() {
 		ball = new Ball(625, 0, 30);
@@ -44,7 +43,6 @@ public class GamePanel extends DrawingSurface {
 		mysteryBox = new MysteryBox(608, -75);
 		boxPowerP1 = null;
 		boxPowerP2 = null;
-		goalMessageTime = 0;
 	}
 
 	public void setup() {	
@@ -421,15 +419,15 @@ public class GamePanel extends DrawingSurface {
 			p2.setup(this, "street fighter.gif");			
 		}
 
-		if (p1.getX() + p1.getWidth() < leftGoal.getX()+100) {
-			p1.setX(leftGoal.getX()+100-p1.getWidth());
-		} else if (p1.getX() >rightGoal.getX()) {
-			p1.setX(rightGoal.getX());
+		if (p1.getX() < leftGoal.getX() + leftGoal.getWidth()) {
+			p1.setX(leftGoal.getX() + leftGoal.getWidth());
+		} else if (p1.getX() + p1.getWidth() > rightGoal.getX()) {
+			p1.setX(rightGoal.getX() - p1.getWidth());
 		}
-		if (p2.getX() + p2.getWidth() < leftGoal.getX()+100) {
-			p2.setX(leftGoal.getX()+100-p2.getWidth());
-		} else if (p2.getX() >rightGoal.getX()) {
-			p2.setX(rightGoal.getX());
+		if (p2.getX() < leftGoal.getX() + leftGoal.getWidth()) {
+			p2.setX(leftGoal.getX() + leftGoal.getWidth());
+		} else if (p2.getX() + p2.getWidth() > rightGoal.getX()) {
+			p2.setX(rightGoal.getX() - p2.getWidth());
 		}
 		
 		//need to add bounce off crossbar

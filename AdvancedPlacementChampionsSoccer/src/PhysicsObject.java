@@ -5,7 +5,7 @@
  *
  */
 public abstract class PhysicsObject {
-
+	
 	private float x, y;
 	private float width, height;
 	
