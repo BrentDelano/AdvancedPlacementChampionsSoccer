@@ -33,9 +33,9 @@ public class PlayerSelect extends DrawingSurface {
 	}
 
 	public void setup() {
-		for (int i = 1; i <= 30; i++) {
-			pictures[i] = loadImage("people" + System.getProperty("file.separator") + "tek" + i + ".jpeg");
-		}
+//		for (int i = 1; i <= 30; i++) {
+//			pictures[i] = loadImage("people" + System.getProperty("file.separator") + "tek" + i + ".jpeg");
+//		}
 		background = loadImage("SELECTION.png");
 	}
 

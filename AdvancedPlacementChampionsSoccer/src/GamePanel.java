@@ -1,3 +1,5 @@
+import ddf.minim.AudioPlayer;
+import ddf.minim.Minim;
 import processing.core.PImage;
 //import processing.sound.*;
 
@@ -8,7 +10,7 @@ import processing.core.PImage;
  *
  */
 public class GamePanel extends DrawingSurface {
-	
+
 	private Ball ball;
 	private Tekkist p1;
 	private Tekkist p2;
@@ -20,12 +22,15 @@ public class GamePanel extends DrawingSurface {
 	private int p2Score;
 	private PImage pauseButton;
 	private int time;
+	private int startTime;								// DO THIS LATER!!!!
 	private int delay;
 	private boolean paused;
 	private int pauseDelay;
 	private MysteryBox mysteryBox;
 	private PowerUp boxPowerP1;
 	private PowerUp boxPowerP2;
+	private Minim m;
+	private AudioPlayer a;
 
 	public GamePanel() {
 		ball = new Ball(625, 0, 30);
@@ -37,12 +42,15 @@ public class GamePanel extends DrawingSurface {
 		rightGoal = new Goal(1120, 150, false, 100, 400);
 		p1Score = 0;
 		time = 0;
+		startTime = 5;
 		delay = 0;
 		paused = false;
 		pauseDelay = 0;
 		mysteryBox = new MysteryBox(608, -75);
 		boxPowerP1 = null;
 		boxPowerP2 = null;
+		m = new Minim(this);
+		a = m.loadFile("");			// if it gives errors move to setup, use a.play() whenever you want to play it, a.pause() and a.rewind()
 	}
 
 	public void setup() {	
@@ -67,7 +75,7 @@ public class GamePanel extends DrawingSurface {
 			delay = millis();
 		if (!paused) {
 			time = millis();
-			int displayTime = 60  - (time/1000) + (delay/1000) + (pauseDelay/1000);
+			int displayTime = 60  - (time/1000) + (delay/1000) + (pauseDelay/1000) + startTime;
 
 			if (displayTime >= 0) {
 				clear();		
@@ -80,7 +88,7 @@ public class GamePanel extends DrawingSurface {
 				rightGoal.setY((float)((height*3.0)/16.0));
 				image(background, 0, 0, width, height);
 				image(pauseButton, width - 60, height - 60, 50, 50);
-				
+
 				p1.draw(this);
 				p2.draw(this);	
 				ball.draw(this);
@@ -115,7 +123,7 @@ public class GamePanel extends DrawingSurface {
 				if (!p2.isOnSurface()) 
 					p2.fall(ground);
 
-				if (displayTime <= 55) {
+				if (displayTime <= 30) {
 					mysteryBox.act();
 					if (!mysteryBox.isOnSurface()) 
 						mysteryBox.fall(ground);
@@ -145,7 +153,7 @@ public class GamePanel extends DrawingSurface {
 
 
 				goalInteraction();
-					
+
 				if (Math.abs(p1.getX() - mysteryBox.getX()) <= 100 && Math.abs(p1.getY()-mysteryBox.getY())<100) {
 					if (mysteryBoxCollisionDetection(p1)) {
 						p1.collectBox();
@@ -268,7 +276,7 @@ public class GamePanel extends DrawingSurface {
 	public void mousePressed() {
 		if (mouseX >= width - 60 && mouseY >= height - 60 && mouseY < height - 10 && mouseX < width - 10)
 			paused = !paused;
-	
+
 	}
 
 	public void keyReleased() {
@@ -316,14 +324,14 @@ public class GamePanel extends DrawingSurface {
 
 	public boolean ballInteraction(Tekkist p) {
 		if (p.getY() <= ball.getY() && p.getY() + p.getHeight() >= ball.getY()+ball.getHeight()) {
-						if(ball.getX()+ball.getWidth()<=p.getX()+p.getWidth() && ball.getX()>=p.getX()) {
+			if(ball.getX()+ball.getWidth()<=p.getX()+p.getWidth() && ball.getX()>=p.getX()) {
 				if (!p.getSuperStatus()) {
-					
 
-					
+
+
 					ball.setVX(1.5*p.getVX());
 					if(p.getY()-ball.getY()-ball.getHeight() <10 && ball.getY()<=p.getY() +ball.getHeight()) {
-						
+
 						ball.setVY(-.85 * ball.getVY());
 
 					}
@@ -333,16 +341,16 @@ public class GamePanel extends DrawingSurface {
 							ball.setVX(-1*ball.getVX());
 						}
 					}
-					
-					
-					
+
+
+
 				}
 				else {
 					p.freeze();
 					ball.setVY(0);
 					ball.setVX(0);
 				}
-				
+
 				return true;
 			}
 		}
@@ -352,7 +360,7 @@ public class GamePanel extends DrawingSurface {
 	public void goalInteraction() {
 		if (ball.getX() <= leftGoal.getX() + 35 && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY() + 400) {
 			p2Score++;
-			
+
 			ball = new Ball(width/2 - 15, 0, 30);
 			ball.setup(this);
 			PowerUpBar p1P = p1.getPowerUpBar();
@@ -366,7 +374,7 @@ public class GamePanel extends DrawingSurface {
 		}
 		if (ball.getX() >= rightGoal.getX() + 35 && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+400) {
 			p1Score++;
-			
+
 			ball = new Ball(width/2 - 15, 0, 30);
 			ball.setup(this);
 			PowerUpBar p1P = p1.getPowerUpBar();
@@ -389,7 +397,7 @@ public class GamePanel extends DrawingSurface {
 		} else if (p2.getX() + p2.getWidth() > rightGoal.getX()) {
 			p2.setX(rightGoal.getX() - p2.getWidth());
 		}
-		
+
 		//need to add bounce off crossbar
 	}
 }
