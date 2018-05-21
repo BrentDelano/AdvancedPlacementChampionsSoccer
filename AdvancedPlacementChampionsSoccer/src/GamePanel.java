@@ -101,13 +101,17 @@ public class GamePanel extends DrawingSurface {
 				fill(255);
 				text("SCORE: " + p1Score + " - " + p2Score, (float)(width/2.56),(float)((height*15.0)/16.0));
 
-				// creates physics between physics objects
+				// creates physics
 
-				p1.act();
+				p1.act();			
+				if (!p1.getIsWalking())
+					p1.applyFriction();
 				if (!p1.isOnSurface()) 
 					p1.fall(ground);
 
-				p2.act();
+				p2.act();	
+				if (!p2.getIsWalking())
+					p2.applyFriction();
 				if (!p2.isOnSurface()) 
 					p2.fall(ground);
 
@@ -128,8 +132,10 @@ public class GamePanel extends DrawingSurface {
 				if (Math.abs(p1.getX() - p2.getX()) < 100 && Math.abs(p1.getY() - p2.getY()) < 135)
 					playerCollisionDetection();
 				else {
-					p1.setRightMobility(true);
-					p2.setLeftMobility(true);
+					if (!p1.frozen)
+						p1.setRightMobility(true);
+					if (!p2.frozen)
+						p2.setLeftMobility(true);
 				}
 
 				if (Math.abs(p1.getX() - ball.getX()) < 150)
@@ -137,42 +143,35 @@ public class GamePanel extends DrawingSurface {
 				if (Math.abs(p2.getX() - ball.getX()) < 150)
 					ballInteraction(p2);
 
-				if (Math.abs(p1.getY()+p1.getHeight()-ball.getY()) <5 && ball.getX()  + ball.getWidth() >p1.getX() && ball.getX()  <p1.getX()+p1.getWidth()) {
-					if(ball.getX() >= p1.getX() +p1.getHeight()/2) {
-						ball.setX(p1.getX()+ p1.getWidth());
-					}
-					else {
+				if (Math.abs(p1.getY() + p1.getHeight() - ball.getY()) < 5 && ball.getX() + ball.getWidth() > p1.getX() && ball.getX() < p1.getX() + p1.getWidth()) {
+					if (ball.getX() >= p1.getX() + p1.getHeight()/2)
+						ball.setX(p1.getX() + p1.getWidth());
+					else
 						ball.setX(p1.getX());
-					}
 
 					ball.setVX(1.5* p1.getVX());
 				}
-				if (Math.abs(p2.getY()+p2.getHeight()-ball.getY()) <5 && ball.getX()  + ball.getWidth() >p2.getX() && ball.getX()  <p2.getX()+p2.getWidth()) {
-					if(ball.getX() >= p2.getX() +p2.getHeight()/2) {
+				if (Math.abs(p2.getY() + p2.getHeight() - ball.getY()) < 5 && ball.getX() + ball.getWidth() > p2.getX() && ball.getX()  <p2.getX() + p2.getWidth()) {
+					if (ball.getX() >= p2.getX() +p2.getHeight()/2)
 						ball.setX(p2.getX()+ p2.getWidth());
-					}
-					else {
+					else 
 						ball.setX(p2.getX());
-					}
 
 					ball.setVX(1.5* p2.getVX());
 				}
 
 				goalInteraction();
-				
+
 				if (Math.abs(p1.getX() - mysteryBox.getX()) <= 100 && Math.abs(p1.getY()-mysteryBox.getY())<100) {
-					if(mysteryBoxCollisionDetection(p1));
-					{
+					if (mysteryBoxCollisionDetection(p1)) {
 						p1.collectBox();
 						boxPowerP1 = p1.getBoxPower();
 						boxPowerP1.setup(this);
 					}
-					
 				}
-					
-				if (Math.abs(p2.getX() - mysteryBox.getX()) <= 100&& Math.abs(p1.getY()-mysteryBox.getY())<100) {
-					if(mysteryBoxCollisionDetection(p2));
-					{
+
+				if (Math.abs(p2.getX() - mysteryBox.getX()) <= 100 && Math.abs(p1.getY()-mysteryBox.getY())<100) {
+					if (mysteryBoxCollisionDetection(p2)) {
 						p2.collectBox();
 						boxPowerP2 = p2.getBoxPower();
 						boxPowerP2.setup(this);
@@ -185,18 +184,41 @@ public class GamePanel extends DrawingSurface {
 				p2.getPowerUpBar().draw(this);
 				p1.getHealth().draw(this);
 				p2.getHealth().draw(this);	
-				
-				if(boxPowerP1 != null)
-				{
-					boxPowerP1.draw(this, 20, 90);
-				}
-				if(boxPowerP2 != null)
-				{
-					boxPowerP2.draw(this, 1100, 90);
-				}
-				
-			}
 
+				if(boxPowerP1 != null)
+					boxPowerP1.draw(this, 20, 90);
+				if(boxPowerP2 != null)
+					boxPowerP2.draw(this, 1100, 90);	
+
+				p1.findHeartbeat();
+				p2.findHeartbeat();
+				if (!p1.hasHeartbeat()) {
+					if (p1.getTimeOfDeath() == 0) {
+						p1.freeze();
+						p1.setTimeOfDeath(displayTime);
+					} else {
+						if (p1.getTimeOfDeath() - displayTime >= 7) {
+							p1.defibrillation();
+							p1.unfreeze();
+							p1.setTimeOfDeath(0);
+							p1.getHealth().setHealthAmount(100);
+						}
+					}
+				}
+				if (!p2.hasHeartbeat()) {
+					if (p2.getTimeOfDeath() == 0) {
+						p2.freeze();
+						p2.setTimeOfDeath(displayTime);
+					} else {
+						if (p2.getTimeOfDeath() - displayTime >= 7) {
+							p2.defibrillation();
+							p2.unfreeze();
+							p2.setTimeOfDeath(0);
+							p2.getHealth().setHealthAmount(100);
+						}
+					}
+				}
+			}
 		} else {
 			pauseDelay = millis() - time;
 		}
@@ -214,22 +236,20 @@ public class GamePanel extends DrawingSurface {
 				if (p1.canMoveRight())
 					p1.walkHorizontally(1);
 			if (key == 'w')
-				p1.jump();
-			if (key == 's')
-				if(ballInteraction(p1))
-					p1.kick(ball, ground, true);
-			if (key == ' ')
-			{
-				if(boxPowerP1 != null)
-				{
-					boxPowerP2 = null;
-				}
-				else {
-					p1.makeSuper();
-				}
-				
+				if (p1.canMoveUp())
+					p1.jump();
+			if (key == 's') {
+				if (ballInteraction(p1))
+					p1.kickBall(ball, true);
+				if (playerCollisionDetection())
+					p1.kickPlayer(p2, true);
 			}
-				
+			if (key == ' ') {
+				if (boxPowerP1 != null)
+					boxPowerP1 = null;
+				else
+					p1.makeSuper();
+			}
 
 			// player 2
 
@@ -240,18 +260,19 @@ public class GamePanel extends DrawingSurface {
 				if (p2.canMoveRight())
 					p2.walkHorizontally(1);
 			if (keyCode == UP)
-				p2.jump();
-			if (keyCode == DOWN) 
-				if(ballInteraction(p2))
-					p2.kick(ball, ground, false);
+				if (p2.canMoveUp())
+					p2.jump();
+			if (keyCode == DOWN) {
+				if (ballInteraction(p2))
+					p2.kickBall(ball, false);
+				if (playerCollisionDetection())
+					p2.kickPlayer(p1, false);
+			}
 			if (key == ENTER) {
-				if(boxPowerP2 != null)
-				{
+				if (boxPowerP2 != null)
 					boxPowerP2 = null;
-				}
-				else {
+				else
 					p2.makeSuper();
-				}
 			}
 		}	
 	}
@@ -280,20 +301,22 @@ public class GamePanel extends DrawingSurface {
 	/**
 	 * @pre only detects collision if p1 is to the left of p2; also it does not detect player collision on the y axis
 	 */
-	public void playerCollisionDetection() {
+	public boolean playerCollisionDetection() {
 		if (p1.getX() + p1.getWidth() >= p2.getX()) {
 			p1.setVX(0);
 			p1.setRightMobility(false);
 			p2.setVX(0);
 			p2.setLeftMobility(false);
+			return true;
 		}
+		return false;
 	}
 
 	public boolean mysteryBoxCollisionDetection(Tekkist p) {
 		if (p.getY() <= mysteryBox.getY() + mysteryBox.getHeight() && p.getY() + p.getHeight() >= mysteryBox.getY()) {
 			if (p.getX() + p.getWidth() >= mysteryBox.getX() && p.getX() + p.getWidth()/2.0 < mysteryBox.getX() ||
 					p.getX() <= mysteryBox.getX() + mysteryBox.getWidth() && p.getX() >= mysteryBox.getX() + mysteryBox.getWidth()/2.0) {
-				
+
 				mysteryBox.setX(-100);
 				mysteryBox.setY(-100);
 				return true;
@@ -310,10 +333,10 @@ public class GamePanel extends DrawingSurface {
 				if (!p.getSuperStatus())
 					ball.setVX(1.5 * p.getVX());
 				else {
+					p.freeze();
 					ball.setVY(0);
 					ball.setVX(0);
 				}
-
 				return true;
 			}
 		}

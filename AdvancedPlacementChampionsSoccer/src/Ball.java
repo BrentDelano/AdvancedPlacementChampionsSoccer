@@ -29,23 +29,6 @@ public class Ball extends MovingObject {
 		drawer.popMatrix();
 	}
 
-	public void applyFriction() {
-		if (isOnSurface()) {
-			double friction;
-			if (Math.abs(getVX()) < 0.05) 
-				friction = Math.abs(getVX());
-			else
-				friction = 0.05;
-
-			if (getVX() > 0) {
-				setVX(getVX() - friction);
-			}
-			if (getVX() < 0) {
-				setVX(getVX() + friction);
-			} 
-		}
-	}
-
 	public void fall(Surface s) {
 		if (getY() <= s.getY() - getHeight()) {
 			setY((float) (getY() + getVY()));

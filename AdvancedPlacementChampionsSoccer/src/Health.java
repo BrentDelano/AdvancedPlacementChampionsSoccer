@@ -16,11 +16,11 @@ public class Health {
 		health = 100;
 	}
 	
-	public int getHealth() {
+	public int getHealthAmount() {
 		return health;
 	}
 	
-	public void setHealth(int h) {
+	public void setHealthAmount(int h) {
 		health = h;
 	}
 	
@@ -38,7 +38,8 @@ public class Health {
 		else
 			drawer.fill(255, 0, 0);
 		
-		drawer.rect(x, y, health * 3, 20);
+		if (health > 0) 
+			drawer.rect(x, y, health * 3, 20);
 		
 		drawer.textSize(15);
 		drawer.fill(0);
