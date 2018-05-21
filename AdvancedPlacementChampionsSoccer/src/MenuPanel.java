@@ -1,10 +1,4 @@
 import processing.core.PImage;
-
-import java.awt.Dimension;
-
-import javax.swing.JFrame;
-
-import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
 
 /**
@@ -13,33 +7,16 @@ import processing.core.PApplet;
  * @version 5/10/18
  *
  */
-public class MenuPanel extends DrawingSurface {
+public class MenuPanel extends Screen{
 
 	private PImage background;
 
 	public MenuPanel() {
 		background = new PImage();
 	}
-	public void setup() {
-		background = loadImage("MENU.png");
-	}
 
-	public void settings() {
-		size(1280, 800, P2D);
-	}
-	
-	public void draw() {			
-		clear();
-		float ratioX = (float) width / 500; 		
-		float ratioY = (float) height / 500; 
-		scale(ratioX, ratioY);
-		image(background, 0, 0, 500, 500);
-	}
-	
-	public void mouseClicked() {
-		if (mouseButton == LEFT) {
-			PApplet.main("InsPanel");
-		}
-		
+	public void draw(PApplet drawer) {	
+		background = drawer.loadImage("MENU.png");
+		drawer.image(background, 0, 0, 500, 500);
 	}
 }
