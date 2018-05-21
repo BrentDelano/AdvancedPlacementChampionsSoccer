@@ -26,6 +26,7 @@ public class GamePanel extends DrawingSurface {
 	private MysteryBox mysteryBox;
 	private PowerUp boxPowerP1;
 	private PowerUp boxPowerP2;
+	private int goalMessageTime;
 
 	public GamePanel() {
 		ball = new Ball(625, 0, 30);
@@ -43,6 +44,7 @@ public class GamePanel extends DrawingSurface {
 		mysteryBox = new MysteryBox(608, -75);
 		boxPowerP1 = null;
 		boxPowerP2 = null;
+		goalMessageTime = 0;
 	}
 
 	public void setup() {	
@@ -80,7 +82,7 @@ public class GamePanel extends DrawingSurface {
 				rightGoal.setY((float)((height*3.0)/16.0));
 				image(background, 0, 0, width, height);
 				image(pauseButton, width - 60, height - 60, 50, 50);
-
+				
 				p1.draw(this);
 				p2.draw(this);	
 				ball.draw(this);
@@ -132,9 +134,9 @@ public class GamePanel extends DrawingSurface {
 				if (Math.abs(p1.getX() - p2.getX()) < 100 && Math.abs(p1.getY() - p2.getY()) < 135)
 					playerCollisionDetection();
 				else {
-					if (!p1.frozen)
+					if (!p1.isFrozen())
 						p1.setRightMobility(true);
-					if (!p2.frozen)
+					if (!p2.isFrozen())
 						p2.setLeftMobility(true);
 				}
 
@@ -161,7 +163,7 @@ public class GamePanel extends DrawingSurface {
 				}
 
 				goalInteraction();
-
+					
 				if (Math.abs(p1.getX() - mysteryBox.getX()) <= 100 && Math.abs(p1.getY()-mysteryBox.getY())<100) {
 					if (mysteryBoxCollisionDetection(p1)) {
 						p1.collectBox();
@@ -239,10 +241,12 @@ public class GamePanel extends DrawingSurface {
 				if (p1.canMoveUp())
 					p1.jump();
 			if (key == 's') {
-				if (ballInteraction(p1))
-					p1.kickBall(ball, true);
-				if (playerCollisionDetection())
-					p1.kickPlayer(p2, true);
+				if (p1.canKick()) {
+					if (ballInteraction(p1))
+						p1.kickBall(ball, true);
+					if (playerCollisionDetection())
+						p1.kickPlayer(p2, true);
+				}
 			}
 			if (key == ' ') {
 				if (boxPowerP1 != null)
@@ -263,10 +267,12 @@ public class GamePanel extends DrawingSurface {
 				if (p2.canMoveUp())
 					p2.jump();
 			if (keyCode == DOWN) {
-				if (ballInteraction(p2))
-					p2.kickBall(ball, false);
-				if (playerCollisionDetection())
-					p2.kickPlayer(p1, false);
+				if (p2.canKick()) {
+					if (ballInteraction(p2))
+						p2.kickBall(ball, false);
+					if (playerCollisionDetection())
+						p2.kickPlayer(p1, false);
+				}
 			}
 			if (key == ENTER) {
 				if (boxPowerP2 != null)
@@ -344,15 +350,33 @@ public class GamePanel extends DrawingSurface {
 	}
 
 	public void goalInteraction() {
-		if (ball.getX()<=100+leftGoal.getX() && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY()+400) {
+		if (ball.getX() <= leftGoal.getX() + 35 && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY() + 400) {
 			p2Score++;
+			
 			ball = new Ball(width/2 - 15, 0, 30);
 			ball.setup(this);
+			PowerUpBar p1P = p1.getPowerUpBar();
+			Health p1H = p1.getHealth();
+			PowerUpBar p2P = p2.getPowerUpBar();
+			Health p2H = p2.getHealth();
+			p1 = new Tekkist(225, 520, 100, 135, p1P, p1H);
+			p2 = new Tekkist(1000, 520, 100, 135, p2P, p2H);
+			p1.setup(this, "batman.gif");	
+			p2.setup(this, "street fighter.gif");
 		}
-		if (ball.getX()>=rightGoal.getX() && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+400) {
+		if (ball.getX() >= rightGoal.getX() + 35 && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+400) {
 			p1Score++;
+			
 			ball = new Ball(width/2 - 15, 0, 30);
 			ball.setup(this);
+			PowerUpBar p1P = p1.getPowerUpBar();
+			Health p1H = p1.getHealth();
+			PowerUpBar p2P = p2.getPowerUpBar();
+			Health p2H = p2.getHealth();
+			p1 = new Tekkist(225, 520, 100, 135, p1P, p1H);
+			p2 = new Tekkist(1000, 520, 100, 135, p2P, p2H);
+			p1.setup(this, "batman.gif");	
+			p2.setup(this, "street fighter.gif");			
 		}
 
 		if (p1.getX() + p1.getWidth() < leftGoal.getX()+100) {
@@ -365,7 +389,7 @@ public class GamePanel extends DrawingSurface {
 		} else if (p2.getX() >rightGoal.getX()) {
 			p2.setX(rightGoal.getX());
 		}
-
+		
 		//need to add bounce off crossbar
 	}
 }

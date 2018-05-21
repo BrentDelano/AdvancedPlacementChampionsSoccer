@@ -103,5 +103,5 @@ public abstract class MovingObject extends PhysicsObject {
 	}
 
 	public abstract void draw(PApplet drawer);
-
+	
 }

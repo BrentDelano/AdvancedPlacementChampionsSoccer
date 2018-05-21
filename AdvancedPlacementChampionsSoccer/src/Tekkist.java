@@ -19,8 +19,8 @@ public class Tekkist extends MovingObject {
 	private boolean isWalking;
 	private boolean hasHeartbeat;
 	private int timeOfDeath;
-	public boolean frozen;
-	public boolean canKick;
+	private boolean frozen;
+	private boolean canKick;
 
 	public Tekkist(int x, int y, int w, int h, PowerUpBar p, Health health) {
 		super(x, y, w, h);
@@ -182,6 +182,10 @@ public class Tekkist extends MovingObject {
 		canKick = true;
 	}
 	
+	public boolean isFrozen() {
+		return frozen;
+	}
+	
 	public boolean getHasBoxPower() {
 		return hasBoxPower;
 	}
@@ -218,5 +222,9 @@ public class Tekkist extends MovingObject {
 	
 	public int getTimeOfDeath() {
 		return timeOfDeath;
+	}
+	
+	public boolean canKick() {
+		return canKick;
 	}
 }
