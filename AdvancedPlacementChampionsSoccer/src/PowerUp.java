@@ -15,6 +15,7 @@ public class PowerUp {
 	
 	public PowerUp() {
 		powerUp= powerUps[(int)(Math.random()*powerUps.length)];
+		//powerUp=powerUps[1];
 		powerPic = new PImage();
 	}
 	
