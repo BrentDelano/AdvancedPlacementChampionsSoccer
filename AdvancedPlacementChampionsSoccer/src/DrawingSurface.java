@@ -23,16 +23,13 @@ public class DrawingSurface extends PApplet {
 			gp.setup();
 		}
 	}
-	
+
 	public void draw() {
-		
+
 		clear();
 
 		if (inGame) {
 			gp.draw();
-			gp.keyPressed();
-			gp.mousePressed();
-			gp.keyReleased();
 		} else {
 			p.draw(this);
 		}
@@ -57,5 +54,23 @@ public class DrawingSurface extends PApplet {
 			setup();
 		}
 
+		if(inGame) {
+			gp.mousePressed();
+			System.out.println("LOL");
+		}
+	}
+
+	public void keyPressed() {
+		if(inGame) {
+			gp.keyPressed();
+			System.out.println("LOL");
+		}
+	}
+	
+	public void keyReleased() {
+		if(inGame) {	
+			gp.keyReleased();
+			System.out.println("LOL");
+		}
 	}
 }

@@ -10,10 +10,12 @@ import processing.core.PImage;
 public class Ball extends MovingObject {
 
 	private PImage ball;
+	private boolean frozen;
 
 	public Ball(float x, float y, float d) { 
 		super(x, y, d, d);
 		ball = new PImage();
+		frozen = false;
 	}
 
 	public void setup(PApplet drawer) {
@@ -54,5 +56,28 @@ public class Ball extends MovingObject {
 			return -Math.pow(2, getVX()) / 4.0;
 		else 
 			return Math.pow(2, Math.abs(getVX())) / 4.0;
+	}
+	
+	public void freeze() {
+		frozen = true;
+		
+		setRightMobility(false);
+		setLeftMobility(false);
+		setUpwardsMobility(false);
+		
+		setVX(0);
+		setVY(0);
+	}
+	
+	public void unfreeze() {		
+		frozen = false;
+		
+		setRightMobility(true);
+		setLeftMobility(true);
+		setUpwardsMobility(true);
+	}
+	
+	public boolean isFrozen() {
+		return frozen;
 	}
 }

@@ -1,16 +1,16 @@
-
 import processing.core.PApplet;
 import processing.core.PConstants;
+import ddf.minim.AudioPlayer;
+import ddf.minim.Minim;
 import processing.core.PImage;
-//import processing.sound.*;
 
 /**
  * Represents the in-game screen
- * @author Brent Delano, Mira Khosla, Tony Yu
+ * @author Brent Delano, Mira Khosla
  * @version 5/15/18
  *
  */
-public class GamePanel {
+public class GamePanel{
 
 	private Ball ball;
 	private Tekkist p1;
@@ -23,15 +23,17 @@ public class GamePanel {
 	private int p2Score;
 	private PImage pauseButton;
 	private int time;
+	private int startTime;								// DO THIS LATER!!!!
 	private int delay;
 	private boolean paused;
 	private int pauseDelay;
 	private MysteryBox mysteryBox;
 	private PowerUp boxPowerP1;
 	private PowerUp boxPowerP2;
-	private boolean goalChange;
+	private Minim m;
+	private AudioPlayer a;
+	private boolean anyChange;
 	private int isPowered;
-
 	private PApplet p;
 
 	public GamePanel(PApplet n) {
@@ -47,13 +49,16 @@ public class GamePanel {
 		rightGoal = new Goal(1120, 150, false, 100, 400);
 		p1Score = 0;
 		time = 0;
+		startTime = 5;
 		delay = 0;
 		paused = false;
 		pauseDelay = 0;
 		mysteryBox = new MysteryBox(608, -75);
 		boxPowerP1 = null;
 		boxPowerP2 = null;
-		goalChange = false;
+		m = new Minim(this);
+		a = m.loadFile("");			// if it gives errors move to setup, use a.play() whenever you want to play it, a.pause() and a.rewind()
+		anyChange = false;
 		isPowered = 0;
 	}
 
@@ -85,19 +90,30 @@ public class GamePanel {
 			if (displayTime >= 0) {
 				p.clear();		
 
-				if(goalChange && time-isPowered >=10*1000) {
-					resetGoalSizes();
-					goalChange = !goalChange;
+
+				// some objects being drawn here
+				if(displayTime == 30 && mysteryBox.getX()<0)
+				{
+					mysteryBox.setX(608);
+					mysteryBox.setY(-75);
+					mysteryBox.setState(false);
 				}
-				if(!goalChange) {
+
+				if(anyChange && time-isPowered >=10*1000) {
+					resetAllSizes();
+					anyChange = !anyChange;
+				}
+				if(!anyChange) {
+
 					leftGoal.setX((float)(p.width/25.6));
 					leftGoal.setY((float)((p.height*3.0)/16.0));
 					rightGoal.setX((float)((p.width*7.0)/8.0));
 					rightGoal.setY((float)((p.height*3.0)/16.0));
+
 				}
 
 				p.image(background, 0, 0, p.width, p.height);
-				//				p.image(pauseButton, p.width - 60, 10, 50, 50);
+				p.image(pauseButton, p.width - 60, 10, 50, 50);
 
 				p1.draw(p);
 				p2.draw(p);	
@@ -133,7 +149,7 @@ public class GamePanel {
 				if (!p2.isOnSurface()) 
 					p2.fall(ground);
 
-				if (displayTime <= 55) {
+				if (displayTime <= 60) {
 					mysteryBox.act();
 					if (!mysteryBox.isOnSurface()) 
 						mysteryBox.fall(ground);
@@ -150,9 +166,9 @@ public class GamePanel {
 				if (Math.abs(p1.getX() - p2.getX()) < 100 && Math.abs(p1.getY() - p2.getY()) < 135)
 					playerCollisionDetection();
 				else {
-					if (!p1.frozen)
+					if (!p1.isFrozen())
 						p1.setRightMobility(true);
-					if (!p2.frozen)
+					if (!p2.isFrozen())
 						p2.setLeftMobility(true);
 				}
 
@@ -226,7 +242,7 @@ public class GamePanel {
 		}
 	}
 
-	@SuppressWarnings("static-access")
+
 	public void keyPressed() {		
 		if (p.keyPressed) {
 
@@ -249,13 +265,13 @@ public class GamePanel {
 			}if (p.key == ' ') {
 				if (boxPowerP1 != null) {
 					useBoxPower(boxPowerP1, 1);
-					goalChange = true;
+					anyChange = true;
 					isPowered = time;
 					boxPowerP1 = null;
 
 				}
-				else
-					p1.makeSuper();
+				//else
+				//	p1.makeSuper();
 			}
 
 
@@ -268,31 +284,32 @@ public class GamePanel {
 				if (p2.canMoveRight())
 					p2.walkHorizontally(1);
 			if (p.keyCode == PConstants.UP)
-				if (p.keyCode == p.UP)
-					if (p2.canMoveUp())
-						p2.jump();
-			if (p.keyCode == p.DOWN) {
-				if (ballInteraction(p2))
-					p2.kickBall(ball, false);
-				if (playerCollisionDetection())
-					p2.kickPlayer(p1, false);
+				if (p2.canMoveUp())
+					p2.jump();
+			if (p.keyCode == PConstants.DOWN) {
+				if (p2.canKick()) {
+					if (ballInteraction(p2))
+						p2.kickBall(ball, false);
+					if (playerCollisionDetection())
+						p2.kickPlayer(p1, false);
+				}
+
 			}
-			if (p.key == p.ENTER) {
+			if (p.key == PConstants.ENTER) {
 				if (boxPowerP2 != null)
 				{
 					useBoxPower(boxPowerP2, 2);
-					goalChange = true;
+					anyChange = true;
 					isPowered = time;
 					boxPowerP2 = null;
 
 				}
-
 				else
 					p2.makeSuper();
 			}
 		}
-	}
 
+	}
 	public void mousePressed()
 	{
 		if(p.mouseX>=p.width-60 && p.mouseY<=60 && p.mouseY>10 && p.mouseX<p.width-10)
@@ -381,24 +398,56 @@ public class GamePanel {
 	public void goalInteraction() {
 		if (ball.getX()<=leftGoal.getWidth()+leftGoal.getX() && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY()+leftGoal.getHeight()) {
 			p2Score++;
-			ball = new Ball(p.width/2 - 15, 0, 30);
-			ball.setup(p);
-		}
-		if (ball.getX()>=rightGoal.getX() && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+rightGoal.getHeight()) {
-			p1Score++;
-			ball = new Ball(p.width/2 - 15, 0, 30);
-			ball.setup(p);
+
+			ball.setX(p.width/2-15);
+			ball.setY(0);
+			ball.setState(false);
+			ball.setVX(0);
+			PowerUpBar p1P = p1.getPowerUpBar();
+			Health p1H = p1.getHealth();
+			PowerUpBar p2P = p2.getPowerUpBar();
+			Health p2H = p2.getHealth();
+			p1.setX(225);
+			p1.setHealth(p1H);
+			p1.setPowerUpBar(p1P);
+			p2.setX(1000);
+			p2.setPowerUpBar(p2P);
+			p2.setHealth(p2H);
+			p1.reset();
+			p2.reset();
 		}
 
-		if (p1.getX() + p1.getWidth() < leftGoal.getX()+100) {
-			p1.setX(leftGoal.getX()+100-p1.getWidth());
-		} else if (p1.getX() >rightGoal.getX()) {
-			p1.setX(rightGoal.getX());
+		if (ball.getX()>=rightGoal.getX() && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+rightGoal.getHeight()) {
+			p1Score++;
+
+			ball.setX(p.width/2-15);
+			ball.setY(0);
+			ball.setState(false);
+			ball.setVX(0);
+			//ball.setup(this);
+			PowerUpBar p1P = p1.getPowerUpBar();
+			Health p1H = p1.getHealth();
+			PowerUpBar p2P = p2.getPowerUpBar();
+			Health p2H = p2.getHealth();
+			p1.setX(225);
+			p1.setHealth(p1H);
+			p1.setPowerUpBar(p1P);
+			p2.setX(1000);
+			p2.setPowerUpBar(p2P);
+			p2.setHealth(p2H);
+			p1.reset();
+			p2.reset();
 		}
-		if (p2.getX() + p2.getWidth() < leftGoal.getX()+100) {
-			p2.setX(leftGoal.getX()+100-p2.getWidth());
-		} else if (p2.getX() >rightGoal.getX()) {
-			p2.setX(rightGoal.getX());
+
+		if (p1.getX() < leftGoal.getX() + leftGoal.getWidth()) {
+			p1.setX(leftGoal.getX() + leftGoal.getWidth());
+		} else if (p1.getX() + p1.getWidth() > rightGoal.getX()) {
+			p1.setX(rightGoal.getX() - p1.getWidth());
+		}
+		if (p2.getX() < leftGoal.getX() + leftGoal.getWidth()) {
+			p2.setX(leftGoal.getX() + leftGoal.getWidth());
+		} else if (p2.getX() + p2.getWidth() > rightGoal.getX()) {
+			p2.setX(rightGoal.getX() - p2.getWidth());
 		}
 
 	}
@@ -438,13 +487,28 @@ public class GamePanel {
 				rightGoal.setY(rightGoal.getY()+rightGoal.getHeight()/2+50);
 			}
 		}
+		else if(boxPower.getPower().equals("growTekkist")) {
+			if(p1orp2 == 1)
+			{
+				p1.setHeight(p1.getHeight()*2);
+				p1.setY(p1.getY()-p1.getHeight()/2);
+			}
+			else
+			{
+				p2.setHeight(p2.getHeight()*2);
+				p2.setY(p2.getY()-p2.getHeight()/2);
+			}
+		}
 	}
 
-	public void resetGoalSizes()
-	{
+	public void resetAllSizes()	{
 		leftGoal.setHeight(400);
 		leftGoal.setWidth(100);
 		rightGoal.setWidth(100);
 		rightGoal.setHeight(400);
+		p1.setHeight(135);
+		p2.setHeight(135);
+		p1.setState(false);
+		p2.setState(false);
 	}
 }

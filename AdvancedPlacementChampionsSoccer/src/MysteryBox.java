@@ -20,7 +20,7 @@ public class MysteryBox extends MovingObject {
 	}
 	
 	public void draw(PApplet drawer) {
-			drawer.image(mysteryBox, getX(), getY(), getWidth(), getHeight());
+		drawer.image(mysteryBox, getX(), getY(), getWidth(), getHeight());
 	}
 	
 	public void fall(Surface s) {
@@ -42,5 +42,4 @@ public class MysteryBox extends MovingObject {
 		setVY(-Math.abs(getVY()) + Math.abs(getVY() * 0.4));
 		setState(false);
 	}
-	
 }
