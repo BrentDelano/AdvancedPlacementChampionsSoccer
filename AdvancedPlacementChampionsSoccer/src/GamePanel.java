@@ -395,7 +395,7 @@ public class GamePanel{
 
 
 					ball.setVX(1.5*p.getVX());
-					if(p.getY()-ball.getY()-ball.getHeight() <10 && ball.getY()<=p.getY() +ball.getHeight()) {
+					if(p.getY()-ball.getY()-ball.getHeight() <5 && ball.getY()<=p.getY() +ball.getHeight()) {
 
 						ball.setVY(-.85 * ball.getVY());
 
