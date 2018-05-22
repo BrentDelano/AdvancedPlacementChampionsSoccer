@@ -30,6 +30,12 @@ public class Ball extends MovingObject {
 		drawer.translate((float) -(getX() + getWidth()/2.0), (float) -(getY() + getHeight()/2.0));
 		drawer.popMatrix();
 	}
+	
+	public void superSpeed()
+	{
+		setVX(50);
+		setVY(5*getVY());
+	}
 
 	public void fall(Surface s) {
 		if (getY() <= s.getY() - getHeight()) {

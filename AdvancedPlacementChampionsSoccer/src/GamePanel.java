@@ -29,6 +29,8 @@ public class GamePanel extends DrawingSurface {
 	private MysteryBox mysteryBox;
 	private PowerUp boxPowerP1;
 	private PowerUp boxPowerP2;
+//	private boolean 
+
 //<<<<<<< HEAD
 	private Minim m;
 	private AudioPlayer a;
@@ -235,6 +237,7 @@ public class GamePanel extends DrawingSurface {
 			}
 		} else {
 			pauseDelay = millis() - time;
+			
 		}
 	}
 
@@ -268,8 +271,8 @@ public class GamePanel extends DrawingSurface {
 					boxPowerP1 = null;
 					
 				}
-				//else
-				//	p1.makeSuper();
+				else
+					p1.makeSuper();
 			}
 
 			// player 2
@@ -301,8 +304,8 @@ public class GamePanel extends DrawingSurface {
 					
 				}
 					
-				//else
-					//p2.makeSuper();
+				else
+					p2.makeSuper();
 			}
 		}	
 	}
@@ -357,19 +360,19 @@ public class GamePanel extends DrawingSurface {
 	}
 
 	public boolean ballInteraction(Tekkist p) {
-		if (p.getY() <= ball.getY() && p.getY() + p.getHeight() >= ball.getY()+ball.getHeight()) {
-			if(ball.getX()+ball.getWidth()<=p.getX()+p.getWidth() && ball.getX()>=p.getX()) {
+		if (p.getY() <= ball.getY() +30 && p.getY() + p.getHeight() >= ball.getY()+ball.getHeight()) {
+			if(ball.getX()+ball.getWidth()<=p.getX()+p.getWidth() +30 && ball.getX()+30>=p.getX()) {
 				if (!p.getSuperStatus()) {
 
 
 
 					ball.setVX(1.5*p.getVX());
-					if(p.getY()-ball.getY()-ball.getHeight() <10 && ball.getY()<=p.getY() +ball.getHeight()) {
+					if(p.getY()-ball.getY()-ball.getHeight() <20 && ball.getY()<=p.getY() +ball.getHeight()) {
 
 						ball.setVY(-.85 * ball.getVY());
 
 					}
-					if(p.getX()+p.getWidth()-ball.getX() <10 && ball.getX() <=p.getX()+p.getWidth()) {
+					if(p.getX()+p.getWidth()-ball.getX()-30 <10 && ball.getX() <=p.getX()+p.getWidth()+30) {
 						if(ball.getVX() <0)
 						{
 							ball.setVX(-1*ball.getVX());
