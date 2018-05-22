@@ -2,7 +2,7 @@ import processing.core.PImage;
 import processing.core.PApplet;
 
 /**
- * Represents the screen where the player can begin the game
+ * Represents the screen where there is instructions for the game
  * @author Tony Yu
  * @version 5/10/18
  *

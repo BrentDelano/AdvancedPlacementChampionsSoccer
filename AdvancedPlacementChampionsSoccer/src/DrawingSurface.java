@@ -67,6 +67,7 @@ public class DrawingSurface extends PApplet {
 			setup();
 			gp.draw();
 		}
+		
 		if(inGame) {
 			gp.mousePressed();
 

@@ -3,7 +3,7 @@ import processing.core.*;
 /**
  * Represents the power up bar that a Tekkist has
  * @author Brent Delano
- * @version 5/15/18
+ * @version 5/21/18
  */
 public class PowerUpBar {
 

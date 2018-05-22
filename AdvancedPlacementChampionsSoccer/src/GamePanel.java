@@ -20,7 +20,6 @@ public class GamePanel{
 	private Goal rightGoal;
 	private int p1Score;
 	private int p2Score;
-	private PImage pauseButton;
 	private int time;
 	private int startTime;								// DO THIS LATER!!!!
 	private int delay;
@@ -38,7 +37,7 @@ public class GamePanel{
 	private String player2Pic;
 
 	public GamePanel(PApplet n, String player1Pic, String player2Pic) {
-		
+
 		this.p = n;
 		this.player1Pic = player1Pic;
 		this.player2Pic = player2Pic;
@@ -72,7 +71,6 @@ public class GamePanel{
 		p2.setup(p, "people//"+player2Pic + ".png");
 		leftGoal.setup(p);
 		rightGoal.setup(p);
-		pauseButton = p.loadImage("pauseButton.png");
 		p2Score = 0;
 		mysteryBox.setup(p);
 		background = p.loadImage("field.jpeg");
@@ -83,17 +81,24 @@ public class GamePanel{
 	}
 
 	public void draw() {	
-		
+
 		if (delay == 0) 
 			delay = p.millis();
 		if (!paused) {
 			time = p.millis();
-			int displayTime = 60  - (time/1000)  + (delay/1000) + (pauseDelay/1000);
+			int displayTime = 20  - (time/1000)  + (delay/1000) + (pauseDelay/1000);
 
-			if (displayTime >= 0) {
+			if (displayTime < 0) {
+				if (p1Score==p2Score)
+					p.image(p.loadImage("ENDPANEL3.png"), 0, 0, p.width, p.height);
+				if (p1Score>p2Score)
+					p.image(p.loadImage("ENDPANEL1.png"), 0, 0, p.width, p.height);
+				if (p1Score<p2Score)
+					p.image(p.loadImage("ENDPANEL2.png"), 0, 0, p.width, p.height);
+			}
+			else if (displayTime >= 0) {
 				p.clear();		
 
-				
 				// some objects being drawn here
 				if(displayTime == 30 && mysteryBox.getX()<0)
 				{
@@ -116,9 +121,8 @@ public class GamePanel{
 				}
 
 				p.image(background, 0, 0, p.width, p.height);
-				p.image(pauseButton, p.width - 60, 10, 50, 50);
 
-				
+
 				p1.draw(p);
 				p2.draw(p);	
 				ball.draw(p);
@@ -389,22 +393,22 @@ public class GamePanel{
 
 				}
 				else {
-				
+
 					int x = (int)(Math.random()*2);
 					if(x==1)
 					{
-					ball.setY(p.getY()-10);
-					ball.setVY(10);
-					
-					ball.setState(false);
-					if(Math.abs(p.getX()-p1.getX())<0.01)
-					{
-						ball.setVX(20);
-					}
-					else
-					{
-						ball.setVX(-20);
-					}
+						ball.setY(p.getY()-10);
+						ball.setVY(10);
+
+						ball.setState(false);
+						if(Math.abs(p.getX()-p1.getX())<0.01)
+						{
+							ball.setVX(20);
+						}
+						else
+						{
+							ball.setVX(-20);
+						}
 					}
 					else {
 						if(Math.abs(p.getX()-p1.getX())<0.01)
@@ -416,22 +420,22 @@ public class GamePanel{
 							ball.setVX(-40);
 						}
 					}
-					
-					
-//					if(p.getY()-ball.getY()-ball.getHeight() <10 && ball.getY()<=p.getY() +ball.getHeight()) {
-//
-//						ball.setVY(-.85 * ball.getVY());
-//						
-//					}
-//					if(p.getX()+p.getWidth()-ball.getX()-30 <10 && ball.getX() <=p.getX()+p.getWidth()+30) {
-//						if(ball.getVX() <0)
-//						{
-//							ball.setVX(-1*ball.getVX());
-//						}
-//					}
-					
+
+
+					//					if(p.getY()-ball.getY()-ball.getHeight() <10 && ball.getY()<=p.getY() +ball.getHeight()) {
+					//
+					//						ball.setVY(-.85 * ball.getVY());
+					//						
+					//					}
+					//					if(p.getX()+p.getWidth()-ball.getX()-30 <10 && ball.getX() <=p.getX()+p.getWidth()+30) {
+					//						if(ball.getVX() <0)
+					//						{
+					//							ball.setVX(-1*ball.getVX());
+					//						}
+					//					}
+
 					p.makeNotSuper();
-					
+
 				}
 
 				return true;
