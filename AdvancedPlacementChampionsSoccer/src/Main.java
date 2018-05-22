@@ -4,6 +4,12 @@ import javax.swing.JFrame;
 import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
 
+/**
+ * Contains the main method
+ * @author Tony Yu
+ * @version 5/18/18
+ *
+ */
 public class Main {
 
 	public static void main(String args[]) {

@@ -1,8 +1,8 @@
 import processing.core.*;
 /**
- * Represents the power up  that a Tekkist has
+ * Represents the power up that a Tekkist has
  * @author Mira Khosla
- * @version 5/20/18
+ * @version 5/21/18
  */
 public class PowerUp {
 

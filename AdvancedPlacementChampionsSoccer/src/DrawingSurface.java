@@ -1,11 +1,16 @@
 import processing.core.PApplet;
 
+/**
+ * Represents a drawing surface that can switch between panels
+ * @author Tony Yu
+ * @version 2/21/18
+ *
+ */
 public class DrawingSurface extends PApplet {
 
 	private Screen p;
 	private GamePanel gp;
 	private int n;
-	private boolean inGame;
 
 	public DrawingSurface() {
 		p = new MenuPanel();
@@ -13,13 +18,13 @@ public class DrawingSurface extends PApplet {
 
 	public void settings() {
 		size(1280, 800, "processing.opengl.PGraphics2D");
-		if (inGame) {
+		if (n==3) {
 			gp.settings();
 		}
 	}
 
 	public void setup() {
-		if (inGame) {
+		if (n==3) {
 			gp.setup();
 		}
 	}
@@ -28,7 +33,7 @@ public class DrawingSurface extends PApplet {
 
 		clear();
 
-		if (inGame) {
+		if (n==3) {
 			gp.draw();
 		} else {
 			p.draw(this);
@@ -38,7 +43,12 @@ public class DrawingSurface extends PApplet {
 	public void mousePressed() {
 
 		if (mouseButton == LEFT) {
-			n++;
+		
+			if (n==3) {
+				n--;
+			} else {
+				n++;
+			}
 		}
 
 		if (n==1) {
@@ -49,28 +59,24 @@ public class DrawingSurface extends PApplet {
 			p = ps;
 		} else if (n==3) {
 			gp = new GamePanel(this);
-			inGame = true;
 			settings();
 			setup();
 		}
 
-		if(inGame) {
+		if(n==3) {
 			gp.mousePressed();
-			System.out.println("LOL");
 		}
 	}
 
 	public void keyPressed() {
-		if(inGame) {
+		if(n==3) {
 			gp.keyPressed();
-			System.out.println("LOL");
 		}
 	}
 	
 	public void keyReleased() {
-		if(inGame) {	
+		if(n==3) {	
 			gp.keyReleased();
-			System.out.println("LOL");
 		}
 	}
 }
