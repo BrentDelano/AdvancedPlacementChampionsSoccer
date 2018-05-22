@@ -3,7 +3,6 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
-import processing.opengl.PSurfaceJOGL;
 
 /**
  * Contains the main method
@@ -17,7 +16,7 @@ public class Main {
 
 		DrawingSurface drawing = new DrawingSurface();
 		PApplet.runSketch(new String[]{""}, drawing);
-		PSurfaceJOGL surf = (PSurfaceJOGL) drawing.getSurface();
+		PSurfaceAWT surf = (PSurfaceAWT) drawing.getSurface();
 		PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
 		JFrame window = (JFrame)canvas.getFrame();
 
