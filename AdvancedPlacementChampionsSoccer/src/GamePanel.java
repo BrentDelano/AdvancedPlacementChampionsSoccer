@@ -86,7 +86,7 @@ public class GamePanel{
 			delay = p.millis();
 		if (!paused) {
 			time = p.millis();
-			int displayTime = 20  - (time/1000)  + (delay/1000) + (pauseDelay/1000);
+			int displayTime = 60  - (time/1000)  + (delay/1000) + (pauseDelay/1000);
 
 			if (displayTime < 0) {
 				if (p1Score==p2Score)
