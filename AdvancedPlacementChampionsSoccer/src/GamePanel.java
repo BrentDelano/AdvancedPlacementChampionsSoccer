@@ -17,6 +17,7 @@ public class GamePanel{
 	private Surface ground;
 	private PImage background;
 	private Goal leftGoal;
+	private Surface ground2; 
 	private Goal rightGoal;
 	private int p1Score;
 	private int p2Score;
@@ -35,6 +36,7 @@ public class GamePanel{
 	private AudioPlayer crowd;
 	private String player1Pic;
 	private String player2Pic;
+	private AudioPlayer vuvuzela;
 
 	public GamePanel(PApplet n, String player1Pic, String player2Pic) {
 
@@ -42,9 +44,10 @@ public class GamePanel{
 		this.player1Pic = player1Pic;
 		this.player2Pic = player2Pic;
 		ball = new Ball(625, 0, 30);
-		p1 = new Tekkist(225, 520, 100, 150, new PowerUpBar(20, 20), new Health(20, 60));
-		p2 = new Tekkist(1000, 520, 100, 150, new PowerUpBar(960, 20), new Health(960, 60));
-		ground = new Surface(0, 470, 1280, 400);
+		p1 = new Tekkist(225, 520, 150, 150, new PowerUpBar(20, 20), new Health(20, 60));
+		p2 = new Tekkist(1000, 520, 150, 150, new PowerUpBar(960, 20), new Health(960, 60));
+		ground = new Surface(0, 490, 1280, 400);
+		ground2 = new Surface(0, 450, 1280, 400);
 		background = new PImage();
 		leftGoal = new Goal((float)(p.width/25.6), (float)((p.height*3.0)/16.0), true, 100, 400); 
 		rightGoal = new Goal(1120, 150, false, 100, 400);
@@ -64,7 +67,11 @@ public class GamePanel{
 
 	public void setup() {
 		crowd = m.loadFile("crowd.mp3");
+		crowd.setGain(0);
 		crowd.play();
+		vuvuzela = m.loadFile("vuvuzela.mp3");
+		vuvuzela.setGain(-7);
+		vuvuzela.play();
 		p.frame.setResizable(false);
 		ball.setup(p);
 		p1.setup(p, "people//"+player1Pic +".png");	
@@ -81,7 +88,15 @@ public class GamePanel{
 	}
 
 	public void draw() {	
-
+		if(!crowd.isPlaying())
+		{
+			crowd.rewind();
+			crowd.play();
+		}
+		if(!vuvuzela.isPlaying()) {
+			vuvuzela.rewind();
+			vuvuzela.play();
+		}
 		if (delay == 0) 
 			delay = p.millis();
 		if (!paused) {
@@ -160,12 +175,12 @@ public class GamePanel{
 				if (displayTime <= 60) {
 					mysteryBox.act();
 					if (!mysteryBox.isOnSurface()) 
-						mysteryBox.fall(ground);
+						mysteryBox.fall(ground2);
 				}
 
 				ball.act();
 				if (!ball.isOnSurface()) 
-					ball.fall(ground);
+					ball.fall(ground2);
 				if (ball.getVX() != 0)
 					ball.applyFriction();
 
@@ -244,6 +259,9 @@ public class GamePanel{
 						}
 					}
 				}
+			} else {
+				crowd.pause();
+				vuvuzela.pause();
 			}
 		} else {
 
