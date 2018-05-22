@@ -83,7 +83,7 @@ public class GamePanel{
 	}
 
 	public void draw() {	
-
+		
 		if (delay == 0) 
 			delay = p.millis();
 		if (!paused) {
@@ -93,7 +93,7 @@ public class GamePanel{
 			if (displayTime >= 0) {
 				p.clear();		
 
-
+				
 				// some objects being drawn here
 				if(displayTime == 30 && mysteryBox.getX()<0)
 				{
@@ -118,6 +118,7 @@ public class GamePanel{
 				p.image(background, 0, 0, p.width, p.height);
 				p.image(pauseButton, p.width - 60, 10, 50, 50);
 
+				
 				p1.draw(p);
 				p2.draw(p);	
 				ball.draw(p);
