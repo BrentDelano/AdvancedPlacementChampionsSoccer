@@ -68,8 +68,8 @@ public class GamePanel{
 		crowd.play();
 		p.frame.setResizable(false);
 		ball.setup(p);
-		p1.setup(p, "people//"+player1Pic +".jpeg");	
-		p2.setup(p, "people//"+player2Pic + ".jpeg");
+		p1.setup(p, "people//"+player1Pic +".png");	
+		p2.setup(p, "people//"+player2Pic + ".png");
 		leftGoal.setup(p);
 		rightGoal.setup(p);
 		pauseButton = p.loadImage("pauseButton.png");
