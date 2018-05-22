@@ -129,7 +129,7 @@ public class Tekkist extends MovingObject {
 		if (hasHeartbeat)
 			drawer.image(tekkist, getX(), getY(), getWidth(), getHeight());	
 		else {
-			drawer.image(gravestone, getX()-10, getY() + getHeight()/2+getHeight()/4, getWidth(), getHeight()/4);
+			drawer.image(gravestone, getX()-10, getY(), getWidth(), getHeight());
 			
 			if (health.getHealthAmount() < 100)
 				health.setHealthAmount(health.getHealthAmount() + 0.2);
@@ -177,6 +177,11 @@ public class Tekkist extends MovingObject {
 			power.setCapability(false);
 			power.setPowerAmount(0);
 		}
+	}
+	
+	public void makeNotSuper() {
+		superSaiyan = false;
+		power.setCapability(true);
 	}
 	
 	public boolean getSuperStatus() {
