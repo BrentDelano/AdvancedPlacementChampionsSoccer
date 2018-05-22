@@ -17,7 +17,6 @@ public class InsPanel extends Screen {
 	
 	public void draw(PApplet drawer) {	
 		background = drawer.loadImage("INSTRUCTIONS.png");
-		drawer.image(background, 0, 0, 500, 500);
+		drawer.image(background, 0, 0, drawer.width, drawer.height);
 	}
-
 }

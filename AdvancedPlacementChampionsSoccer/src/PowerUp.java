@@ -1,46 +1,39 @@
-
 import processing.core.*;
-
 /**
- * Represents the power up that a Tekkist has
+ * Represents the power up  that a Tekkist has
  * @author Mira Khosla
- * @version 5/15/18
- *
+ * @version 5/20/18
  */
 public class PowerUp {
-	public static final String[] powerUps= new String[]{"shrink goal","grow", "slow motion"};
-	public int whichPower;
-	public float x, y;
-	public PImage powerImage;
+
+	public static final String[] powerUps = {"growGoal", "shrinkGoal"};
+	//add grow and shrink tekkist
+	private String powerUp;
+	private PImage powerPic;
 	
-	public PowerUp(int whichPower, float x, float y)
-	{
-		this.whichPower = whichPower;
-		powerImage = new PImage();
-		this.x =x;
-		this.y = y;
+	public PowerUp() {
+		powerUp= powerUps[(int)(Math.random()*powerUps.length)];
+		//powerUp=powerUps[1];
+		powerPic = new PImage();
 	}
 	
 	public void setup(PApplet drawer) {
-		powerImage = drawer.loadImage("powerUpLogo.jpg");
+		powerPic = drawer.loadImage(powerUp + ".png");
 	}
 	
-	public void setPower(int newPower)
-	{
-		whichPower = newPower;
+	public void draw(PApplet drawer, float x, float y) {
+		drawer.fill(0);
+		drawer.stroke(0);
+		drawer.rect(x, y, 80, 80);
+		drawer.image(powerPic, x, y, 80, 80);
+
+		
 	}
 	
-	public void setX(float x)
+	public String getPower()
 	{
-		this.x = x;
-	}
-	public void setY(float y)
-	{
-		this.y =y;
+		return powerUp;
 	}
 	
-	public void draw(PApplet drawer)
-	{
-		drawer.image(powerImage, x, y, 100, 50);
-	}
+	
 }

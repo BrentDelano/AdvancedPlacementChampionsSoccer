@@ -17,6 +17,6 @@ public class MenuPanel extends Screen{
 
 	public void draw(PApplet drawer) {	
 		background = drawer.loadImage("MENU.png");
-		drawer.image(background, 0, 0, 500, 500);
+		drawer.image(background, 0, 0, drawer.width, drawer.height);
 	}
 }

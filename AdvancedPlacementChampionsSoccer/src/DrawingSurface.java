@@ -13,17 +13,26 @@ public class DrawingSurface extends PApplet {
 
 	public void settings() {
 		size(1280, 800, "processing.opengl.PGraphics2D");
+		if (inGame) {
+			gp.settings();
+		}
 	}
 
+	public void setup() {
+		if (inGame) {
+			gp.setup();
+		}
+	}
+	
 	public void draw() {
+		
 		clear();
-		float ratioX = (float) width / 500; 		
-		float ratioY = (float) height / 500; 
-		scale(ratioX, ratioY);
 
 		if (inGame) {
 			gp.draw();
-			inGame = false;
+			gp.keyPressed();
+			gp.mousePressed();
+			gp.keyReleased();
 		} else {
 			p.draw(this);
 		}
@@ -44,6 +53,8 @@ public class DrawingSurface extends PApplet {
 		} else if (n==3) {
 			gp = new GamePanel(this);
 			inGame = true;
+			settings();
+			setup();
 		}
 
 	}

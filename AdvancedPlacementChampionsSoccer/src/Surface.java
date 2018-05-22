@@ -1,5 +1,3 @@
-import processing.core.PApplet;
-
 /**
  * Represents the surface of the soccer field, which is a Physics Object
  * @author Brent Delano
@@ -16,14 +14,5 @@ public class Surface extends PhysicsObject {
 		if (otherX >= getX() && otherY >= getY() && otherX <= getX() + getWidth() && otherY <= getY() + getHeight())
 			return true;
 		return false;
-	}
-	
-	public void draw(PApplet drawer) {
-//		drawer.rotateX(drawer.PI/4);	
-//		drawer.rectMode(drawer.CENTER);
-		drawer.noFill();
-		drawer.stroke(255);
-
-		drawer.rect(getX(), getY(), getWidth(), getHeight());
 	}
 }

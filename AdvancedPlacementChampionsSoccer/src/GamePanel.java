@@ -1,3 +1,4 @@
+
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
@@ -14,7 +15,7 @@ public class GamePanel {
 	private Ball ball;
 	private Tekkist p1;
 	private Tekkist p2;
-	private Surface[] boundaries;
+	private Surface ground;
 	private PImage background;
 	private Goal leftGoal;
 	private Goal rightGoal;
@@ -25,40 +26,39 @@ public class GamePanel {
 	private int delay;
 	private boolean paused;
 	private int pauseDelay;
-	private PowerUp p1Power;
-	private PowerUp p2Power;
+	private MysteryBox mysteryBox;
+	private PowerUp boxPowerP1;
+	private PowerUp boxPowerP2;
+	private boolean goalChange;
+	private int isPowered;
 
 	private PApplet p;
 
-	public GamePanel(PApplet p) {
-		this.p = p;
-		ball = new Ball(700, 0, 30);
-		p1 = new Tekkist(225, 520, 100, 135);
-		p2 = new Tekkist(1000, 520, 100, 135);
-		boundaries = new Surface[6];
+	public GamePanel(PApplet n) {
+
+		this.p = n;
+
+		ball = new Ball(625, 0, 30);
+		p1 = new Tekkist(225, 520, 100, 135, new PowerUpBar(20, 20), new Health(20, 60));
+		p2 = new Tekkist(1000, 520, 100, 135, new PowerUpBar(960, 20), new Health(960, 60));
+		ground = new Surface(0, 470, 1280, 400);
 		background = new PImage();
-		leftGoal = new Goal((float)(p.width/25.6), (float)((p.height*3.0)/16.0), true,100, 400); 
-		rightGoal = new Goal(1120, 150, false,100, 400);
-		pauseButton = new PImage();
+		leftGoal = new Goal((float)(p.width/25.6), (float)((p.height*3.0)/16.0), true, 100, 400); 
+		rightGoal = new Goal(1120, 150, false, 100, 400);
 		p1Score = 0;
 		time = 0;
 		delay = 0;
 		paused = false;
 		pauseDelay = 0;
-		p1Power = new PowerUp(1, 110, (float)((p.height*15.0)/16.0));
-		p2Power = new PowerUp(1, p.width-110, (float)((p.height*15.0)/16.0));
+		mysteryBox = new MysteryBox(608, -75);
+		boxPowerP1 = null;
+		boxPowerP2 = null;
+		goalChange = false;
+		isPowered = 0;
 	}
 
-	public void createBoundaries() {
-		//		boundaries[0] = new Surface(0, 0, (int) (3.0 * width / 4.0), (int) (3.0 * height / 5.0));
-		boundaries[0] = new Surface(0, (int) (p.height / 2.0) + 70,  p.width, (int) (p.height / 2.0));
-
-	}
-
-	public void setup() {	
+	public void setup() {
 		p.frame.setResizable(false);
-		background = p.loadImage("field.jpeg");
-		createBoundaries();
 		ball.setup(p);
 		p1.setup(p, "batman.gif");	
 		p2.setup(p, "street fighter.gif");
@@ -66,15 +66,16 @@ public class GamePanel {
 		rightGoal.setup(p);
 		pauseButton = p.loadImage("pauseButton.png");
 		p2Score = 0;
-		p1Power.setup(p);
-		p2Power.setup(p);
+		mysteryBox.setup(p);
+		background = p.loadImage("field.jpeg");
 	}
 
 	public void settings() {
 		p.size(1280, 800, PConstants.P2D);
 	}
 
-	public void draw() {			
+	public void draw() {	
+
 		if (delay == 0) 
 			delay = p.millis();
 		if (!paused) {
@@ -82,28 +83,28 @@ public class GamePanel {
 			int displayTime = 60  - (time/1000)  + (delay/1000) + (pauseDelay/1000);
 
 			if (displayTime >= 0) {
-
 				p.clear();		
 
-				// draws everything onto the screen
+				if(goalChange && time-isPowered >=10*1000) {
+					resetGoalSizes();
+					goalChange = !goalChange;
+				}
+				if(!goalChange) {
+					leftGoal.setX((float)(p.width/25.6));
+					leftGoal.setY((float)((p.height*3.0)/16.0));
+					rightGoal.setX((float)((p.width*7.0)/8.0));
+					rightGoal.setY((float)((p.height*3.0)/16.0));
+				}
 
-				leftGoal.setX((float)(p.width/25.6));
-				leftGoal.setY((float)((p.height*3.0)/16.0));
-				rightGoal.setX((float)((p.width*7.0)/8.0));
-				rightGoal.setY((float)((p.height*3.0)/16.0));
-				p1Power.setY((float)((p.height*15.0)/16.0)-60);
-				p2Power.setY((float)((p.height*15.0)/16.0)-60);
-				p2Power.setX(p.width-110-100);
 				p.image(background, 0, 0, p.width, p.height);
-				p.image(pauseButton, p.width - 60, 10, 50, 50);
+				//				p.image(pauseButton, p.width - 60, 10, 50, 50);
 
 				p1.draw(p);
 				p2.draw(p);	
 				ball.draw(p);
 				rightGoal.draw(p);
 				leftGoal.draw(p);
-				p1Power.draw(p);
-				p2Power.draw(p);
+				mysteryBox.draw(p);
 
 				// timing and scoring
 
@@ -120,17 +121,27 @@ public class GamePanel {
 
 				// creates physics between physics objects
 
-				p1.act();
+				p1.act();			
+				if (!p1.getIsWalking())
+					p1.applyFriction();
 				if (!p1.isOnSurface()) 
-					p1.fall(boundaries[0]);
+					p1.fall(ground);
 
-				p2.act();
+				p2.act();	
+				if (!p2.getIsWalking())
+					p2.applyFriction();
 				if (!p2.isOnSurface()) 
-					p2.fall(boundaries[0]);
+					p2.fall(ground);
+
+				if (displayTime <= 55) {
+					mysteryBox.act();
+					if (!mysteryBox.isOnSurface()) 
+						mysteryBox.fall(ground);
+				}
 
 				ball.act();
 				if (!ball.isOnSurface()) 
-					ball.fall(boundaries[0]);
+					ball.fall(ground);
 				if (ball.getVX() != 0)
 					ball.applyFriction();
 
@@ -139,8 +150,10 @@ public class GamePanel {
 				if (Math.abs(p1.getX() - p2.getX()) < 100 && Math.abs(p1.getY() - p2.getY()) < 135)
 					playerCollisionDetection();
 				else {
-					p1.setRightMovability(true);
-					p2.setLeftMovability(true);
+					if (!p1.frozen)
+						p1.setRightMobility(true);
+					if (!p2.frozen)
+						p2.setLeftMobility(true);
 				}
 
 				if (Math.abs(p1.getX() - ball.getX()) < 150)
@@ -148,41 +161,72 @@ public class GamePanel {
 				if (Math.abs(p2.getX() - ball.getX()) < 150)
 					ballInteraction(p2);
 
-				if(Math.abs(p1.getY()+p1.getHeight()-ball.getY()) <5 && ball.getX()  + ball.getWidth() >p1.getX() && ball.getX()  <p1.getX()+p1.getWidth())
-				{
-					if(ball.getX() >= p1.getX() +p1.getHeight()/2)
-					{
-						ball.setX(p1.getX()+ p1.getWidth());
-					}
-					else
-					{
-						ball.setX(p1.getX());
-					}
-
-					ball.setVX(1.5* p1.getVX());
-				}
-				if(Math.abs(p2.getY()+p2.getHeight()-ball.getY()) <5 && ball.getX()  + ball.getWidth() >p2.getX() && ball.getX()  <p2.getX()+p2.getWidth())
-				{
-					if(ball.getX() >= p2.getX() +p2.getHeight()/2)
-					{
-						ball.setX(p2.getX()+ p2.getWidth());
-					}
-					else
-					{
-						ball.setX(p2.getX());
-					}
-
-					ball.setVX(1.5* p2.getVX());
-				}
-
 
 				goalInteraction();
+
+				if (Math.abs(p1.getX() - mysteryBox.getX()) <= 100 && Math.abs(p1.getY()-mysteryBox.getY())<100) {
+					if (mysteryBoxCollisionDetection(p1)) {
+						p1.collectBox();
+						boxPowerP1 = p1.getBoxPower();
+						boxPowerP1.setup(p);
+					}
+				}
+
+				if (Math.abs(p2.getX() - mysteryBox.getX()) <= 100 && Math.abs(p1.getY()-mysteryBox.getY())<100) {
+					if (mysteryBoxCollisionDetection(p2)) {
+						p2.collectBox();
+						boxPowerP2 = p2.getBoxPower();
+						boxPowerP2.setup(p);
+					}
+				}
+
+				// power up, mystery boxes, & health bars
+
+				p1.getPowerUpBar().draw(p);
+				p2.getPowerUpBar().draw(p);
+				p1.getHealth().draw(p);
+				p2.getHealth().draw(p);	
+
+				if(boxPowerP1 != null)
+					boxPowerP1.draw(p, 20, 90);
+				if(boxPowerP2 != null)
+					boxPowerP2.draw(p, 1100, 90);	
+
+				p1.findHeartbeat();
+				p2.findHeartbeat();
+				if (!p1.hasHeartbeat()) {
+					if (p1.getTimeOfDeath() == 0) {
+						p1.freeze();
+						p1.setTimeOfDeath(displayTime);
+					} else {
+						if (p1.getHealth().getHealthAmount() >= 100) {
+							p1.defibrillation();
+							p1.unfreeze();
+							p1.setTimeOfDeath(0);
+							p1.getHealth().setHealthAmount(100);
+						}
+					}
+				}
+				if (!p2.hasHeartbeat()) {
+					if (p2.getTimeOfDeath() == 0) {
+						p2.freeze();
+						p2.setTimeOfDeath(displayTime);
+					} else {
+						if (p2.getHealth().getHealthAmount() >= 100) {
+							p2.defibrillation();
+							p2.unfreeze();
+							p2.setTimeOfDeath(0);
+							p2.getHealth().setHealthAmount(100);
+						}
+					}
+				}
 			}
 		} else {
 			pauseDelay = p.millis() - time;
 		}
 	}
 
+	@SuppressWarnings("static-access")
 	public void keyPressed() {		
 		if (p.keyPressed) {
 
@@ -195,16 +239,26 @@ public class GamePanel {
 				if (p1.canMoveRight())
 					p1.walkHorizontally(1);
 			if (p.key == 'w') {
-				p1.jump();
-				//		inJump = true;
-			}
-			if(p.key == 's')
-			{
-				if(ballInteraction(p1))
-				{
-					p1.kick(ball, boundaries[0], true);
+				if (p1.canMoveUp())
+					p1.jump();
+			}if (p.key == 's') {
+				if (ballInteraction(p1))
+					p1.kickBall(ball, true);
+				if (playerCollisionDetection())
+					p1.kickPlayer(p2, true);
+			}if (p.key == ' ') {
+				if (boxPowerP1 != null) {
+					useBoxPower(boxPowerP1, 1);
+					goalChange = true;
+					isPowered = time;
+					boxPowerP1 = null;
+
 				}
+				else
+					p1.makeSuper();
 			}
+
+
 			// player 2
 
 			if (p.keyCode == PConstants.LEFT)
@@ -213,36 +267,37 @@ public class GamePanel {
 			if (p.keyCode == PConstants.RIGHT)
 				if (p2.canMoveRight())
 					p2.walkHorizontally(1);
-			if (p.keyCode == PConstants.UP) {
-				p2.jump();
-				//		inJump = true;
+			if (p.keyCode == PConstants.UP)
+				if (p.keyCode == p.UP)
+					if (p2.canMoveUp())
+						p2.jump();
+			if (p.keyCode == p.DOWN) {
+				if (ballInteraction(p2))
+					p2.kickBall(ball, false);
+				if (playerCollisionDetection())
+					p2.kickPlayer(p1, false);
 			}
-			if(p.keyCode == PConstants.DOWN) {
-				if(ballInteraction(p2))
+			if (p.key == p.ENTER) {
+				if (boxPowerP2 != null)
 				{
-					p2.kick(ball, boundaries[0], false);
+					useBoxPower(boxPowerP2, 2);
+					goalChange = true;
+					isPowered = time;
+					boxPowerP2 = null;
+
 				}
-			}
 
-			if (p.key == ' ' ) {
-				System.out.print("rightX: " + p1.getX() + p1.getWidth());
-				System.out.print(", Player Width: " + p1.getWidth());
-				System.out.println(", BallX: " + ball.getX());
+				else
+					p2.makeSuper();
 			}
-
-			if (p.key == 'p')
-				paused = !paused;
-		}	
+		}
 	}
 
 	public void mousePressed()
 	{
 		if(p.mouseX>=p.width-60 && p.mouseY<=60 && p.mouseY>10 && p.mouseX<p.width-10)
-		{
-			//TONY ADD PAUSE SCREEN GRAPHIC
 
-		}
-
+			paused = !paused;
 	}
 
 	public void keyReleased() {
@@ -264,61 +319,132 @@ public class GamePanel {
 	/**
 	 * @pre only detects collision if p1 is to the left of p2; also it does not detect player collision on the y axis
 	 */
-	public void playerCollisionDetection() {
+	public boolean playerCollisionDetection() {
 		if (p1.getX() + p1.getWidth() >= p2.getX()) {
 			p1.setVX(0);
-			p1.setRightMovability(false);
+			p1.setRightMobility(false);
 			p2.setVX(0);
-			p2.setLeftMovability(false);
+			p2.setLeftMobility(false);
+			return true;
 		}
+		return false;
 	}
 
-	public boolean ballInteraction(Tekkist p) {
+	public boolean mysteryBoxCollisionDetection(Tekkist p) {
+		if (p.getY() <= mysteryBox.getY() + mysteryBox.getHeight() && p.getY() + p.getHeight() >= mysteryBox.getY()) {
+			if (p.getX() + p.getWidth() >= mysteryBox.getX() && p.getX() + p.getWidth()/2.0 < mysteryBox.getX() ||
+					p.getX() <= mysteryBox.getX() + mysteryBox.getWidth() && p.getX() >= mysteryBox.getX() + mysteryBox.getWidth()/2.0) {
 
-		if (p.getY() <= ball.getY() - ball.getHeight() && p.getY() + p.getHeight() >= ball.getY()) {
-			if (p.getX() + p.getWidth() >= ball.getX() && p.getX() + p.getWidth()/2.0 < ball.getX() ||
-					p.getX() <= ball.getX() + ball.getWidth() && p.getX() >= ball.getX() + ball.getWidth()/2.0) {
-				ball.setVX(1.5 * p.getVX());
+				mysteryBox.setX(-100);
+				mysteryBox.setY(-100);
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public void goalInteraction()
-	{
-		if (ball.getX()<=100+leftGoal.getX() && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY()+400)
-		{
+	public boolean ballInteraction(Tekkist p) {
+		if (p.getY() <= ball.getY() && p.getY() + p.getHeight() >= ball.getY()+ball.getHeight()) {
+			if(ball.getX()+ball.getWidth()<=p.getX()+p.getWidth() && ball.getX()>=p.getX()) {
+				if (!p.getSuperStatus()) {
+
+
+
+					ball.setVX(1.5*p.getVX());
+					if(p.getY()-ball.getY()-ball.getHeight() <10 && ball.getY()<=p.getY() +ball.getHeight()) {
+
+						ball.setVY(-.85 * ball.getVY());
+
+					}
+					if(p.getX()+p.getWidth()-ball.getX() <10 && ball.getX() <=p.getX()+p.getWidth()) {
+						if(ball.getVX() <0)
+						{
+							ball.setVX(-1*ball.getVX());
+						}
+					}
+
+
+
+				}
+				else {
+					p.freeze();
+					ball.setVY(0);
+					ball.setVX(0);
+				}
+
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void goalInteraction() {
+		if (ball.getX()<=leftGoal.getWidth()+leftGoal.getX() && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY()+leftGoal.getHeight()) {
 			p2Score++;
-			//		cheer.play();
-			ball = new Ball(700, 0, 30);
+			ball = new Ball(p.width/2 - 15, 0, 30);
 			ball.setup(p);
 		}
-		if (ball.getX()>=rightGoal.getX() && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+400)
-		{
+		if (ball.getX()>=rightGoal.getX() && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+rightGoal.getHeight()) {
 			p1Score++;
-			//		cheer.play();
-			ball = new Ball(700, 0, 30);
+			ball = new Ball(p.width/2 - 15, 0, 30);
 			ball.setup(p);
 		}
 
-		if (p1.getX() + p1.getWidth() < leftGoal.getX()+100)
-		{
+		if (p1.getX() + p1.getWidth() < leftGoal.getX()+100) {
 			p1.setX(leftGoal.getX()+100-p1.getWidth());
-		}
-		else if (p1.getX() >rightGoal.getX())
-		{
+		} else if (p1.getX() >rightGoal.getX()) {
 			p1.setX(rightGoal.getX());
 		}
-		if (p2.getX() + p2.getWidth() < leftGoal.getX()+100)
-		{
+		if (p2.getX() + p2.getWidth() < leftGoal.getX()+100) {
 			p2.setX(leftGoal.getX()+100-p2.getWidth());
-		}
-		else if (p2.getX() >rightGoal.getX())
-		{
+		} else if (p2.getX() >rightGoal.getX()) {
 			p2.setX(rightGoal.getX());
 		}
 
-		//need to add bounce off crossbar
+	}
+
+	public void useBoxPower(PowerUp boxPower, int p1orp2) {
+		if(boxPower.getPower().equals("growGoal"))
+		{
+			if(p1orp2 == 2)
+			{
+				leftGoal.setHeight(leftGoal.getHeight()*2);
+				leftGoal.setWidth(leftGoal.getWidth()*2);
+				leftGoal.setX(leftGoal.getX()-leftGoal.getWidth()/2+80);
+				leftGoal.setY(leftGoal.getY()-leftGoal.getHeight()/2+100);
+			}
+			else
+			{
+				rightGoal.setHeight(rightGoal.getHeight()*2);
+				rightGoal.setWidth(rightGoal.getWidth()*2);
+				rightGoal.setX(rightGoal.getX()+rightGoal.getWidth()/4-80);
+				rightGoal.setY(rightGoal.getY()-rightGoal.getHeight()/2+100);
+			}
+		}
+		else if(boxPower.getPower().equals("shrinkGoal"))
+		{
+			if(p1orp2 == 1)
+			{
+				leftGoal.setHeight(leftGoal.getHeight()/2);
+				leftGoal.setWidth(leftGoal.getWidth()/2);
+				leftGoal.setX(leftGoal.getX()+leftGoal.getWidth()*2-80);
+				leftGoal.setY(leftGoal.getY()+150);
+			}
+			else
+			{
+				rightGoal.setHeight(rightGoal.getHeight()/2);
+				rightGoal.setWidth(rightGoal.getWidth()/2);
+				rightGoal.setX(rightGoal.getX()+rightGoal.getWidth()-40);
+				rightGoal.setY(rightGoal.getY()+rightGoal.getHeight()/2+50);
+			}
+		}
+	}
+
+	public void resetGoalSizes()
+	{
+		leftGoal.setHeight(400);
+		leftGoal.setWidth(100);
+		rightGoal.setWidth(100);
+		rightGoal.setHeight(400);
 	}
 }

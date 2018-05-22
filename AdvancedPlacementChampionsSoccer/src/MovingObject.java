@@ -10,7 +10,7 @@ public abstract class MovingObject extends PhysicsObject {
 
 	private double vX, vY;
 	private boolean onSurface;
-	private boolean canMoveRight, canMoveLeft;
+	private boolean canMoveRight, canMoveLeft, canMoveUp;
 
 	public MovingObject(float x, float y, float w, float h) {
 		super(x, y, w, h);
@@ -18,6 +18,7 @@ public abstract class MovingObject extends PhysicsObject {
 		vY = 0.0;
 		canMoveRight = true;
 		canMoveLeft = true;
+		canMoveUp = true;
 	}
 
 	public void fall(Surface s) {
@@ -28,6 +29,23 @@ public abstract class MovingObject extends PhysicsObject {
 			vY = 0;
 			onSurface = true;
 			setY(s.getY() - getHeight());
+		}
+	}
+	
+	public void applyFriction() {
+		if (isOnSurface()) {
+			double friction;
+			if (Math.abs(getVX()) < 0.05) 
+				friction = Math.abs(getVX());
+			else
+				friction = 0.05;
+
+			if (getVX() > 0) {
+				setVX(getVX() - friction);
+			}
+			if (getVX() < 0) {
+				setVX(getVX() + friction);
+			} 
 		}
 	}
 
@@ -67,13 +85,21 @@ public abstract class MovingObject extends PhysicsObject {
 	public boolean canMoveLeft() {
 		return canMoveLeft;
 	}
+	
+	public boolean canMoveUp() {
+		return canMoveUp;
+	}
 
-	public void setRightMovability(boolean m) {
+	public void setRightMobility(boolean m) {
 		canMoveRight = m;
 	}
 
-	public void setLeftMovability(boolean m) {
+	public void setLeftMobility(boolean m) {
 		canMoveLeft = m;
+	}
+	
+	public void setUpwardsMobility(boolean m) {
+		canMoveUp = m;
 	}
 
 	public abstract void draw(PApplet drawer);
