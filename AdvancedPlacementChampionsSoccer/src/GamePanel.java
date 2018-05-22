@@ -29,12 +29,11 @@ public class GamePanel{
 	private MysteryBox mysteryBox;
 	private PowerUp boxPowerP1;
 	private PowerUp boxPowerP2;
-	private Minim m;
-	private AudioPlayer a;
 	private boolean anyChange;
 	private int isPowered;
 	private PApplet p;
-	private boolean isSuperGlowy;
+	private Minim m;
+	private AudioPlayer crowd;
 
 	public GamePanel(PApplet n) {
 
@@ -56,13 +55,14 @@ public class GamePanel{
 		mysteryBox = new MysteryBox(608, -75);
 		boxPowerP1 = null;
 		boxPowerP2 = null;
-		m = new Minim(this);
-		a = m.loadFile("");			// if it gives errors move to setup, use a.play() whenever you want to play it, a.pause() and a.rewind()
+		m = new Minim(p);
 		anyChange = false;
 		isPowered = 0;
 	}
 
 	public void setup() {
+		crowd = m.loadFile("crowd.mp3");
+		crowd.play();
 		p.frame.setResizable(false);
 		ball.setup(p);
 		p1.setup(p, "batman.gif");	
@@ -362,8 +362,8 @@ public class GamePanel{
 	}
 
 	public boolean ballInteraction(Tekkist p) {
-		if (p.getY() <= ball.getY() +30 && p.getY() + p.getHeight() >= ball.getY()+ball.getHeight()) {
-			if(ball.getX()+ball.getWidth()<=p.getX()+p.getWidth() +30 && ball.getX()+30>=p.getX()) {
+		if (p.getY() <= ball.getY() && p.getY() + p.getHeight() >= ball.getY()+ball.getHeight()) {
+			if(ball.getX()+ball.getWidth()<=p.getX()+p.getWidth() && ball.getX()+30>=p.getX()) {
 				if (!p.getSuperStatus()) {
 
 
@@ -374,7 +374,7 @@ public class GamePanel{
 						ball.setVY(-.85 * ball.getVY());
 
 					}
-					if(p.getX()+p.getWidth()-ball.getX()-30 <10 && ball.getX() <=p.getX()+p.getWidth()+30) {
+					if(p.getX()+p.getWidth()-ball.getX() <10 && ball.getX() <=p.getX()+p.getWidth()) {
 						if(ball.getVX() <0)
 						{
 							ball.setVX(-1*ball.getVX());
@@ -385,18 +385,46 @@ public class GamePanel{
 
 				}
 				else {
-					ball.setVX(3*p.getVX());
-					if(p.getY()-ball.getY()-ball.getHeight() <10 && ball.getY()<=p.getY() +ball.getHeight()) {
-
-						ball.setVY(-.85 * ball.getVY());
-						
+				
+					int x = (int)(Math.random()*2);
+					if(x==1)
+					{
+					ball.setY(p.getY()-10);
+					ball.setVY(10);
+					
+					ball.setState(false);
+					if(Math.abs(p.getX()-p1.getX())<0.01)
+					{
+						ball.setVX(20);
 					}
-					if(p.getX()+p.getWidth()-ball.getX()-30 <10 && ball.getX() <=p.getX()+p.getWidth()+30) {
-						if(ball.getVX() <0)
+					else
+					{
+						ball.setVX(-20);
+					}
+					}
+					else {
+						if(Math.abs(p.getX()-p1.getX())<0.01)
 						{
-							ball.setVX(-1*ball.getVX());
+							ball.setVX(40);
+						}
+						else
+						{
+							ball.setVX(-40);
 						}
 					}
+					
+					
+//					if(p.getY()-ball.getY()-ball.getHeight() <10 && ball.getY()<=p.getY() +ball.getHeight()) {
+//
+//						ball.setVY(-.85 * ball.getVY());
+//						
+//					}
+//					if(p.getX()+p.getWidth()-ball.getX()-30 <10 && ball.getX() <=p.getX()+p.getWidth()+30) {
+//						if(ball.getVX() <0)
+//						{
+//							ball.setVX(-1*ball.getVX());
+//						}
+//					}
 					
 					p.makeNotSuper();
 					
