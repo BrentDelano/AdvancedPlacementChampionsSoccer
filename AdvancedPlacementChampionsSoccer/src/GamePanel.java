@@ -42,8 +42,8 @@ public class GamePanel{
 		this.player1Pic = player1Pic;
 		this.player2Pic = player2Pic;
 		ball = new Ball(625, 0, 30);
-		p1 = new Tekkist(225, 520, 100, 135, new PowerUpBar(20, 20), new Health(20, 60));
-		p2 = new Tekkist(1000, 520, 100, 135, new PowerUpBar(960, 20), new Health(960, 60));
+		p1 = new Tekkist(225, 520, 100, 150, new PowerUpBar(20, 20), new Health(20, 60));
+		p2 = new Tekkist(1000, 520, 100, 150, new PowerUpBar(960, 20), new Health(960, 60));
 		ground = new Surface(0, 470, 1280, 400);
 		background = new PImage();
 		leftGoal = new Goal((float)(p.width/25.6), (float)((p.height*3.0)/16.0), true, 100, 400); 
@@ -86,7 +86,7 @@ public class GamePanel{
 			delay = p.millis();
 		if (!paused) {
 			time = p.millis();
-			int displayTime = 20  - (time/1000)  + (delay/1000) + (pauseDelay/1000);
+			int displayTime = 60  - (time/1000)  + (delay/1000) + (pauseDelay/1000);
 
 			if (displayTime < 0) {
 				if (p1Score==p2Score)
@@ -555,8 +555,8 @@ public class GamePanel{
 		leftGoal.setWidth(100);
 		rightGoal.setWidth(100);
 		rightGoal.setHeight(400);
-		p1.setHeight(135);
-		p2.setHeight(135);
+		p1.setHeight(150);
+		p2.setHeight(150);
 		p1.setState(false);
 		p2.setState(false);
 	}
