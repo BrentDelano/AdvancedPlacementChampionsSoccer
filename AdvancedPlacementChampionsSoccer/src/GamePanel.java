@@ -33,7 +33,7 @@ public class GamePanel extends DrawingSurface {
 	private Minim m;
 	private AudioPlayer a;
 //=======
-	private boolean goalChange;
+	private boolean anyChange;
 	private int isPowered;
 //>>>>>>> branch 'master' of https://github.com/bdelano255/AdvancedPlacementChampionsSoccer
 
@@ -58,7 +58,7 @@ public class GamePanel extends DrawingSurface {
 		m = new Minim(this);
 		a = m.loadFile("");			// if it gives errors move to setup, use a.play() whenever you want to play it, a.pause() and a.rewind()
 //=======
-		goalChange = false;
+		anyChange = false;
 		isPowered = 0;
 //>>>>>>> branch 'master' of https://github.com/bdelano255/AdvancedPlacementChampionsSoccer
 	}
@@ -97,11 +97,11 @@ public class GamePanel extends DrawingSurface {
 					mysteryBox.setY(-75);
 					mysteryBox.setState(false);
 				}
-				if(goalChange && time-isPowered >=10*1000) {
-					resetGoalSizes();
-					goalChange = !goalChange;
+				if(anyChange && time-isPowered >=10*1000) {
+					resetAllSizes();
+					anyChange = !anyChange;
 				}
-				if(!goalChange) {
+				if(!anyChange) {
 				
 				leftGoal.setX((float)(width/25.6));
 				leftGoal.setY((float)((height*3.0)/16.0));
@@ -263,13 +263,13 @@ public class GamePanel extends DrawingSurface {
 			if (key == ' ') {
 				if (boxPowerP1 != null) {
 					useBoxPower(boxPowerP1, 1);
-					goalChange = true;
+					anyChange = true;
 					isPowered = time;
 					boxPowerP1 = null;
 					
 				}
-				else
-					p1.makeSuper();
+				//else
+				//	p1.makeSuper();
 			}
 
 			// player 2
@@ -295,14 +295,14 @@ public class GamePanel extends DrawingSurface {
 				if (boxPowerP2 != null)
 				{
 					useBoxPower(boxPowerP2, 2);
-					goalChange = true;
+					anyChange = true;
 					isPowered = time;
 					boxPowerP2 = null;
 					
 				}
 					
-				else
-					p2.makeSuper();
+				//else
+					//p2.makeSuper();
 			}
 		}	
 	}
@@ -491,13 +491,29 @@ public class GamePanel extends DrawingSurface {
 				rightGoal.setY(rightGoal.getY()+rightGoal.getHeight()/2+50);
 			}
 		}
+		else if(boxPower.getPower().equals("growTekkist")) {
+			if(p1orp2 == 1)
+			{
+				p1.setHeight(p1.getHeight()*2);
+				p1.setY(p1.getY()-p1.getHeight()/2);
+			}
+			else
+			{
+				p2.setHeight(p2.getHeight()*2);
+				p2.setY(p2.getY()-p2.getHeight()/2);
+			}
+		}
 	}
 	
-	public void resetGoalSizes()
+	public void resetAllSizes()
 	{
 		leftGoal.setHeight(400);
 		leftGoal.setWidth(100);
 		rightGoal.setWidth(100);
 		rightGoal.setHeight(400);
+		p1.setHeight(135);
+		p2.setHeight(135);
+		p1.setState(false);
+		p2.setState(false);
 	}
 }

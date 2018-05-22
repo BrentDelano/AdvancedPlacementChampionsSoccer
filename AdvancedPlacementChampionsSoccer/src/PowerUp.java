@@ -8,14 +8,14 @@ public class PowerUp {
 
 	public static final String fileSeparator = System.getProperty("file.separator");
 	
-	public static final String[] powerUps = {"growGoal", "shrinkGoal"};
+	public static final String[] powerUps = {"growGoal", "shrinkGoal", "growTekkist"};
 	//add grow and shrink tekkist
 	private String powerUp;
 	private PImage powerPic;
 	
 	public PowerUp() {
 		powerUp= powerUps[(int)(Math.random()*powerUps.length)];
-		//powerUp=powerUps[1];
+		//powerUp=powerUps[2];
 		powerPic = new PImage();
 	}
 	
