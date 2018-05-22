@@ -38,7 +38,28 @@ public class Tekkist extends MovingObject {
 		frozen = false;
 		canKick = true;
 	}
+	
+	public void reset() {
+		superSaiyan = false;
+		boxPower = null;
+		hasBoxPower = false;
+		isWalking = false;
+		hasHeartbeat = true;
+		timeOfDeath = 0;
+		frozen = false;
+		canKick = true;
+	}
 
+	public void setPowerUpBar(PowerUpBar p)
+	{
+		power = p;
+	}
+	
+	public void setHealth(Health h)
+	{
+		health = h;
+	}
+	
 	public void walkHorizontally(int direction) {
 		if (direction > 0) {
 			isWalking = true;
@@ -108,7 +129,8 @@ public class Tekkist extends MovingObject {
 		if (hasHeartbeat)
 			drawer.image(tekkist, getX(), getY(), getWidth(), getHeight());	
 		else {
-			drawer.image(gravestone, getX(), getY(), getWidth(), getHeight());
+			drawer.image(gravestone, getX()-10, getY() + getHeight()/2+getHeight()/4, getWidth(), getHeight()/4);
+			
 			if (health.getHealthAmount() < 100)
 				health.setHealthAmount(health.getHealthAmount() + 0.2);
 		}
@@ -133,9 +155,9 @@ public class Tekkist extends MovingObject {
 	
 	public void kickPlayer(Tekkist t, boolean isLeft) {
 		if (isLeft)
-			t.setVX(1);
+			t.setVX(4);
 		else
-			t.setVX(-1);
+			t.setVX(-4);
 		
 		t.getHealth().setHealthAmount(t.getHealth().getHealthAmount() - 5);
 		power.setPowerAmount(power.getPowerAmount() + 1);

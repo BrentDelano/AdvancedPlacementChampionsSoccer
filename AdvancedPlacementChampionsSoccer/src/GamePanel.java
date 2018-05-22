@@ -393,40 +393,54 @@ public class GamePanel extends DrawingSurface {
 
 	public void goalInteraction() {
 //<<<<<<< HEAD
-		if (ball.getX() <= leftGoal.getX() + 35 && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY() + 400) {
+		//if (ball.getX() <= leftGoal.getX() + 35 && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY() + 400) {
 //=======
 		if (ball.getX()<=leftGoal.getWidth()+leftGoal.getX() && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY()+leftGoal.getHeight()) {
 //>>>>>>> branch 'master' of https://github.com/bdelano255/AdvancedPlacementChampionsSoccer
 			p2Score++;
 
-			ball = new Ball(width/2 - 15, 0, 30);
-			ball.setup(this);
+			ball.setX(width/2-15);
+			ball.setY(0);
+			ball.setState(false);
+			ball.setVX(0);
 			PowerUpBar p1P = p1.getPowerUpBar();
 			Health p1H = p1.getHealth();
 			PowerUpBar p2P = p2.getPowerUpBar();
 			Health p2H = p2.getHealth();
-			p1 = new Tekkist(225, 520, 100, 135, p1P, p1H);
-			p2 = new Tekkist(1000, 520, 100, 135, p2P, p2H);
-			p1.setup(this, "batman.gif");	
-			p2.setup(this, "street fighter.gif");
+			p1.setX(225);
+			p1.setHealth(p1H);
+			p1.setPowerUpBar(p1P);
+			p2.setX(1000);
+			p2.setPowerUpBar(p2P);
+			p2.setHealth(p2H);
+			p1.reset();
+			p2.reset();
 		}
 //<<<<<<< HEAD
-		if (ball.getX() >= rightGoal.getX() + 35 && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+400) {
+	//	if (ball.getX() >= rightGoal.getX() + 35 && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+400) {
 //=======
 		if (ball.getX()>=rightGoal.getX() && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+rightGoal.getHeight()) {
 //>>>>>>> branch 'master' of https://github.com/bdelano255/AdvancedPlacementChampionsSoccer
 			p1Score++;
 
-			ball = new Ball(width/2 - 15, 0, 30);
-			ball.setup(this);
+			ball.setX(width/2-15);
+			ball.setY(0);
+			ball.setState(false);
+			ball.setVX(0);
+			//ball.setup(this);
 			PowerUpBar p1P = p1.getPowerUpBar();
 			Health p1H = p1.getHealth();
 			PowerUpBar p2P = p2.getPowerUpBar();
 			Health p2H = p2.getHealth();
-			p1 = new Tekkist(225, 520, 100, 135, p1P, p1H);
-			p2 = new Tekkist(1000, 520, 100, 135, p2P, p2H);
-			p1.setup(this, "batman.gif");	
-			p2.setup(this, "street fighter.gif");			
+			p1.setX(225);
+			p1.setHealth(p1H);
+			p1.setPowerUpBar(p1P);
+			p2.setX(1000);
+			p2.setPowerUpBar(p2P);
+			p2.setHealth(p2H);
+			p1.reset();
+			p2.reset();
+		
 		}
 
 		if (p1.getX() < leftGoal.getX() + leftGoal.getWidth()) {
@@ -440,8 +454,6 @@ public class GamePanel extends DrawingSurface {
 			p2.setX(rightGoal.getX() - p2.getWidth());
 		}
 
-	}
-		}
 	}
 	
 	public void useBoxPower(PowerUp boxPower, int p1orp2) {

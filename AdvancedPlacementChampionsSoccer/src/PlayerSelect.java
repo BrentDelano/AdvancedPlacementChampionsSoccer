@@ -46,6 +46,8 @@ public class PlayerSelect extends DrawingSurface {
 	public void draw() {			
 		clear();
 		image(background, 0, 0, width, height);
+		fill(225);
+		rect(0f, 260f, 128f, 180f);
 	}
 	
 //	public int get(int x, int y) {
@@ -54,7 +56,7 @@ public class PlayerSelect extends DrawingSurface {
 
 	public void mouseClicked() {
 		if (mouseButton == LEFT) {
-
+			
 			PApplet.main("GamePanel");
 		}
 	}
