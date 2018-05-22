@@ -7,30 +7,16 @@ import processing.core.PApplet;
  * @version 5/10/18
  *
  */
-public class MenuPanel extends DrawingSurface {
+public class MenuPanel extends Screen{
 
 	private PImage background;
 
 	public MenuPanel() {
 		background = new PImage();
 	}
-	public void setup() {
-		background = loadImage("MENU.png");
-	}
 
-	public void settings() {
-		size(1280, 800, P2D);
-	}
-	
-	public void draw() {			
-		clear();
-		image(background, 0, 0, width, height);
-	}
-	
-	public void mouseClicked() {
-		if (mouseButton == LEFT) {
-			PApplet.main("InsPanel");
-		}
-		
+	public void draw(PApplet drawer) {	
+		background = drawer.loadImage("MENU.png");
+		drawer.image(background, 0, 0, drawer.width, drawer.height);
 	}
 }

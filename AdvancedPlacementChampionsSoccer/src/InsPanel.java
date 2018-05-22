@@ -7,30 +7,16 @@ import processing.core.PApplet;
  * @version 5/10/18
  *
  */
-public class InsPanel extends DrawingSurface {
+public class InsPanel extends Screen {
 
 	private PImage background;
 
 	public InsPanel() {
 		background = new PImage();
 	}
-	public void setup() {
-		background = loadImage("INSTRUCTIONS.png");
-	}
-
-	public void settings() {
-		size(1280, 800, P2D);
-	}
-
-	public void draw() {			
-		clear();
-		image(background, 0, 0, width, height);
-	}
-
-	public void mouseClicked() {
-		if (mouseButton == LEFT) {
-			PApplet.main("PlayerSelect");
-
-		}
+	
+	public void draw(PApplet drawer) {	
+		background = drawer.loadImage("INSTRUCTIONS.png");
+		drawer.image(background, 0, 0, drawer.width, drawer.height);
 	}
 }

@@ -179,6 +179,11 @@ public class Tekkist extends MovingObject {
 		}
 	}
 	
+	public void makeNotSuper() {
+		superSaiyan = false;
+		power.setCapability(true);
+	}
+	
 	public boolean getSuperStatus() {
 		return superSaiyan;
 	}

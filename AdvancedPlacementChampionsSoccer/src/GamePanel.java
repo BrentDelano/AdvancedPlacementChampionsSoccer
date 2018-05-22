@@ -1,15 +1,15 @@
+import processing.core.PApplet;
+import processing.core.PConstants;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import processing.core.PImage;
-//import processing.sound.*;
-
 /**
  * Represents the in-game screen
- * @author Brent Delano & Mira Khosla
+ * @author Brent Delano, Mira Khosla
  * @version 5/15/18
  *
  */
-public class GamePanel extends DrawingSurface {
+public class GamePanel{
 
 	private Ball ball;
 	private Tekkist p1;
@@ -29,23 +29,23 @@ public class GamePanel extends DrawingSurface {
 	private MysteryBox mysteryBox;
 	private PowerUp boxPowerP1;
 	private PowerUp boxPowerP2;
-//	private boolean 
-
-//<<<<<<< HEAD
 	private Minim m;
 	private AudioPlayer a;
-//=======
 	private boolean anyChange;
 	private int isPowered;
-//>>>>>>> branch 'master' of https://github.com/bdelano255/AdvancedPlacementChampionsSoccer
+	private PApplet p;
+	private boolean isSuperGlowy;
 
-	public GamePanel() {
+	public GamePanel(PApplet n) {
+
+		this.p = n;
+
 		ball = new Ball(625, 0, 30);
 		p1 = new Tekkist(225, 520, 100, 135, new PowerUpBar(20, 20), new Health(20, 60));
 		p2 = new Tekkist(1000, 520, 100, 135, new PowerUpBar(960, 20), new Health(960, 60));
 		ground = new Surface(0, 470, 1280, 400);
 		background = new PImage();
-		leftGoal = new Goal((float)(width/25.6), (float)((height*3.0)/16.0), true, 100, 400); 
+		leftGoal = new Goal((float)(p.width/25.6), (float)((p.height*3.0)/16.0), true, 100, 400); 
 		rightGoal = new Goal(1120, 150, false, 100, 400);
 		p1Score = 0;
 		time = 0;
@@ -56,41 +56,40 @@ public class GamePanel extends DrawingSurface {
 		mysteryBox = new MysteryBox(608, -75);
 		boxPowerP1 = null;
 		boxPowerP2 = null;
-//<<<<<<< HEAD
 		m = new Minim(this);
 		a = m.loadFile("");			// if it gives errors move to setup, use a.play() whenever you want to play it, a.pause() and a.rewind()
-//=======
 		anyChange = false;
 		isPowered = 0;
-//>>>>>>> branch 'master' of https://github.com/bdelano255/AdvancedPlacementChampionsSoccer
 	}
 
-	public void setup() {	
-		frame.setResizable(false);
-		background = loadImage("field.jpeg");
-		ball.setup(this);
-		p1.setup(this, "batman.gif");	
-		p2.setup(this, "street fighter.gif");
-		leftGoal.setup(this);
-		rightGoal.setup(this);
-		pauseButton = loadImage("pauseButton.png");
+	public void setup() {
+		p.frame.setResizable(false);
+		ball.setup(p);
+		p1.setup(p, "batman.gif");	
+		p2.setup(p, "street fighter.gif");
+		leftGoal.setup(p);
+		rightGoal.setup(p);
+		pauseButton = p.loadImage("pauseButton.png");
 		p2Score = 0;
-		mysteryBox.setup(this);
+		mysteryBox.setup(p);
+		background = p.loadImage("field.jpeg");
 	}
 
 	public void settings() {
-		size(1280, 800, P2D);
+		p.size(1280, 800, PConstants.P2D);
 	}
 
-	public void draw() {			
+	public void draw() {	
+
 		if (delay == 0) 
-			delay = millis();
+			delay = p.millis();
 		if (!paused) {
-			time = millis();
-			int displayTime = 60  - (time/1000) + (delay/1000) + (pauseDelay/1000) + startTime;
+			time = p.millis();
+			int displayTime = 60  - (time/1000)  + (delay/1000) + (pauseDelay/1000);
 
 			if (displayTime >= 0) {
-				clear();		
+				p.clear();		
+
 
 				// some objects being drawn here
 				if(displayTime == 30 && mysteryBox.getX()<0)
@@ -99,41 +98,44 @@ public class GamePanel extends DrawingSurface {
 					mysteryBox.setY(-75);
 					mysteryBox.setState(false);
 				}
+
 				if(anyChange && time-isPowered >=10*1000) {
 					resetAllSizes();
 					anyChange = !anyChange;
 				}
 				if(!anyChange) {
-				
-				leftGoal.setX((float)(width/25.6));
-				leftGoal.setY((float)((height*3.0)/16.0));
-				rightGoal.setX((float)((width*7.0)/8.0));
-				rightGoal.setY((float)((height*3.0)/16.0));
-				}
-				image(background, 0, 0, width, height);
-				image(pauseButton, width - 60, height - 60, 50, 50);
 
-				p1.draw(this);
-				p2.draw(this);	
-				ball.draw(this);
-				rightGoal.draw(this);
-				leftGoal.draw(this);
-				mysteryBox.draw(this);
+					leftGoal.setX((float)(p.width/25.6));
+					leftGoal.setY((float)((p.height*3.0)/16.0));
+					rightGoal.setX((float)((p.width*7.0)/8.0));
+					rightGoal.setY((float)((p.height*3.0)/16.0));
+
+				}
+
+				p.image(background, 0, 0, p.width, p.height);
+				p.image(pauseButton, p.width - 60, 10, 50, 50);
+
+				p1.draw(p);
+				p2.draw(p);	
+				ball.draw(p);
+				rightGoal.draw(p);
+				leftGoal.draw(p);
+				mysteryBox.draw(p);
 
 				// timing and scoring
 
-				textSize(40);
-				fill(0);
+				p.textSize(40);
+				p.fill(0);
 				if (displayTime >= 10)
-					text(displayTime, 12 * width / 25, height / 10);
+					p.text(displayTime, 12 * p.width / 25, p.height / 10);
 				else if (displayTime >= 0)
-					text(displayTime, 12 * width / 25, height / 10);
+					p.text(displayTime, 12 * p.width / 25, p.height / 10);
 				else
-					text("0", width / 2, height / 10);
-				fill(255);
-				text("SCORE: " + p1Score + " - " + p2Score, (float)(width/2.56),(float)((height*15.0)/16.0));
+					p.text("0", p.width / 2, p.height / 10);
+				p.fill(255);
+				p.text("SCORE: " + p1Score + " - " + p2Score, (float)(p.width/2.56),(float)((p.height*15.0)/16.0));
 
-				// creates physics
+				// creates physics between physics objects
 
 				p1.act();			
 				if (!p1.getIsWalking())
@@ -182,7 +184,7 @@ public class GamePanel extends DrawingSurface {
 					if (mysteryBoxCollisionDetection(p1)) {
 						p1.collectBox();
 						boxPowerP1 = p1.getBoxPower();
-						boxPowerP1.setup(this);
+						boxPowerP1.setup(p);
 					}
 				}
 
@@ -190,21 +192,21 @@ public class GamePanel extends DrawingSurface {
 					if (mysteryBoxCollisionDetection(p2)) {
 						p2.collectBox();
 						boxPowerP2 = p2.getBoxPower();
-						boxPowerP2.setup(this);
+						boxPowerP2.setup(p);
 					}
 				}
 
 				// power up, mystery boxes, & health bars
 
-				p1.getPowerUpBar().draw(this);
-				p2.getPowerUpBar().draw(this);
-				p1.getHealth().draw(this);
-				p2.getHealth().draw(this);	
+				p1.getPowerUpBar().draw(p);
+				p2.getPowerUpBar().draw(p);
+				p1.getHealth().draw(p);
+				p2.getHealth().draw(p);	
 
 				if(boxPowerP1 != null)
-					boxPowerP1.draw(this, 20, 90);
+					boxPowerP1.draw(p, 20, 90);
 				if(boxPowerP2 != null)
-					boxPowerP2.draw(this, 1100, 90);	
+					boxPowerP2.draw(p, 1100, 90);	
 
 				p1.findHeartbeat();
 				p2.findHeartbeat();
@@ -236,99 +238,99 @@ public class GamePanel extends DrawingSurface {
 				}
 			}
 		} else {
-			pauseDelay = millis() - time;
-			
+
+			pauseDelay = p.millis() - time;
 		}
 	}
 
+
 	public void keyPressed() {		
-		if (keyPressed) {
+		if (p.keyPressed) {
 
 			// player 1
 
-			if (key == 'a')
+			if (p.key == 'a')
 				if (p1.canMoveLeft())
 					p1.walkHorizontally(-1);
-			if (key == 'd')
+			if (p.key == 'd')
 				if (p1.canMoveRight())
 					p1.walkHorizontally(1);
-			if (key == 'w')
+			if (p.key == 'w') {
 				if (p1.canMoveUp())
 					p1.jump();
-			if (key == 's') {
-				if (p1.canKick()) {
-					if (ballInteraction(p1))
-						p1.kickBall(ball, true);
-					if (playerCollisionDetection())
-						p1.kickPlayer(p2, true);
-				}
-			}
-			if (key == ' ') {
+			}if (p.key == 's') {
+				if (ballInteraction(p1))
+					p1.kickBall(ball, true);
+				if (playerCollisionDetection())
+					p1.kickPlayer(p2, true);
+			}if (p.key == ' ') {
 				if (boxPowerP1 != null) {
 					useBoxPower(boxPowerP1, 1);
 					anyChange = true;
 					isPowered = time;
 					boxPowerP1 = null;
-					
+
 				}
 				else
 					p1.makeSuper();
 			}
 
+
 			// player 2
 
-			if (keyCode == LEFT)
+			if (p.keyCode == PConstants.LEFT)
 				if (p2.canMoveLeft())
 					p2.walkHorizontally(-1);
-			if (keyCode == RIGHT)
+			if (p.keyCode == PConstants.RIGHT)
 				if (p2.canMoveRight())
 					p2.walkHorizontally(1);
-			if (keyCode == UP)
+			if (p.keyCode == PConstants.UP)
 				if (p2.canMoveUp())
 					p2.jump();
-			if (keyCode == DOWN) {
+			if (p.keyCode == PConstants.DOWN) {
 				if (p2.canKick()) {
 					if (ballInteraction(p2))
 						p2.kickBall(ball, false);
 					if (playerCollisionDetection())
 						p2.kickPlayer(p1, false);
 				}
+
 			}
-			if (key == ENTER) {
+			if (p.key == PConstants.ENTER) {
 				if (boxPowerP2 != null)
 				{
 					useBoxPower(boxPowerP2, 2);
 					anyChange = true;
 					isPowered = time;
 					boxPowerP2 = null;
-					
+
 				}
-					
 				else
 					p2.makeSuper();
 			}
-		}	
+		}
+
 	}
+	public void mousePressed()
+	{
+		if(p.mouseX>=p.width-60 && p.mouseY<=60 && p.mouseY>10 && p.mouseX<p.width-10)
 
-	public void mousePressed() {
-		if (mouseX >= width - 60 && mouseY >= height - 60 && mouseY < height - 10 && mouseX < width - 10)
 			paused = !paused;
-
 	}
 
 	public void keyReleased() {
 		// player 1	
 
-		if (key == 'a') 
+		if (p.key == 'a') 
 			p1.walkHorizontally(0);
-		if (key == 'd')
+		if (p.key == 'd')
 			p1.walkHorizontally(0);
 
 		// player 2	
 
-		if (keyCode == LEFT)
+		if (p.keyCode == PConstants.LEFT)
 			p2.walkHorizontally(0);
-		if (keyCode == RIGHT)
+		if (p.keyCode == PConstants.RIGHT)
 			p2.walkHorizontally(0);
 	}
 
@@ -367,7 +369,7 @@ public class GamePanel extends DrawingSurface {
 
 
 					ball.setVX(1.5*p.getVX());
-					if(p.getY()-ball.getY()-ball.getHeight() <20 && ball.getY()<=p.getY() +ball.getHeight()) {
+					if(p.getY()-ball.getY()-ball.getHeight() <10 && ball.getY()<=p.getY() +ball.getHeight()) {
 
 						ball.setVY(-.85 * ball.getVY());
 
@@ -383,9 +385,21 @@ public class GamePanel extends DrawingSurface {
 
 				}
 				else {
-					p.freeze();
-					ball.setVY(0);
-					ball.setVX(0);
+					ball.setVX(3*p.getVX());
+					if(p.getY()-ball.getY()-ball.getHeight() <10 && ball.getY()<=p.getY() +ball.getHeight()) {
+
+						ball.setVY(-.85 * ball.getVY());
+						
+					}
+					if(p.getX()+p.getWidth()-ball.getX()-30 <10 && ball.getX() <=p.getX()+p.getWidth()+30) {
+						if(ball.getVX() <0)
+						{
+							ball.setVX(-1*ball.getVX());
+						}
+					}
+					
+					p.makeNotSuper();
+					
 				}
 
 				return true;
@@ -395,14 +409,10 @@ public class GamePanel extends DrawingSurface {
 	}
 
 	public void goalInteraction() {
-//<<<<<<< HEAD
-		//if (ball.getX() <= leftGoal.getX() + 35 && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY() + 400) {
-//=======
 		if (ball.getX()<=leftGoal.getWidth()+leftGoal.getX() && ball.getY() >= leftGoal.getY() && ball.getY()<=leftGoal.getY()+leftGoal.getHeight()) {
-//>>>>>>> branch 'master' of https://github.com/bdelano255/AdvancedPlacementChampionsSoccer
 			p2Score++;
 
-			ball.setX(width/2-15);
+			ball.setX(p.width/2-15);
 			ball.setY(0);
 			ball.setState(false);
 			ball.setVX(0);
@@ -419,14 +429,11 @@ public class GamePanel extends DrawingSurface {
 			p1.reset();
 			p2.reset();
 		}
-//<<<<<<< HEAD
-	//	if (ball.getX() >= rightGoal.getX() + 35 && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+400) {
-//=======
+
 		if (ball.getX()>=rightGoal.getX() && ball.getY() >= rightGoal.getY() && ball.getY()<=rightGoal.getY()+rightGoal.getHeight()) {
-//>>>>>>> branch 'master' of https://github.com/bdelano255/AdvancedPlacementChampionsSoccer
 			p1Score++;
 
-			ball.setX(width/2-15);
+			ball.setX(p.width/2-15);
 			ball.setY(0);
 			ball.setState(false);
 			ball.setVX(0);
@@ -443,7 +450,6 @@ public class GamePanel extends DrawingSurface {
 			p2.setHealth(p2H);
 			p1.reset();
 			p2.reset();
-		
 		}
 
 		if (p1.getX() < leftGoal.getX() + leftGoal.getWidth()) {
@@ -458,7 +464,7 @@ public class GamePanel extends DrawingSurface {
 		}
 
 	}
-	
+
 	public void useBoxPower(PowerUp boxPower, int p1orp2) {
 		if(boxPower.getPower().equals("growGoal"))
 		{
@@ -507,9 +513,8 @@ public class GamePanel extends DrawingSurface {
 			}
 		}
 	}
-	
-	public void resetAllSizes()
-	{
+
+	public void resetAllSizes()	{
 		leftGoal.setHeight(400);
 		leftGoal.setWidth(100);
 		rightGoal.setWidth(100);

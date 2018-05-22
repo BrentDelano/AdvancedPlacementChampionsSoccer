@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -7,8 +7,7 @@ import processing.core.PImage;
  * @author Tony Yu
  * @version 5/15/18
  */
-public class PlayerSelect extends DrawingSurface {
-
+public class PlayerSelect extends Screen{
 	private PImage[] pictures;
 	private final int startX;
 	private final int startY;
@@ -32,32 +31,16 @@ public class PlayerSelect extends DrawingSurface {
 		background = new PImage();
 	}
 
-	public void setup() {
-//		for (int i = 1; i <= 30; i++) {
-//			pictures[i] = loadImage("people" + System.getProperty("file.separator") + "tek" + i + ".jpeg");
-//		}
-		background = loadImage("SELECTION.png");
-	}
-
-	public void settings() {
-		size(1280, 800, P2D);
-	}
-
-	public void draw() {			
-		clear();
-		image(background, 0, 0, width, height);
-		fill(225);
-
-	}
-	
-//	public int get(int x, int y) {
-//
+//	public PImage getTekkistPicture(double mouseX, double mouseY)
+//	{
+//		int a = (int)(mouseX/imgWidth);
+//		int b = (int)((mouseY-460)/imgHeight);
+//		return pictures.get(b*10 + a);	
 //	}
+	
+	public void draw(PApplet drawer) {
+		background = drawer.loadImage("SELECTION.png");
+		drawer.image(background, 0, 0, drawer.width, drawer.height);
 
-	public void mouseClicked() {
-		if (mouseButton == LEFT) {
-			double x = mouseX/imgWidth;
-			PApplet.main("GamePanel");
-		}
 	}
 }
