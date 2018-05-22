@@ -34,11 +34,14 @@ public class GamePanel{
 	private PApplet p;
 	private Minim m;
 	private AudioPlayer crowd;
+	private String player1Pic;
+	private String player2Pic;
 
-	public GamePanel(PApplet n) {
-
+	public GamePanel(PApplet n, String player1Pic, String player2Pic) {
+		
 		this.p = n;
-
+		this.player1Pic = player1Pic;
+		this.player2Pic = player2Pic;
 		ball = new Ball(625, 0, 30);
 		p1 = new Tekkist(225, 520, 100, 135, new PowerUpBar(20, 20), new Health(20, 60));
 		p2 = new Tekkist(1000, 520, 100, 135, new PowerUpBar(960, 20), new Health(960, 60));
@@ -65,8 +68,8 @@ public class GamePanel{
 		crowd.play();
 		p.frame.setResizable(false);
 		ball.setup(p);
-		p1.setup(p, "batman.gif");	
-		p2.setup(p, "street fighter.gif");
+		p1.setup(p, "people//"+player1Pic +".jpeg");	
+		p2.setup(p, "people//"+player2Pic + ".jpeg");
 		leftGoal.setup(p);
 		rightGoal.setup(p);
 		pauseButton = p.loadImage("pauseButton.png");
