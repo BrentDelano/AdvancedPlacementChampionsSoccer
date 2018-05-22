@@ -77,5 +77,6 @@ public class PlayerSelect extends Screen{
 			drawer.rect((float)(p2x), (float)(p2y), (float)imgWidth,(float) imgHeight);
 			//System.out.println(p2selected);
 		}
+		drawer.strokeWeight(1);
 	}
 }

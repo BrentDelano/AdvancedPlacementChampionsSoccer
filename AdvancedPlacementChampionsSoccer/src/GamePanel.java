@@ -6,7 +6,7 @@ import processing.core.PImage;
 /**
  * Represents the in-game screen
  * @author Brent Delano, Mira Khosla
- * @version 5/21/18
+ * @version 5/15/18
  *
  */
 public class GamePanel{
@@ -16,14 +16,15 @@ public class GamePanel{
 	private Tekkist p2;
 	private Surface ground;
 	private PImage background;
-	private PImage end;
 	private Goal leftGoal;
 	private Goal rightGoal;
 	private int p1Score;
 	private int p2Score;
 	private int time;
-	private int startTime;
+	private int startTime;								// DO THIS LATER!!!!
 	private int delay;
+	private boolean paused;
+	private int pauseDelay;
 	private MysteryBox mysteryBox;
 	private PowerUp boxPowerP1;
 	private PowerUp boxPowerP2;
@@ -45,13 +46,14 @@ public class GamePanel{
 		p2 = new Tekkist(1000, 520, 100, 135, new PowerUpBar(960, 20), new Health(960, 60));
 		ground = new Surface(0, 470, 1280, 400);
 		background = new PImage();
-		end = new PImage();
 		leftGoal = new Goal((float)(p.width/25.6), (float)((p.height*3.0)/16.0), true, 100, 400); 
 		rightGoal = new Goal(1120, 150, false, 100, 400);
 		p1Score = 0;
 		time = 0;
 		startTime = 5;
 		delay = 0;
+		paused = false;
+		pauseDelay = 0;
 		mysteryBox = new MysteryBox(608, -75);
 		boxPowerP1 = null;
 		boxPowerP2 = null;
@@ -72,7 +74,6 @@ public class GamePanel{
 		p2Score = 0;
 		mysteryBox.setup(p);
 		background = p.loadImage("field.jpeg");
-		end = p.loadImage("ENDPANEL.png");
 	}
 
 	public void settings() {
@@ -83,166 +84,173 @@ public class GamePanel{
 
 		if (delay == 0) 
 			delay = p.millis();
-		time = p.millis();
-		int displayTime = 5  - (time/1000)  + (delay/1000);
+		if (!paused) {
+			time = p.millis();
+			int displayTime = 20  - (time/1000)  + (delay/1000) + (pauseDelay/1000);
 
-		if (displayTime < 0) {
-			if (p1Score == p2Score)
-				p.image(p.loadImage("ENDPANEL3.png"),0, 0, p.width, p.height);
-			if (p1Score > p2Score)
-				p.image(p.loadImage("ENDPANEL1.png"),0, 0, p.width, p.height);
-			if (p1Score < p2Score)
-				p.image(p.loadImage("ENDPANEL2.png"),0, 0, p.width, p.height);
-		} else if (displayTime >= 0) {
-			p.clear();		
-
-			// some objects being drawn here
-			if(displayTime == 30 && mysteryBox.getX()<0)
-			{
-				mysteryBox.setX(608);
-				mysteryBox.setY(-75);
-				mysteryBox.setState(false);
+			if (displayTime < 0) {
+				if (p1Score==p2Score)
+					p.image(p.loadImage("ENDPANEL3.png"), 0, 0, p.width, p.height);
+				if (p1Score>p2Score)
+					p.image(p.loadImage("ENDPANEL1.png"), 0, 0, p.width, p.height);
+				if (p1Score<p2Score)
+					p.image(p.loadImage("ENDPANEL2.png"), 0, 0, p.width, p.height);
 			}
+			else if (displayTime >= 0) {
+				p.clear();		
 
-			if(anyChange && time-isPowered >=10*1000) {
-				resetAllSizes();
-				anyChange = !anyChange;
-			}
-			if(!anyChange) {
-
-				leftGoal.setX((float)(p.width/25.6));
-				leftGoal.setY((float)((p.height*3.0)/16.0));
-				rightGoal.setX((float)((p.width*7.0)/8.0));
-				rightGoal.setY((float)((p.height*3.0)/16.0));
-
-			}
-
-			p.image(background, 0, 0, p.width, p.height);
-
-			p1.draw(p);
-			p2.draw(p);	
-			ball.draw(p);
-			rightGoal.draw(p);
-			leftGoal.draw(p);
-			mysteryBox.draw(p);
-
-			// timing and scoring
-
-			p.textSize(40);
-			p.fill(0);
-			if (displayTime >= 10)
-				p.text(displayTime, 12 * p.width / 25, p.height / 10);
-			else if (displayTime >= 0)
-				p.text(displayTime, 12 * p.width / 25, p.height / 10);
-			else
-				p.text("0", p.width / 2, p.height / 10);
-			p.fill(255);
-			p.text("SCORE: " + p1Score + " - " + p2Score, (float)(p.width/2.56),(float)((p.height*15.0)/16.0));
-
-			// creates physics between physics objects
-
-			p1.act();			
-			if (!p1.getIsWalking())
-				p1.applyFriction();
-			if (!p1.isOnSurface()) 
-				p1.fall(ground);
-
-			p2.act();	
-			if (!p2.getIsWalking())
-				p2.applyFriction();
-			if (!p2.isOnSurface()) 
-				p2.fall(ground);
-
-			if (displayTime <= 60) {
-				mysteryBox.act();
-				if (!mysteryBox.isOnSurface()) 
-					mysteryBox.fall(ground);
-			}
-
-			ball.act();
-			if (!ball.isOnSurface()) 
-				ball.fall(ground);
-			if (ball.getVX() != 0)
-				ball.applyFriction();
-
-			//  collision detecting
-
-			if (Math.abs(p1.getX() - p2.getX()) < 100 && Math.abs(p1.getY() - p2.getY()) < 135)
-				playerCollisionDetection();
-			else {
-				if (!p1.isFrozen())
-					p1.setRightMobility(true);
-				if (!p2.isFrozen())
-					p2.setLeftMobility(true);
-			}
-
-			if (Math.abs(p1.getX() - ball.getX()) < 150)
-				ballInteraction(p1);
-			if (Math.abs(p2.getX() - ball.getX()) < 150)
-				ballInteraction(p2);
-
-
-			goalInteraction();
-
-			if (Math.abs(p1.getX() - mysteryBox.getX()) <= 100 && Math.abs(p1.getY()-mysteryBox.getY())<100) {
-				if (mysteryBoxCollisionDetection(p1)) {
-					p1.collectBox();
-					boxPowerP1 = p1.getBoxPower();
-					boxPowerP1.setup(p);
+				// some objects being drawn here
+				if(displayTime == 30 && mysteryBox.getX()<0)
+				{
+					mysteryBox.setX(608);
+					mysteryBox.setY(-75);
+					mysteryBox.setState(false);
 				}
-			}
 
-			if (Math.abs(p2.getX() - mysteryBox.getX()) <= 100 && Math.abs(p1.getY()-mysteryBox.getY())<100) {
-				if (mysteryBoxCollisionDetection(p2)) {
-					p2.collectBox();
-					boxPowerP2 = p2.getBoxPower();
-					boxPowerP2.setup(p);
+				if(anyChange && time-isPowered >=10*1000) {
+					resetAllSizes();
+					anyChange = !anyChange;
 				}
-			}
+				if(!anyChange) {
 
-			// power up, mystery boxes, & health bars
+					leftGoal.setX((float)(p.width/25.6));
+					leftGoal.setY((float)((p.height*3.0)/16.0));
+					rightGoal.setX((float)((p.width*7.0)/8.0));
+					rightGoal.setY((float)((p.height*3.0)/16.0));
 
-			p1.getPowerUpBar().draw(p);
-			p2.getPowerUpBar().draw(p);
-			p1.getHealth().draw(p);
-			p2.getHealth().draw(p);	
+				}
 
-			if(boxPowerP1 != null)
-				boxPowerP1.draw(p, 20, 90);
-			if(boxPowerP2 != null)
-				boxPowerP2.draw(p, 1100, 90);	
+				p.image(background, 0, 0, p.width, p.height);
 
-			p1.findHeartbeat();
-			p2.findHeartbeat();
-			if (!p1.hasHeartbeat()) {
-				if (p1.getTimeOfDeath() == 0) {
-					p1.freeze();
-					p1.setTimeOfDeath(displayTime);
-				} else {
-					if (p1.getHealth().getHealthAmount() >= 100) {
-						p1.defibrillation();
-						p1.unfreeze();
-						p1.setTimeOfDeath(0);
-						p1.getHealth().setHealthAmount(100);
+
+				p1.draw(p);
+				p2.draw(p);	
+				ball.draw(p);
+				rightGoal.draw(p);
+				leftGoal.draw(p);
+				mysteryBox.draw(p);
+
+				// timing and scoring
+
+				p.textSize(40);
+				p.fill(0);
+				if (displayTime >= 10)
+					p.text(displayTime, 12 * p.width / 25, p.height / 10);
+				else if (displayTime >= 0)
+					p.text(displayTime, 12 * p.width / 25, p.height / 10);
+				else
+					p.text("0", p.width / 2, p.height / 10);
+				p.fill(255);
+				p.text("SCORE: " + p1Score + " - " + p2Score, (float)(p.width/2.56),(float)((p.height*15.0)/16.0));
+
+				// creates physics between physics objects
+
+				p1.act();			
+				if (!p1.getIsWalking())
+					p1.applyFriction();
+				if (!p1.isOnSurface()) 
+					p1.fall(ground);
+
+				p2.act();	
+				if (!p2.getIsWalking())
+					p2.applyFriction();
+				if (!p2.isOnSurface()) 
+					p2.fall(ground);
+
+				if (displayTime <= 60) {
+					mysteryBox.act();
+					if (!mysteryBox.isOnSurface()) 
+						mysteryBox.fall(ground);
+				}
+
+				ball.act();
+				if (!ball.isOnSurface()) 
+					ball.fall(ground);
+				if (ball.getVX() != 0)
+					ball.applyFriction();
+
+				//  collision detecting
+
+				if (Math.abs(p1.getX() - p2.getX()) < 100 && Math.abs(p1.getY() - p2.getY()) < 135)
+					playerCollisionDetection();
+				else {
+					if (!p1.isFrozen())
+						p1.setRightMobility(true);
+					if (!p2.isFrozen())
+						p2.setLeftMobility(true);
+				}
+
+				if (Math.abs(p1.getX() - ball.getX()) < 150)
+					ballInteraction(p1);
+				if (Math.abs(p2.getX() - ball.getX()) < 150)
+					ballInteraction(p2);
+
+
+				goalInteraction();
+
+				if (Math.abs(p1.getX() - mysteryBox.getX()) <= 100 && Math.abs(p1.getY()-mysteryBox.getY())<100) {
+					if (mysteryBoxCollisionDetection(p1)) {
+						p1.collectBox();
+						boxPowerP1 = p1.getBoxPower();
+						boxPowerP1.setup(p);
+					}
+				}
+
+				if (Math.abs(p2.getX() - mysteryBox.getX()) <= 100 && Math.abs(p1.getY()-mysteryBox.getY())<100) {
+					if (mysteryBoxCollisionDetection(p2)) {
+						p2.collectBox();
+						boxPowerP2 = p2.getBoxPower();
+						boxPowerP2.setup(p);
+					}
+				}
+
+				// power up, mystery boxes, & health bars
+
+				p1.getPowerUpBar().draw(p);
+				p2.getPowerUpBar().draw(p);
+				p1.getHealth().draw(p);
+				p2.getHealth().draw(p);	
+
+				if(boxPowerP1 != null)
+					boxPowerP1.draw(p, 20, 90);
+				if(boxPowerP2 != null)
+					boxPowerP2.draw(p, 1100, 90);	
+
+				p1.findHeartbeat();
+				p2.findHeartbeat();
+				if (!p1.hasHeartbeat()) {
+					if (p1.getTimeOfDeath() == 0) {
+						p1.freeze();
+						p1.setTimeOfDeath(displayTime);
+					} else {
+						if (p1.getHealth().getHealthAmount() >= 100) {
+							p1.defibrillation();
+							p1.unfreeze();
+							p1.setTimeOfDeath(0);
+							p1.getHealth().setHealthAmount(100);
+						}
+					}
+				}
+				if (!p2.hasHeartbeat()) {
+					if (p2.getTimeOfDeath() == 0) {
+						p2.freeze();
+						p2.setTimeOfDeath(displayTime);
+					} else {
+						if (p2.getHealth().getHealthAmount() >= 100) {
+							p2.defibrillation();
+							p2.unfreeze();
+							p2.setTimeOfDeath(0);
+							p2.getHealth().setHealthAmount(100);
+						}
 					}
 				}
 			}
-			if (!p2.hasHeartbeat()) {
-				if (p2.getTimeOfDeath() == 0) {
-					p2.freeze();
-					p2.setTimeOfDeath(displayTime);
-				} else {
-					if (p2.getHealth().getHealthAmount() >= 100) {
-						p2.defibrillation();
-						p2.unfreeze();
-						p2.setTimeOfDeath(0);
-						p2.getHealth().setHealthAmount(100);
-					}
-				}
-			}
+		} else {
 
+			pauseDelay = p.millis() - time;
 		}
 	}
+
 
 	public void keyPressed() {		
 		if (p.keyPressed) {
@@ -313,7 +321,9 @@ public class GamePanel{
 	}
 	public void mousePressed()
 	{
+		if(p.mouseX>=p.width-60 && p.mouseY<=60 && p.mouseY>10 && p.mouseX<p.width-10)
 
+			paused = !paused;
 	}
 
 	public void keyReleased() {

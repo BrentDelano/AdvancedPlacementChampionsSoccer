@@ -39,39 +39,35 @@ public class DrawingSurface extends PApplet {
 	}
 
 	public void mousePressed() {
-		
+		//System.out.println(n);
 		if (mouseButton == LEFT) {
-
-			if (n==4) {
-				n=2;
-			} else {
-				n++;
-			}
-
-			System.out.println(n);
+			n++;
 		}
 
 		if (n==1) {
 			InsPanel ip = new InsPanel();
 			p = ip;
-		} else if (n==2 || n==3) {
+		} else if (n==2 || n==3 || n==4) {
 
 			PlayerSelect ps = new PlayerSelect();
 			p = ps;
 			ps.draw(this);
-			if (n==2) {
+			if (n==3) {
 				p1=ps.getTekkistPicture(mouseX, mouseY, true);
-			} else if (n==3) {
+				//System.out.println(p1);
+			} else if (n==4) {
 				p2=ps.getTekkistPicture(mouseX, mouseY, false);
+				//System.out.println(p2);
 			}
 			
-		}else if (n==4){
+		}else if (n>=5){
 			gp = new GamePanel(this, p1, p2);
 			inGame = true;
 			settings();
 			setup();
 			gp.draw();
 		}
+		
 		if(inGame) {
 			gp.mousePressed();
 
